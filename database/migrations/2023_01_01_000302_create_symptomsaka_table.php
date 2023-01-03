@@ -1,7 +1,7 @@
 <?php
 /**
  *   Differential Diagnose Support System
- *   Copyright (C) 2023  ddss@gmail.com
+ *   Copyright (C) 2023  ddss.software@gmail.com
 
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
