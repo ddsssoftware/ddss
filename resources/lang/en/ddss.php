@@ -24,4 +24,8 @@ return [
     'index_header_title' => 'Differential Diagnose Support System',
     'index_header_new' => 'New',
     'index_header_load' => 'Load',
+
+    'factsheet_no-data' => 'No data',
+    'factsheet_condition_title' => 'Factsheet',
+    'factsheet_condition_symptoms_title' => 'Symptoms',
 ];

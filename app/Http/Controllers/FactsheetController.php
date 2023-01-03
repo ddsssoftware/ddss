@@ -19,8 +19,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FactsheetController extends Controller
 {
-    //
+    public function condition($id)
+    {
+        $condition = DB::select("SELECT * FROM conditions WHERE id = ?", [$id]);
+
+        if (count($condition) == 0) abort(404);
+        $condition = $condition[0];
+
+        $sql = <<<EOL
+            SELECT
+                symptoms.id,
+                symptoms.name
+            FROM
+                symptoms
+                JOIN condition_symptom ON condition_symptom.symptom_id = symptoms.id
+            WHERE
+                condition_symptom.condition_id = ?
+        EOL;
+        $symptoms = DB::select($sql, [$id]); 
+
+        return view('factsheets.condition', compact('condition', 'symptoms'));
+    }
+
+    public function symptom($id)
+    {
+
+    }
+
+    public function test($id)
+    {
+
+    }
 }
