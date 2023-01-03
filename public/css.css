@@ -1,0 +1,81 @@
+body {
+    margin: 1rem 1rem 3rem 1rem;
+    font-family: sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    color: #889;
+}
+
+nav button {
+    width:auto;
+}
+
+article#case {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+section#case, section#symptoms, section#conditions {
+    flex: 25%;
+}
+
+textarea, input {
+    background-color: #fff;
+    border: 2px inset #777;
+    display: block;
+    width: 100%;
+    padding: 0.7rem;
+    line-height: 1.5rem;
+}
+
+
+textarea#case_description_form_text {
+    height: 7rem;
+}
+
+button {
+    background-color: #eef;
+    border: 2px outset #777;
+    padding: 0.3rem;
+    width: 33%;
+}
+
+h1, h2, h3 {
+    font-family: monospace;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+h2, h3 {
+    position: relative;
+    left: -1rem;
+}
+
+h1 {
+    font-size: 1rem;
+}
+
+section {
+    margin: 0 1rem 0 1rem;
+}
+
+footer {
+    margin: 7rem 0 3rem 0;
+    font-size: 0.77rem;
+    color: #aaa;
+    text-align: center;
+}
+
+footer p {
+    display: inline;
+    margin: 0 1rem 0 1rem;
+}
