@@ -47,7 +47,24 @@ class FactsheetController extends Controller
 
     public function symptom($id)
     {
+        $symptom = DB::select("SELECT * FROM symptoms WHERE id = ?", [$id]);
 
+        if (count($symptom) == 0) abort(404);
+        $symptom = $symptom[0];
+
+        $sql = <<<EOL
+            SELECT
+                tests.id,
+                tests.name
+            FROM
+                tests
+                JOIN symptom_test ON symptom_test.test_id = tests.id
+            WHERE
+                symptom_test.symptom_id = ?
+        EOL;
+        $tests = DB::select($sql, [$id]); 
+
+        return view('factsheets.symptom', compact('symptom', 'tests'));
     }
 
     public function test($id)

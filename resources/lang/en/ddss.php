@@ -28,4 +28,6 @@ return [
     'factsheet_no-data' => 'No data',
     'factsheet_condition_title' => 'Factsheet',
     'factsheet_condition_symptoms_title' => 'Symptoms',
+    'factsheet_symptom_title' => 'Factsheet',
+    'factsheet_condition_test_title' => 'Tests'
 ];
