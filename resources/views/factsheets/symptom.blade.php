@@ -9,8 +9,8 @@
                 <h3>{{ $symptom->name }}</h3>
                 <p>{{ $symptom->desc }}</p>
             </section>
-            <section id="factsheet_condition_test">
-                <h4>{{ __('ddss.factsheet_condition_test_title') }}</h4>
+            <section id="factsheet_symptom_test">
+                <h4>{{ __('ddss.factsheet_symptom_test_title') }}</h4>
                 <ul>
                 @forelse ($tests as $test)
                     <li><a href="{{ route('factsheet.test', [$test->id]) }}">{{ $test->name }}</a></li>

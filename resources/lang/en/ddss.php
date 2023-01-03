@@ -29,5 +29,7 @@ return [
     'factsheet_condition_title' => 'Factsheet',
     'factsheet_condition_symptoms_title' => 'Symptoms',
     'factsheet_symptom_title' => 'Factsheet',
-    'factsheet_condition_test_title' => 'Tests'
+    'factsheet_symptom_test_title' => 'Tests',
+    'factsheet_test_title' => 'Factsheet',
+    'factsheet_test_symptoms_title' => 'Symptoms',
 ];
