@@ -1,8 +1,8 @@
 {
     "name": "ddss/ddss",
     "type": "project",
-    "description": "Differential diagnose support system",
-    "keywords": ["differential diagnose", "support system"],
+    "description": "Differential diagnosis support system",
+    "keywords": ["differential diagnosis", "support system"],
     "license": "GPLv3",
     "require": {
         "php": "^7.4|^8.0",

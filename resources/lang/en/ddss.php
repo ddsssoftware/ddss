@@ -20,8 +20,8 @@ return [
     'symptoms_suggestions_title' => 'Case suggestions',
 
     'index_head_title' => 'DDSS',
-    'index_head_description' => 'Differential Diagnose Support System',
-    'index_header_title' => 'Differential Diagnose Support System',
+    'index_head_description' => 'Differential Diagnosis Support System',
+    'index_header_title' => 'Differential Diagnosis Support System',
     'index_header_new' => 'New',
     'index_header_load' => 'Load',
 

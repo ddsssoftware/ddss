@@ -1,4 +1,4 @@
-# Differential Diagnose Support System
+# Differential Diagnosis Support System
 
 For medical professionals only.
 

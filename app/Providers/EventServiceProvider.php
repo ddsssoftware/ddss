@@ -1,6 +1,6 @@
 <?php
 /**
- *   Differential Diagnose Support System
+ *   Differential Diagnosis Support System
  *   Copyright (C) 2023  ddss.software@gmail.com
 
  *   This program is free software: you can redistribute it and/or modify
