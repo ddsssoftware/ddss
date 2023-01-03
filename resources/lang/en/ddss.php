@@ -19,6 +19,8 @@ return [
     'symptoms_search_form_search' => 'Search',
     'symptoms_suggestions_title' => 'Case suggestions',
 
+    'symptom_item_no-data' => 'No data',
+
     'index_head_title' => 'DDSS',
     'index_head_description' => 'Differential Diagnosis Support System',
     'index_header_title' => 'Differential Diagnosis Support System',

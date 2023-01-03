@@ -18,6 +18,7 @@
  */
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CaseController;
+use App\Http\Controllers\SymptomController;
 use App\Http\Controllers\FactsheetController;
 
 Route::get('/', [CaseController::class, 'index'])->name('case.index');
@@ -25,3 +26,5 @@ Route::get('/', [CaseController::class, 'index'])->name('case.index');
 Route::get('/factsheet/condition/{id}', [FactsheetController::class, 'condition'])->name('factsheet.condition');
 Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->name('factsheet.symptom');
 Route::get('/factsheet/test/{id}', [FactsheetController::class, 'test'])->name('factsheet.test');
+
+Route::post('/symptom-search', [SymptomController::class, 'search'])->name('case.symptom.search');

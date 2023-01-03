@@ -19,8 +19,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SymptomController extends Controller
 {
-    //
+    public function search(Request $request)
+    {
+        $symptomSearchResult = [];
+        if (isset($request->term)) {
+            $term = $request->term;
+            if (strlen($term) != 0) {
+                $term = '%'.strtolower($term).'%';
+                $sql = <<<EOL
+                    SELECT
+                        suggestions.symptom_id,
+                        suggestions.symptom_name
+                    FROM
+                        suggestions
+                    WHERE
+                        suggestions.symptom_id IN (
+                                SELECT
+                                    symptomsaka.symptom_id
+                                FROM
+                                    symptomsaka
+                                WHERE
+                                    name LIKE ?
+                            )
+                EOL;
+                $symptomSearchResult = DB::select($sql, [$term]);
+            }
+        }
+
+        return view('index', compact('symptomSearchResult'));
+    }
 }
