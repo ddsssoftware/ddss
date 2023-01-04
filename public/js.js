@@ -30,13 +30,13 @@ setupDescriptionUnsavedAlert();
 document.addEventListener("beforeunload", checkDescriptionUnsaved);
 
 function setupDescriptionUnsavedAlert() {
-    el = document.getElementById("case_description-form_text");
+    el = document.getElementById("case_description_form_text");
     el.dataset.hash = el.innerText.hashCode();
 }
 
 function checkDescriptionUnsaved() {
     //TODO: test with HTTPS
-    el = document.getElementById("case_description-form_text");
+    el = document.getElementById("case_description_form_text");
     if (el.dataset.hash != el.innerText.hashCode()) {
         return "Case description changes will not be saved";
     }
@@ -44,3 +44,13 @@ function checkDescriptionUnsaved() {
 
 //#endregion
 
+//#region Symptoms
+
+document.querySelectorAll('.symptom_item_name').forEach(el => {
+    el.addEventListener('click', function(event) {
+        id = event.target.id.replace('name', 'details');
+        toggle(document.getElementById(id));
+    });
+});
+
+//#endregion
