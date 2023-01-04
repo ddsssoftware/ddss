@@ -24,12 +24,8 @@ function toggle(el) {
 //#endregion
 
 
-
 //#region Case
 
-document.getElementById("case_digital-summary_copy-to-clipboard").addEventListener("click", copyToClipboard);
-document.getElementById("case_digital-summary_continue-previous").addEventListener("click", showContinuePrevious);
-document.getElementById("case_digital-summary_form_cancel").addEventListener("click", hideContinuePrevious);
 setupDescriptionUnsavedAlert();
 document.addEventListener("beforeunload", checkDescriptionUnsaved);
 
@@ -44,18 +40,6 @@ function checkDescriptionUnsaved() {
     if (el.dataset.hash != el.innerText.hashCode()) {
         return "Case description changes will not be saved";
     }
-}
-
-function copyToClipboard() {
-    navigator.clipboard.writeText(document.getElementById("case_digital-summary_summary").innerText);
-}
-
-function showContinuePrevious() {
-    toggle(document.getElementById("case_digital-summary_form"));
-}
-
-function hideContinuePrevious() {
-    toggle(document.getElementById("case_digital-summary_form"));
 }
 
 //#endregion
