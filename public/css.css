@@ -79,3 +79,17 @@ footer p {
     display: inline;
     margin: 0 1rem 0 1rem;
 }
+
+div.symptom_item {
+    background-color:#eef;
+    margin: 0.13rem;
+    padding: 0.77rem;
+}
+
+div.symptom_item_details {
+    padding: 0.77rem;
+}
+
+span.symptom_item_name {
+    cursor: pointer;
+}
