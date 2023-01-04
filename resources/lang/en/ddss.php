@@ -20,6 +20,9 @@ return [
     'symptoms_suggestions_title' => 'Case suggestions',
 
     'symptom_item_no-data' => 'No data',
+    'symptom_item_details_factsheet' => 'Factsheet',
+    'symptom_item_details_presence_present' => 'Present',
+    'symptom_item_details_presence_not-present' => 'Not present',
 
     'index_head_title' => 'DDSS',
     'index_head_description' => 'Differential Diagnosis Support System',
