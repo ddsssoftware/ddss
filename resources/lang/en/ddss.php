@@ -31,9 +31,10 @@ return [
     'index_header_load' => 'Load',
 
     'factsheet_no-data' => 'No data',
-    'factsheet_condition_title' => 'Factsheet',
+    'factsheet_condition_title' => 'Factsheet - Condition',
     'factsheet_condition_symptoms_title' => 'Symptoms',
-    'factsheet_symptom_title' => 'Factsheet',
+    'factsheet_condition_tests_title' => 'Tests',
+    'factsheet_symptom_title' => 'Factsheet - Symptom',
     'factsheet_symptom_test_title' => 'Tests',
     'factsheet_symptom_condition_title' => 'Conditions',
     'factsheet_test_title' => 'Factsheet',
