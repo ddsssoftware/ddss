@@ -32,8 +32,8 @@ textarea, input {
     background-color: #fff;
     border: 2px inset #777;
     display: block;
-    width: 100%;
-    padding: 0.7rem;
+    width: 92%;
+    padding: 0.33rem 0.77rem 0.33rem 0.77rem;
     line-height: 1.5rem;
 }
 
@@ -84,6 +84,15 @@ div.symptom_item {
     background-color:#eef;
     margin: 0.13rem;
     padding: 0.77rem;
+}
+
+div.symptom_item div {
+    margin: 0.5rem 0 0 0;
+}
+
+div.symptom_item_details_tests button {
+    width: 100%;
+    text-align: left;
 }
 
 div.symptom_item_details {

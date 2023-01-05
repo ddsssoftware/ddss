@@ -13,5 +13,15 @@
             <button>{{ __('ddss.symptom_item_details_presence_present') }}</button>
             <button>{{ __('ddss.symptom_item_details_presence_not-present') }}</button>
         </div>
+
+        <div id="symptom_item_details_tests_{{ $result->symptom_id }}" class="symptom_item_details_tests">
+            @foreach($result->tests as $test)
+                <button>{{ $test->test_name }}</button>
+            @endforeach
+        </div>
+
+        <div id="symptom_item_details_notes_{{ $result->symptom_id }}" class="symptom_item_details_notes">
+            <textarea id="symptom_item_details_notes_text_{{ $result->symptom_id }}" placeholder="Notes"></textarea>
+        </div>
     </div>
 </div>
