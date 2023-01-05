@@ -19,6 +19,16 @@
                 @endforelse
                 </ul>
             </section>
+            <section id="factsheet_symptom_condition">
+                <h4>{{ __('ddss.factsheet_symptom_condition_title') }}</h4>
+                <ul>
+                @forelse ($conditions as $condition)
+                    <li><a href="{{ route('factsheet.condition', [$condition->id]) }}">{{ $condition->name }}</a></li>
+                @empty
+                    <p>{{ __('ddss.factsheet_no-data') }}</p>
+                @endforelse
+                </ul>
+            </section>
         <section>
     </article>
 

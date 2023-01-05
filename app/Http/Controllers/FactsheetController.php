@@ -61,10 +61,26 @@ class FactsheetController extends Controller
                 JOIN symptom_test ON symptom_test.test_id = tests.id
             WHERE
                 symptom_test.symptom_id = ?
+            ORDER BY
+                tests.delay ASC
         EOL;
         $tests = DB::select($sql, [$id]); 
 
-        return view('factsheets.symptom', compact('symptom', 'tests'));
+        $sql = <<<EOL
+            SELECT
+                conditions.id,
+                conditions.name
+            FROM
+                conditions
+                JOIN condition_symptom ON condition_symptom.condition_id = conditions.id
+            WHERE
+                condition_symptom.symptom_id = ?
+            ORDER BY
+                conditions.urgency ASC
+        EOL;
+        $conditions = DB::select($sql, [$id]);
+
+        return view('factsheets.symptom', compact('symptom', 'tests', 'conditions'));
     }
 
     public function test($id)
