@@ -26,4 +26,28 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    function collapseData(&$data, $conditionFlag = true, $symptomFlag = true, $testFlag = true)
+    {
+        if ($testFlag) {
+            $keys = array_keys($data);
+            $previousKey = $keys[0];
+            foreach ($keys as $key) {
+                if ($previousKey != $key &&
+                    $data[$previousKey]->symptom_id == $data[$key]->symptom_id) {
+                    if (!isset($data[$previousKey]->tests)) {
+                        $data[$previousKey]->tests = [];
+                    }
+                    $data[$previousKey]->tests[] = $data[$key];
+                    unset($data[$key]);
+                } else {
+                    if (!isset($data[$key]->tests)) {
+                        $data[$key]->tests = [];
+                        $data[$key]->tests[] = $data[$key];
+                    }
+                    $previousKey = $key;
+                }
+            }
+        }
+    }
 }

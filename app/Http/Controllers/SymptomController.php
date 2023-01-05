@@ -33,7 +33,9 @@ class SymptomController extends Controller
                 $sql = <<<EOL
                     SELECT
                         suggestions.symptom_id,
-                        suggestions.symptom_name
+                        suggestions.symptom_name,
+                        suggestions.test_id,
+                        suggestions.test_name
                     FROM
                         suggestions
                     WHERE
@@ -47,6 +49,7 @@ class SymptomController extends Controller
                             )
                 EOL;
                 $symptomSearchResult = DB::select($sql, [$term]);
+                $this->collapseData($symptomSearchResult, false, false, true);
             }
         }
 
