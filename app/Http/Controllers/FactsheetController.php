@@ -121,6 +121,22 @@ class FactsheetController extends Controller
         EOL;
         $symptoms = DB::select($sql, [$id]); 
 
-        return view('factsheets.test', compact('test', 'symptoms'));
+        $sql = <<<EOL
+            SELECT DISTINCT
+                conditions.id,
+                conditions.name,
+                conditions.urgency
+            FROM
+                conditions
+                JOIN condition_symptom ON condition_symptom.condition_id = conditions.id
+                JOIN symptom_test ON condition_symptom.symptom_id = symptom_test.symptom_id
+            WHERE
+                symptom_test.test_id = ?
+            ORDER BY
+                conditions.urgency
+        EOL;
+        $conditions = DB::select($sql, [$id]); 
+
+        return view('factsheets.test', compact('test', 'symptoms', 'conditions'));
     }
 }
