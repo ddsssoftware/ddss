@@ -19,8 +19,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ConditionController extends Controller
 {
-    //
+    public function search(Request $request)
+    {
+        $conditionSearchResult = [];
+        if (isset($request->term)) {
+            $term = $request->term;
+            if (strlen($term) != 0) {
+                $term = '%'.strtolower($term).'%';
+                $sql = <<<EOL
+                    SELECT DISTINCT
+                        conditions.id,
+                        conditions.name,
+                        conditions.urgency
+                    FROM
+                        conditionsaka
+                        JOIN conditions ON conditions.id = conditionsaka.condition_id
+                    WHERE
+                        conditionsaka.name LIKE ?
+                    ORDER BY
+                        conditions.urgency
+                EOL;
+                $conditionSearchResult = DB::select($sql, [$term]);    
+            }
+        }
+
+        return view('index', compact('conditionSearchResult'));
+    }
 }

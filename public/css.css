@@ -80,13 +80,13 @@ footer p {
     margin: 0 1rem 0 1rem;
 }
 
-div.symptom_item {
+div.symptom_item, div.condition_item {
     background-color:#eef;
     margin: 0.13rem;
     padding: 0.77rem;
 }
 
-div.symptom_item div {
+div.symptom_item div, div.condition_item div {
     margin: 0.5rem 0 0 0;
 }
 
@@ -99,6 +99,6 @@ div.symptom_item_details {
     padding: 0.77rem;
 }
 
-span.symptom_item_name {
+span.symptom_item_name, span.condition_item_name {
     cursor: pointer;
 }

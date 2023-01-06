@@ -14,6 +14,11 @@ return [
     'conditions_search_form_search' => 'Search',
     'conditions_suggestions_title' => 'Case suggestions',
 
+    'condition_item_no-data' => 'No data',
+    'condition_item_details_factsheet' => 'Factsheet',
+    'condition_item_details_presence_present' => 'Present',
+    'condition_item_details_presence_not-present' => 'Not present',
+
     'symptoms_index_title' => 'Symptoms',
     'symptoms_search_title' => 'Search',
     'symptoms_search_form_search' => 'Search',

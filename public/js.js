@@ -54,3 +54,14 @@ document.querySelectorAll('.symptom_item_name').forEach(el => {
 });
 
 //#endregion
+
+//#region Conditions
+
+document.querySelectorAll('.condition_item_name').forEach(el => {
+    el.addEventListener('click', function(event) {
+        id = event.target.id.replace('name', 'details');
+        toggle(document.getElementById(id));
+    });
+});
+
+//#endregion
