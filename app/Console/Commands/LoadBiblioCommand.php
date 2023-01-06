@@ -116,11 +116,12 @@ class LoadBiblioCommand extends Command
             $values = array_values($values);
             DB::insert("INSERT INTO symptoms (id, name, desc, delay) VALUES (?, ?, ?, -1)", $values);
             
-            if(isset($content['aka'])) {
-                $content['aka'][] = $content['name'];
-                foreach ($content['aka'] as $alias) {
-                    DB::insert("INSERT INTO symptomsaka VALUES (?, ?)", [$content['id'], $alias]);
-                }
+            if (!isset($content['aka'])) {
+                $content['aka'] = [];
+            }
+            $content['aka'][] = $content['name'];
+            foreach ($content['aka'] as $alias) {
+                DB::insert("INSERT INTO symptomsaka VALUES (?, ?)", [$content['id'], $alias]);
             }
 
             if (isset($content['tests'])) {
@@ -146,6 +147,14 @@ class LoadBiblioCommand extends Command
             $values = Arr::only($content, $fields);
             $values = array_values($values);
             DB::insert("INSERT INTO conditions (id, name, desc, urgency) VALUES (?, ?, ?, ?)", $values);
+
+            if (!isset($content['aka'])) {
+                $content['aka'] = [];
+            }
+            $content['aka'][] = $content['name'];
+            foreach ($content['aka'] as $alias) {
+                DB::insert("INSERT INTO conditionsaka VALUES (?, ?)", [$content['id'], $alias]);
+            }
 
             if (isset($content['symptoms'])) {
                 foreach ($content['symptoms'] as $symptom) {
