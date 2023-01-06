@@ -21,6 +21,14 @@ function toggle(el) {
     }
 }
 
+function addCaseToForm(formEl) {
+    inputEl = document.createElement('input');
+    inputEl.setAttribute('type', 'hidden');
+    inputEl.setAttribute('name', 'case');
+    inputEl.setAttribute('value', JSON.stringify(document.ddsscase));
+    formEl.appendChild(inputEl);
+}
+
 //#endregion
 
 
@@ -61,6 +69,16 @@ document.querySelectorAll('.condition_item_name').forEach(el => {
     el.addEventListener('click', function(event) {
         id = event.target.id.replace('name', 'details');
         toggle(document.getElementById(id));
+    });
+});
+
+document.querySelectorAll('.condition_item_details_presence_form_button').forEach(el => {
+    el.addEventListener('click', function(event) {
+        formId = event.target.id.replace('_button', '');
+        console.log(formId);
+        formEl = document.getElementById(formId);
+        addCaseToForm(formEl);
+        formEl.submit();
     });
 });
 

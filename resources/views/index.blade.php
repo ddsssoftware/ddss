@@ -13,4 +13,5 @@
     @include('symptoms.index')
     @include('conditions.index')
 </article>
+    @include('case')
 @endsection

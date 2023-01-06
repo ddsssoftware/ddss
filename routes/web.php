@@ -29,4 +29,6 @@ Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->
 Route::get('/factsheet/test/{id}', [FactsheetController::class, 'test'])->name('factsheet.test');
 
 Route::post('/symptom-search', [SymptomController::class, 'search'])->name('case.symptom.search');
+
 Route::post('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
+Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');

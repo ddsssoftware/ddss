@@ -49,4 +49,29 @@ class ConditionController extends Controller
 
         return view('index', compact('conditionSearchResult'));
     }
+
+    public function present(Request $request)
+    {
+        extract($request->validate([
+            'condition' => ['bail', 'required', 'exists:conditions,id'],
+            'case' => ['bail', 'required'],
+        ]));
+        $case = $this->getCase($case);
+        $case['conditions'][$condition] = [
+            'id' => $condition,
+            'present' => true,
+        ];
+        $this->addCondition($case, $condition, true);
+
+        return view('index', compact('case'));
+    }
+
+    private function addCondition(&$case, $id, $present)
+    {
+        if (!isset($case['conditions'])) {
+            $case['conditions'] = [];
+        }
+        
+    }
+
 }

@@ -50,4 +50,16 @@ class Controller extends BaseController
             }
         }
     }
+
+    public function getCase($case)
+    {
+        $case = trim($case, '"');
+        if ($case == 'new') {
+            $case = [];
+            $case['conditions'] = [];
+        } else {
+            $case = unserialize($case);
+        }
+        return $case;
+    }
 }
