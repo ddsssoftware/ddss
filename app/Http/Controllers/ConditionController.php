@@ -25,29 +25,28 @@ class ConditionController extends Controller
 {
     public function search(Request $request)
     {
-        $conditionSearchResult = [];
-        if (isset($request->term)) {
-            $term = $request->term;
-            if (strlen($term) != 0) {
-                $term = '%'.strtolower($term).'%';
-                $sql = <<<EOL
-                    SELECT DISTINCT
-                        conditions.id,
-                        conditions.name,
-                        conditions.urgency
-                    FROM
-                        conditionsaka
-                        JOIN conditions ON conditions.id = conditionsaka.condition_id
-                    WHERE
-                        conditionsaka.name LIKE ?
-                    ORDER BY
-                        conditions.urgency
-                EOL;
-                $conditionSearchResult = DB::select($sql, [$term]);    
-            }
-        }
+        extract($request->validate([
+            'term' => ['bail', 'required', 'string', 'min:1'],
+            'case' => ['bail', 'required'],
+        ]));
+        $sql = <<<EOL
+            SELECT DISTINCT
+                conditions.id,
+                conditions.name,
+                conditions.urgency
+            FROM
+                conditionsaka
+                JOIN conditions ON conditions.id = conditionsaka.condition_id
+            WHERE
+                conditionsaka.name LIKE ?
+            ORDER BY
+                conditions.urgency
+        EOL;
+        $term = '%'.strtolower($term).'%';
+        $conditionSearchResult = DB::select($sql, [$term]);
+        $case = $this->getCase($case);
 
-        return view('index', compact('conditionSearchResult'));
+        return view('index', compact('conditionSearchResult', 'case'));
     }
 
     public function present(Request $request)
