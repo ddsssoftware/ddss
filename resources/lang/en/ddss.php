@@ -4,8 +4,8 @@ return [
     'case_title' => 'Case',
     'case_description_title' => 'Description',
     'case_description_form_save' => 'Save',
-    'case_eliminated_title' => 'Eliminated',
-    'case_presentation_title' => 'Presentation',
+    'case_conditions_title' => 'Conditions',
+    'case_symptoms_title' => 'Symptoms',
     'case_summary_title' => 'Summary',
     'case_tests_title' => 'Tests',
 
