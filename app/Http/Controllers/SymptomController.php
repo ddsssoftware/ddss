@@ -25,34 +25,33 @@ class SymptomController extends Controller
 {
     public function search(Request $request)
     {
-        $symptomSearchResult = [];
-        if (isset($request->term)) {
-            $term = $request->term;
-            if (strlen($term) != 0) {
-                $term = '%'.strtolower($term).'%';
-                $sql = <<<EOL
-                    SELECT
-                        suggestions.symptom_id,
-                        suggestions.symptom_name,
-                        suggestions.test_id,
-                        suggestions.test_name
-                    FROM
-                        suggestions
-                    WHERE
-                        suggestions.symptom_id IN (
-                                SELECT
-                                    symptomsaka.symptom_id
-                                FROM
-                                    symptomsaka
-                                WHERE
-                                    name LIKE ?
-                            )
-                EOL;
-                $symptomSearchResult = DB::select($sql, [$term]);
-                $this->collapseData($symptomSearchResult, false, false, true);
-            }
-        }
+        extract($request->validate([
+            'term' => ['bail', 'required', 'string', 'min:1'],
+            'case' => ['bail', 'required'],
+        ]));
+        $sql = <<<EOL
+            SELECT
+                suggestions.symptom_id,
+                suggestions.symptom_name,
+                suggestions.test_id,
+                suggestions.test_name
+            FROM
+                suggestions
+            WHERE
+                suggestions.symptom_id IN (
+                        SELECT
+                            symptomsaka.symptom_id
+                        FROM
+                            symptomsaka
+                        WHERE
+                            name LIKE ?
+                    )
+        EOL;
+        $term = '%'.strtolower($term).'%';
+        $symptomSearchResult = DB::select($sql, [$term]);
+        $this->collapseData($symptomSearchResult, false, false, true);
+        $case = $this->getCase($case);
 
-        return view('index', compact('symptomSearchResult'));
+        return view('index', compact('symptomSearchResult', 'case'));
     }
 }
