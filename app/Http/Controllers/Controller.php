@@ -57,6 +57,7 @@ class Controller extends BaseController
         if ($case == null || $case == 'new' || $case == '') {
             $case = [];
             $case['description'] = '';
+            $case['symptoms'] = [];
             $case['conditions'] = [];
         } else {
             $case = unserialize($case);

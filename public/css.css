@@ -96,3 +96,7 @@ div.symptom_item_details {
 span.symptom_item_name, span.condition_item_name {
     cursor: pointer;
 }
+
+div.condition_item_details_presence form, div.symptom_item_details_presence form {
+    display: inline;
+}

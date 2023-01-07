@@ -54,4 +54,39 @@ class SymptomController extends Controller
 
         return view('index', compact('symptomSearchResult', 'case'));
     }
+
+    public function present(Request $request)
+    {
+        return $this->presence($request, true);
+    }
+
+    public function notPresent(Request $request)
+    {
+        return $this->presence($request, false);
+    }
+
+    public function presence(Request $request, $present)
+    {
+        extract($request->validate([
+            'symptom' => ['bail', 'required', 'exists:symptoms,id'],
+            'case' => ['bail', 'required'],
+        ]));
+        $sql = <<<EOL
+            SELECT
+                symptoms.id,
+                symptoms.name,
+                symptoms.delay
+            FROM
+                symptoms
+            WHERE
+                symptoms.id = ?
+        EOL;
+        $data = DB::select($sql, [$symptom])[0];
+        $data->present = $present;
+        $case = $this->getCase($case);
+        $case['symptoms'][$symptom] = $data;
+
+        return view('index', compact('case'));
+    }
+
 }

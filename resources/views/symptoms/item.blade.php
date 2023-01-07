@@ -10,10 +10,27 @@
             href="{{ route('factsheet.symptom', [$result->symptom_id])}}"
             target="_blank">{{ __('ddss.symptom_item_details_factsheet')}}</a>
     
-        <div id="symptom_item_details_presence_{{ $result->symptom_id }}" class="symptom_item_details_presence">
-            <button>{{ __('ddss.symptom_item_details_presence_present') }}</button>
-            <button>{{ __('ddss.symptom_item_details_presence_not-present') }}</button>
+            <div id="symptom_item_details_presence_{{ $result->symptom_id }}" class="symptom_item_details_presence">
+            <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
+                  method="POST"
+                  action="{{ route('case.symptom.present') }}"
+                  data-form-needs-case="true">
+                <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
+                <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
+                        class="symptom_item_details_presence_form_submit"
+                        type="button">{{ __('ddss.symptom_item_details_presence_present') }}</button>
+            </form>
+            <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
+                  method="POST"
+                  action="{{ route('case.symptom.notpresent') }}"
+                  data-form-needs-case="true">
+                <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
+                <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
+                        class="symptom_item_details_presence_form_submit"
+                        type="button">{{ __('ddss.symptom_item_details_presence_not-present') }}</button>
+            </form>
         </div>
+
 
         <div id="symptom_item_details_tests_{{ $result->symptom_id }}" class="symptom_item_details_tests">
             @foreach($result->tests as $test)
