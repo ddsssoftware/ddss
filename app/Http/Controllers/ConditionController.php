@@ -56,22 +56,21 @@ class ConditionController extends Controller
             'condition' => ['bail', 'required', 'exists:conditions,id'],
             'case' => ['bail', 'required'],
         ]));
+        $sql = <<<EOL
+            SELECT
+                conditions.id,
+                conditions.name,
+                conditions.urgency
+            FROM
+                conditions
+            WHERE
+                conditions.id = ?
+        EOL;
+        $data = DB::select($sql, [$condition])[0];
+        $data->present = true;
         $case = $this->getCase($case);
-        $case['conditions'][$condition] = [
-            'id' => $condition,
-            'present' => true,
-        ];
-        $this->addCondition($case, $condition, true);
+        $case['conditions'][$condition] = $data;
 
         return view('index', compact('case'));
     }
-
-    private function addCondition(&$case, $id, $present)
-    {
-        if (!isset($case['conditions'])) {
-            $case['conditions'] = [];
-        }
-        
-    }
-
 }

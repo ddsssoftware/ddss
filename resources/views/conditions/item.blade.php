@@ -11,9 +11,14 @@
             target="_blank">{{ __('ddss.condition_item_details_factsheet')}}</a>
     
         <div id="condition_item_details_presence_{{ $result->id }}" class="condition_item_details_presence">
-            <form id="condition_item_details_presence_form_{{ $result->id }}" method="POST" action="{{ route('case.condition.present') }}">
+            <form id="condition_item_details_presence_form_{{ $result->id }}"
+                  method="POST"
+                  action="{{ route('case.condition.present') }}"
+                  data-form-needs-case="true">
                 <input type="hidden" name="condition" value="{{ $result->id }}">
-                <button id="condition_item_details_presence_form_button_{{ $result->id }}" class="condition_item_details_presence_form_button" type="button">{{ __('ddss.condition_item_details_presence_present') }}</button>
+                <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
+                        class="condition_item_details_presence_form_submit"
+                        type="button">{{ __('ddss.condition_item_details_presence_present') }}</button>
             </form>
             <button>{{ __('ddss.condition_item_details_presence_not-present') }}</button>
         </div>
