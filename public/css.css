@@ -13,10 +13,6 @@ header h1 {
     color: #555;
 }
 
-nav button {
-    width:auto;
-}
-
 article#case {
     display: flex;
     flex-direction: row;
@@ -37,7 +33,6 @@ textarea, input {
     line-height: 1.5rem;
 }
 
-
 textarea#case_description_form_text {
     height: 7rem;
 }
@@ -45,8 +40,7 @@ textarea#case_description_form_text {
 button {
     background-color: #eef;
     border: 2px outset #777;
-    padding: 0.3rem;
-    width: 33%;
+    padding: 0.42rem 1.42rem 0.42rem 1.42rem;
 }
 
 h1, h2, h3 {
