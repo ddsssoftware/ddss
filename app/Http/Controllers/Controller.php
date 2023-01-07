@@ -54,8 +54,9 @@ class Controller extends BaseController
     public function getCase($case)
     {
         $case = trim($case, '"');
-        if ($case == 'new') {
+        if ($case == null || $case == 'new' || $case == '') {
             $case = [];
+            $case['description'] = '';
             $case['conditions'] = [];
         } else {
             $case = unserialize($case);

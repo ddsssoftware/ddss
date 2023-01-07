@@ -25,9 +25,18 @@ function addCaseToForm(formEl) {
     inputEl = document.createElement('input');
     inputEl.setAttribute('type', 'hidden');
     inputEl.setAttribute('name', 'case');
-    inputEl.setAttribute('value', JSON.stringify(document.ddsscase));
+    inputEl.setAttribute('value', document.ddsscase);
     formEl.appendChild(inputEl);
 }
+
+document.querySelectorAll('[data-form-needs-case="true"]').forEach(el => {
+    el.addEventListener('click', function(event) {
+        formId = event.target.id.replace('_submit', '');
+        formEl = document.getElementById(formId);
+        addCaseToForm(formEl);
+        formEl.submit();
+    });
+});
 
 //#endregion
 
@@ -72,14 +81,6 @@ document.querySelectorAll('.condition_item_name').forEach(el => {
     });
 });
 
-document.querySelectorAll('.condition_item_details_presence_form_button').forEach(el => {
-    el.addEventListener('click', function(event) {
-        formId = event.target.id.replace('_button', '');
-        console.log(formId);
-        formEl = document.getElementById(formId);
-        addCaseToForm(formEl);
-        formEl.submit();
-    });
-});
+document.querySelectorAll('.condition_item_details_presence_form_button')
 
 //#endregion

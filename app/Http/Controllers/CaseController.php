@@ -26,4 +26,16 @@ class CaseController extends Controller
     {
         return view('index');
     }
+
+    public function updateDescription(Request $request)
+    {
+        extract($request->validate([
+            'case' => ['bail', 'required'],
+            'description' => ['bail', 'string'],
+        ]));
+        $case = $this->getCase($case);
+        $case['description'] = $description;
+
+        return view('index', compact('case'));
+    }
 }

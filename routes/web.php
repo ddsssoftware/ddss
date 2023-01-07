@@ -23,6 +23,7 @@ use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\FactsheetController;
 
 Route::get('/', [CaseController::class, 'index'])->name('case.index');
+Route::post('/', [CaseController::class, 'updateDescription'])->name('case.updatedescription');
 
 Route::get('/factsheet/condition/{id}', [FactsheetController::class, 'condition'])->name('factsheet.condition');
 Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->name('factsheet.symptom');
