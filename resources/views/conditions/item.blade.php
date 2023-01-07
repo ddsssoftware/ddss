@@ -1,6 +1,7 @@
 <div class="condition_item">
     <span id="condition_item_name_{{ $result->id }}"
-          class="condition_item_name">{{ $result->name }}</span>
+          class="condition_item_name"
+          data-has-collapsed-details="true">{{ $result->name }}</span>
     <div id="condition_item_details_{{ $result->id }}" 
         class="condition_item_details"
         style="display: none;">

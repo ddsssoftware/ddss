@@ -25,6 +25,13 @@ document.querySelectorAll('[data-form-needs-case="true"]').forEach(el => {
     });
 });
 
+document.querySelectorAll('[data-has-collapsed-details="true"]').forEach(el => {
+    el.addEventListener('click', function(event) {
+        id = event.target.id.replace('name', 'details');
+        toggle(document.getElementById(id));
+    });
+});
+
 //#endregion
 
 
@@ -34,22 +41,8 @@ document.querySelectorAll('[data-form-needs-case="true"]').forEach(el => {
 
 //#region Symptoms
 
-document.querySelectorAll('.symptom_item_name').forEach(el => {
-    el.addEventListener('click', function(event) {
-        id = event.target.id.replace('name', 'details');
-        toggle(document.getElementById(id));
-    });
-});
-
 //#endregion
 
 //#region Conditions
-
-document.querySelectorAll('.condition_item_name').forEach(el => {
-    el.addEventListener('click', function(event) {
-        id = event.target.id.replace('name', 'details');
-        toggle(document.getElementById(id));
-    });
-});
 
 //#endregion
