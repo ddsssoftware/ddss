@@ -21,7 +21,11 @@ document.querySelectorAll('[data-form-needs-case="true"]').forEach(el => {
         formId = event.target.id.replace('_submit', '');
         formEl = document.getElementById(formId);
         addCaseToForm(formEl);
-        formEl.submit();
+        if (formEl.checkValidity()) {
+            formEl.submit();
+        } else {
+            formEl.reportValidity();
+        }
     });
 });
 
