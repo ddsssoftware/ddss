@@ -33,3 +33,4 @@ Route::post('/symptom-search', [SymptomController::class, 'search'])->name('case
 
 Route::post('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
 Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');
+Route::post('/condition-notpresent', [ConditionController::class, 'notPresent'])->name('case.condition.notpresent');

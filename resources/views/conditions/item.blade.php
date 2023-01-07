@@ -20,7 +20,15 @@
                         class="condition_item_details_presence_form_submit"
                         type="button">{{ __('ddss.condition_item_details_presence_present') }}</button>
             </form>
-            <button>{{ __('ddss.condition_item_details_presence_not-present') }}</button>
+            <form id="condition_item_details_presence_form_{{ $result->id }}"
+                  method="POST"
+                  action="{{ route('case.condition.notpresent') }}"
+                  data-form-needs-case="true">
+                <input type="hidden" name="condition" value="{{ $result->id }}">
+                <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
+                        class="condition_item_details_presence_form_submit"
+                        type="button">{{ __('ddss.condition_item_details_presence_not-present') }}</button>
+            </form>
         </div>
 
         <div id="condition_item_details_notes_{{ $result->id }}" class="condition_item_details_notes">

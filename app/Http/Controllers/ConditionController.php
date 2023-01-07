@@ -51,6 +51,16 @@ class ConditionController extends Controller
 
     public function present(Request $request)
     {
+        return $this->presence($request, true);
+    }
+
+    public function notPresent(Request $request)
+    {
+        return $this->presence($request, false);
+    }
+
+    public function presence(Request $request, $present)
+    {
         extract($request->validate([
             'condition' => ['bail', 'required', 'exists:conditions,id'],
             'case' => ['bail', 'required'],
@@ -66,7 +76,7 @@ class ConditionController extends Controller
                 conditions.id = ?
         EOL;
         $data = DB::select($sql, [$condition])[0];
-        $data->present = true;
+        $data->present = $present;
         $case = $this->getCase($case);
         $case['conditions'][$condition] = $data;
 
