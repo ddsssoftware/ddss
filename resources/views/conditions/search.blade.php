@@ -4,10 +4,15 @@
           method="POST"
           action="{{ route('case.condition.search') }}"
           data-form-needs-case="true">
-        <input name="term" id="conditions_search_form_text" required>
-        <button id="conditions_search_form_submit" type="button">{{ __('ddss.conditions_search_form_search') }}</button>
+        <input type="hidden" name="case" value="{{ $savedCase }}" />
+        <input name="term" required>
+        <button>{{ __('ddss.conditions_search_form_search') }}</button>
     </form>
     @if(isset($conditionSearchResult))
-        @each('conditions.item', $conditionSearchResult, 'result', 'conditions.noitem')
+        @forelse($conditionSearchResult as $result)
+            @include('conditions.item')
+        @empty
+            @include('conditions.noitem')
+        @endforelse
     @endif
 </section>

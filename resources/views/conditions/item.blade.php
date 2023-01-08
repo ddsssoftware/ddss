@@ -13,17 +13,17 @@
         <div id="condition_item_details_presence_{{ $result->id }}" class="condition_item_details_presence">
             <form id="condition_item_details_presence_form_{{ $result->id }}"
                   method="POST"
-                  action="{{ route('case.condition.present') }}"
-                  data-form-needs-case="true">
+                  action="{{ route('case.condition.present') }}">
                 <input type="hidden" name="condition" value="{{ $result->id }}">
+                <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
                         class="condition_item_details_presence_form_submit"
                         type="button">{{ __('ddss.condition_item_details_presence_present') }}</button>
             </form>
             <form id="condition_item_details_presence_form_{{ $result->id }}"
                   method="POST"
-                  action="{{ route('case.condition.notpresent') }}"
-                  data-form-needs-case="true">
+                  action="{{ route('case.condition.notpresent') }}">
+                <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="condition" value="{{ $result->id }}">
                 <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
                         class="condition_item_details_presence_form_submit"

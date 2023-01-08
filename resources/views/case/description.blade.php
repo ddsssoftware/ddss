@@ -3,9 +3,8 @@
     <form id="case_description_form"
           method="POST"
           action="{{ route('case.updatedescription') }}">
-        <textarea id="case_description_form_text" name="description">{{ ($case['description'] ?? '') }}</textarea>
-        <button id="case_description_form_submit"
-                type="button"
-                data-form-needs-case="true">{{ __('ddss.case_description_form_save') }}</button>
+        <input type="hidden" name="case" value="{{ $savedCase }}" />
+        <textarea name="description">{{ ($case['description'] ?? '') }}</textarea>
+        <button>{{ __('ddss.case_description_form_save') }}</button>
     </form>
 </section>

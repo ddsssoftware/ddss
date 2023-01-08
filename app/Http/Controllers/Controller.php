@@ -51,17 +51,31 @@ class Controller extends BaseController
         }
     }
 
-    public function getCase($case)
+    public function loadCase($case)
     {
-        $case = trim($case, '"');
-        if ($case == null || $case == 'new' || $case == '') {
-            $case = [];
-            $case['description'] = '';
-            $case['symptoms'] = [];
-            $case['conditions'] = [];
-        } else {
-            $case = unserialize($case);
-        }
+        $case = base64_decode($case);
+        $case = gzuncompress($case);
+        $case = unserialize($case);
+
+        return $case;
+    }
+
+    public function saveCase($case)
+    {
+        $case = serialize($case);
+        $case = gzcompress($case);
+        $case = base64_encode($case);
+
+        return $case;
+    }
+
+    public function newCase()
+    {
+        $case = [];
+        $case['description'] = '';
+        $case['symptoms'] = [];
+        $case['conditions'] = [];
+        
         return $case;
     }
 }

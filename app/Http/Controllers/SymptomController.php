@@ -50,9 +50,10 @@ class SymptomController extends Controller
         $term = '%'.strtolower($term).'%';
         $symptomSearchResult = DB::select($sql, [$term]);
         $this->collapseData($symptomSearchResult, false, false, true);
-        $case = $this->getCase($case);
+        $case = $this->loadCase($case);
+        $savedCase = $this->saveCase($case);
 
-        return view('index', compact('symptomSearchResult', 'case'));
+        return view('index', compact('symptomSearchResult', 'case', 'savedCase'));
     }
 
     public function present(Request $request)
@@ -83,10 +84,11 @@ class SymptomController extends Controller
         EOL;
         $data = DB::select($sql, [$symptom])[0];
         $data->present = $present;
-        $case = $this->getCase($case);
+        $case = $this->loadCase($case);
         $case['symptoms'][$symptom] = $data;
+        $savedCase = $this->saveCase($case);
 
-        return view('index', compact('case'));
+        return view('index', compact('case', 'savedCase'));
     }
 
 }

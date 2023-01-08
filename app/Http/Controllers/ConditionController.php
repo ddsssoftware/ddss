@@ -44,9 +44,10 @@ class ConditionController extends Controller
         EOL;
         $term = '%'.strtolower($term).'%';
         $conditionSearchResult = DB::select($sql, [$term]);
-        $case = $this->getCase($case);
+        $case = $this->loadCase($case);
+        $savedCase = $this->saveCase($case);
 
-        return view('index', compact('conditionSearchResult', 'case'));
+        return view('index', compact('conditionSearchResult', 'case', 'savedCase'));
     }
 
     public function present(Request $request)
@@ -77,9 +78,10 @@ class ConditionController extends Controller
         EOL;
         $data = DB::select($sql, [$condition])[0];
         $data->present = $present;
-        $case = $this->getCase($case);
+        $case = $this->loadCase($case);
         $case['conditions'][$condition] = $data;
+        $savedCase = $this->saveCase();
 
-        return view('index', compact('case'));
+        return view('index', compact('case', 'savedCase'));
     }
 }

@@ -24,7 +24,10 @@ class CaseController extends Controller
 {
     public function index()
     {
-        return view('index');
+        $case = $this->newCase();
+        $savedCase = $this->saveCase($case);
+
+        return view('index', compact('case', 'savedCase'));
     }
 
     public function updateDescription(Request $request)
@@ -33,9 +36,10 @@ class CaseController extends Controller
             'case' => ['bail', 'required'],
             'description' => ['bail', 'string'],
         ]));
-        $case = $this->getCase($case);
+        $case = $this->loadCase($case);
         $case['description'] = $description;
+        $savedCase = $this->saveCase($case);
 
-        return view('index', compact('case'));
+        return view('index', compact('case', 'savedCase'));
     }
 }

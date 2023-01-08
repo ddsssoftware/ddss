@@ -13,8 +13,8 @@
             <div id="symptom_item_details_presence_{{ $result->symptom_id }}" class="symptom_item_details_presence">
             <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
                   method="POST"
-                  action="{{ route('case.symptom.present') }}"
-                  data-form-needs-case="true">
+                  action="{{ route('case.symptom.present') }}">
+                <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
                         class="symptom_item_details_presence_form_submit"
@@ -22,8 +22,8 @@
             </form>
             <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
                   method="POST"
-                  action="{{ route('case.symptom.notpresent') }}"
-                  data-form-needs-case="true">
+                  action="{{ route('case.symptom.notpresent') }}">
+                <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
                         class="symptom_item_details_presence_form_submit"
