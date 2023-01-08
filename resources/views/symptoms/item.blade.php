@@ -17,8 +17,7 @@
                 <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
-                        class="symptom_item_details_presence_form_submit"
-                        type="button">{{ __('ddss.symptom_item_details_presence_present') }}</button>
+                        class="symptom_item_details_presence_form_submit">{{ __('ddss.symptom_item_details_presence_present') }}</button>
             </form>
             <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
                   method="POST"
@@ -26,8 +25,7 @@
                 <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
-                        class="symptom_item_details_presence_form_submit"
-                        type="button">{{ __('ddss.symptom_item_details_presence_not-present') }}</button>
+                        class="symptom_item_details_presence_form_submit">{{ __('ddss.symptom_item_details_presence_not-present') }}</button>
             </form>
         </div>
 

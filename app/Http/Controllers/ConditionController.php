@@ -80,7 +80,7 @@ class ConditionController extends Controller
         $data->present = $present;
         $case = $this->loadCase($case);
         $case['conditions'][$condition] = $data;
-        $savedCase = $this->saveCase();
+        $savedCase = $this->saveCase($case);
 
         return view('index', compact('case', 'savedCase'));
     }

@@ -17,8 +17,7 @@
                 <input type="hidden" name="condition" value="{{ $result->id }}">
                 <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
-                        class="condition_item_details_presence_form_submit"
-                        type="button">{{ __('ddss.condition_item_details_presence_present') }}</button>
+                        class="condition_item_details_presence_form_submit">{{ __('ddss.condition_item_details_presence_present') }}</button>
             </form>
             <form id="condition_item_details_presence_form_{{ $result->id }}"
                   method="POST"
@@ -26,8 +25,7 @@
                 <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="condition" value="{{ $result->id }}">
                 <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
-                        class="condition_item_details_presence_form_submit"
-                        type="button">{{ __('ddss.condition_item_details_presence_not-present') }}</button>
+                        class="condition_item_details_presence_form_submit">{{ __('ddss.condition_item_details_presence_not-present') }}</button>
             </form>
         </div>
 
