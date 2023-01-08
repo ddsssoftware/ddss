@@ -20,6 +20,10 @@ document.querySelectorAll('[data-has-collapsed-details="true"]').forEach(el => {
 
 //#region Case
 
+document.getElementById('case_description_form_textarea').addEventListener('change', function() {
+    document.getElementById('case_description_form_submit').style.backgroundColor = '#fed';
+});
+
 //#endregion
 
 //#region Symptoms
