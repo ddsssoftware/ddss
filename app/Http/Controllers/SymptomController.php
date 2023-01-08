@@ -91,4 +91,29 @@ class SymptomController extends Controller
         return view('index', compact('case', 'savedCase'));
     }
 
+    public function addTest(Request $request)
+    {
+        extract($request->validate([
+            'test' => ['bail', 'required', 'exists:tests,id'],
+            'case' => ['bail', 'required'],
+        ]));
+
+        $sql = <<<EOL
+            SELECT
+                tests.id,
+                tests.name,
+                tests.delay
+            FROM
+                tests
+            WHERE
+                tests.id = ?
+        EOL;
+        $data = DB::select($sql, [$test])[0];
+        $case = $this->loadCase($case);
+        $case['tests'][$test] = $data;
+        $savedCase = $this->saveCase($case);
+
+        return view('index', compact('case', 'savedCase'));
+    }
+
 }

@@ -74,6 +74,7 @@ class Controller extends BaseController
         $case = [];
         $case['description'] = '';
         $case['symptoms'] = [];
+        $case['tests'] = [];
         $case['conditions'] = [];
         
         return $case;

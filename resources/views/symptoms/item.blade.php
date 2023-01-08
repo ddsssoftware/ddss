@@ -32,7 +32,14 @@
 
         <div id="symptom_item_details_tests_{{ $result->symptom_id }}" class="symptom_item_details_tests">
             @foreach($result->tests as $test)
-                <button>{{ $test->test_name }}</button>
+                <form method="POST"
+                      action="{{ route('case.symptom.addtest') }}"
+                      id="symptom_item_details_tests_form_{{ $test->test_id }}"
+                      class="symptom_item_details_tests_form">
+                    <input type="hidden" name="case" value="{{ $savedCase }}" />
+                    <input type="hidden" name="test" value="{{ $test->test_id }}">
+                    <button>{{ $test->test_name }}</button>
+                </form>
             @endforeach
         </div>
 
