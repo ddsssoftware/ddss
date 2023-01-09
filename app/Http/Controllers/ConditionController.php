@@ -65,6 +65,7 @@ class ConditionController extends Controller
         extract($request->validate([
             'condition' => ['bail', 'required', 'exists:conditions,id'],
             'case' => ['bail', 'required'],
+            'notes' => ['bail', 'nullable', 'string'],
         ]));
         $sql = <<<EOL
             SELECT
@@ -78,6 +79,7 @@ class ConditionController extends Controller
         EOL;
         $data = DB::select($sql, [$condition])[0];
         $data->present = $present;
+        $data->notes = htmlentities($notes);
         $case = $this->loadCase($case);
         $case['conditions'][$condition] = $data;
         $savedCase = $this->saveCase($case);
