@@ -91,7 +91,8 @@ footer p
 div.symptom_item,
 div.condition_item,
 div.case_symptom_item,
-div.case_test_item
+div.case_test_item,
+div.case_condition_item
 {
     background-color:#eef;
     margin: 0.13rem;
@@ -111,15 +112,18 @@ div.symptom_item_details_tests button
 }
 
 div.symptom_item_details,
-div.case_symptom_item_details
-div.case_test_item_details
+div.case_symptom_item_details,
+div.case_test_item_details,
+div.case_condition_item_details
 {
     padding: 0.77rem;
 }
 
 span.symptom_item_name,
 span.condition_item_name,
-span.case_symptom_item_name
+span.case_symptom_item_name,
+span.case_test_item_name,
+span.case_condition_item_name
 {
     cursor: pointer;
 }
