@@ -71,6 +71,7 @@ class SymptomController extends Controller
         extract($request->validate([
             'symptom' => ['bail', 'required', 'exists:symptoms,id'],
             'case' => ['bail', 'required'],
+            'notes' => ['bail', 'nullable', 'string'],
         ]));
         $sql = <<<EOL
             SELECT
@@ -84,6 +85,7 @@ class SymptomController extends Controller
         EOL;
         $data = DB::select($sql, [$symptom])[0];
         $data->present = $present;
+        $data->notes = htmlentities($notes);
         $case = $this->loadCase($case);
         $case['symptoms'][$symptom] = $data;
         $savedCase = $this->saveCase($case);
@@ -96,6 +98,7 @@ class SymptomController extends Controller
         extract($request->validate([
             'test' => ['bail', 'required', 'exists:tests,id'],
             'case' => ['bail', 'required'],
+            'notes' => ['bail', 'nullable', 'string'],
         ]));
 
         $sql = <<<EOL
@@ -109,6 +112,7 @@ class SymptomController extends Controller
                 tests.id = ?
         EOL;
         $data = DB::select($sql, [$test])[0];
+        $data->notes = htmlentities($notes);
         $case = $this->loadCase($case);
         $case['tests'][$test] = $data;
         $savedCase = $this->saveCase($case);

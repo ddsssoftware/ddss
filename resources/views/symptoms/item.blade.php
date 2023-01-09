@@ -17,6 +17,8 @@
                 <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
+                        type="button"
+                        data-has-notes="symptom_item_details_notes_text_{{ $result->symptom_id }}"
                         class="symptom_item_details_presence_form_submit">{{ __('ddss.symptom_item_details_presence_present') }}</button>
             </form>
             <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
@@ -25,6 +27,8 @@
                 <input type="hidden" name="case" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
+                        type="button"
+                        data-has-notes="symptom_item_details_notes_text_{{ $result->symptom_id }}"
                         class="symptom_item_details_presence_form_submit">{{ __('ddss.symptom_item_details_presence_not-present') }}</button>
             </form>
         </div>
@@ -38,7 +42,8 @@
                       class="symptom_item_details_tests_form">
                     <input type="hidden" name="case" value="{{ $savedCase }}" />
                     <input type="hidden" name="test" value="{{ $test->test_id }}">
-                    <button>{{ $test->test_name }}</button>
+                    <button type="button" 
+                        data-has-notes="symptom_item_details_notes_text_{{ $result->symptom_id }}" >{{ $test->test_name }}</button>
                 </form>
             @endforeach
         </div>

@@ -15,8 +15,21 @@ document.querySelectorAll('[data-has-collapsed-details="true"]').forEach(el => {
     });
 });
 
-//#endregion
+document.querySelectorAll('[data-has-notes]').forEach(el => {
+    el.addEventListener('click', function(event) {
+        buttonEl = event.target;
+        formEl = buttonEl.parentElement;
+        notesEl = document.getElementById(buttonEl.dataset.hasNotes);
+        inputEl = document.createElement("input");
+        inputEl.setAttribute("type", "hidden");
+        inputEl.setAttribute("name", "notes");
+        inputEl.setAttribute("value", notesEl.value);
+        formEl.appendChild(inputEl);
+        formEl.submit();
+    });
+});
 
+//#endregion
 
 //#region Case
 
