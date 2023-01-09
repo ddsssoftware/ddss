@@ -34,7 +34,7 @@ class CaseController extends Controller
     {
         extract($request->validate([
             'case' => ['bail', 'required'],
-            'description' => ['bail', 'string'],
+            'description' => ['bail', 'nullable', 'string'],
         ]));
         $case = $this->loadCase($case);
         $case['description'] = $description;
