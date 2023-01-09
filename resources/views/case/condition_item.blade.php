@@ -7,6 +7,6 @@
             href="{{ route('factsheet.condition', [$condition->id])}}"
             target="_blank">{{ __('ddss.case_condition_item_details_factsheet')}}</a>
         <p>{{ $condition->notes }}</p>
-        <button>{{ __('ddss.case_condition_item_details_remove')}}</button>
+        <button>{{ __('ddss.case_condition_item_details_remove') }}</button>
     </div>
 </div>

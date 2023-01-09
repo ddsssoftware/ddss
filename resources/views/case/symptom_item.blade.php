@@ -7,7 +7,7 @@
         <a id="symptom_item_details_factsheet_{{ $symptom->id }}"
             href="{{ route('factsheet.symptom', [$symptom->id])}}"
             target="_blank">{{ __('ddss.case_symptom_item_details_factsheet')}}</a>
-        <p>Notes</p>
-        <button>Remove</button>
+        <p>{{ $symptom->notes }}</p>
+        <button>{{ __('ddss.case_symptom_item_details_remove') }}</button>
     </div>
 </div>

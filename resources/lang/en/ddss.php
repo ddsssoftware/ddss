@@ -11,6 +11,7 @@ return [
     'case_symptom_item_presence_present' => 'Present',
     'case_symptom_item_presence_not-present' => 'Not present',
     'case_symptom_item_details_factsheet' => 'Factsheet',
+    'case_symptom_item_details_remove' => 'Remove',
     'case_summary_title' => 'Summary',
     'case_tests_title' => 'Tests',
     'case_test_item_details_factsheet' => 'Factsheet',
