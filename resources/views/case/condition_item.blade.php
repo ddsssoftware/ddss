@@ -12,6 +12,6 @@
             <input type="hidden" name="condition" value="{{ $condition->id }}">
             <input type="hidden" name="case" value="{{ $savedCase }}" />
             <button>{{ __('ddss.case_condition_item_details_remove') }}</button>
-        </form
+        </form>
     </div>
 </div>
