@@ -1,6 +1,7 @@
 <div class="case_condition_item">
     <div class="case_condition_item_header">
         <span id="case_condition_item_name_{{ $condition->id }}" class="case_condition_item_name" data-has-collapsed-details="true">{{ $condition->name }}</span>
+        <span class="case_condition_item_presence">{{ __($condition->present ? 'ddss.case_condition_item_presence_present' : 'ddss.case_condition_item_presence_not-present') }}</span>
     </div>
     <div id="case_condition_item_details_{{ $condition->id }}" class="case_condition_item_details" style="display: none;">
         <a id="condition_item_details_factsheet_{{ $condition->id }}"

@@ -134,7 +134,8 @@ div.symptom_item_details_presence form
     display: inline;
 }
 
-span.case_symptom_item_presence
+span.case_symptom_item_presence,
+span.case_condition_item_presence
 {
     font-style: italic;
     font-size: 0.77rem;

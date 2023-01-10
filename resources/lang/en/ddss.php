@@ -6,6 +6,8 @@ return [
     'case_description_form_save' => 'Save',
     'case_conditions_title' => 'Conditions',
     'case_condition_item_details_factsheet' => 'Factsheet',
+    'case_condition_item_presence_present' => 'Present',
+    'case_condition_item_presence_not-present' => 'Not present',
     'case_condition_item_details_remove' => 'Remove',
     'case_symptoms_title' => 'Symptoms',
     'case_symptom_item_presence_present' => 'Present',
