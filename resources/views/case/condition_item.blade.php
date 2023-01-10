@@ -7,6 +7,11 @@
             href="{{ route('factsheet.condition', [$condition->id])}}"
             target="_blank">{{ __('ddss.case_condition_item_details_factsheet')}}</a>
         <p>{{ $condition->notes }}</p>
-        <button>{{ __('ddss.case_condition_item_details_remove') }}</button>
+        <form action="{{ route('case.condition.remove') }}"
+            method="POST">
+            <input type="hidden" name="condition" value="{{ $condition->id }}">
+            <input type="hidden" name="case" value="{{ $savedCase }}" />
+            <button>{{ __('ddss.case_condition_item_details_remove') }}</button>
+        </form
     </div>
 </div>

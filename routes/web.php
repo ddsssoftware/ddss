@@ -37,3 +37,4 @@ Route::post('/add-test', [SymptomController::class, 'addTest'])->name('case.symp
 Route::post('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
 Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');
 Route::post('/condition-notpresent', [ConditionController::class, 'notPresent'])->name('case.condition.notpresent');
+Route::post('/condition-remove', [ConditionController::class, 'remove'])->name('case.condition.remove');

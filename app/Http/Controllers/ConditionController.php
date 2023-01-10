@@ -86,4 +86,18 @@ class ConditionController extends Controller
 
         return view('index', compact('case', 'savedCase'));
     }
+
+    public function remove(Request $request)
+    {
+        extract($request->validate([
+            'case' => ['bail', 'required'],
+            'condition' => ['bail', 'required', 'integer'],
+        ]));
+
+        $case = $this->loadCase($case);
+        unset($case['conditions'][$condition]);
+        $savedCase = $this->saveCase($case);
+
+        return view('index', compact('case', 'savedCase'));
+    }
 }
