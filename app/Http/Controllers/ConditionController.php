@@ -70,8 +70,7 @@ class ConditionController extends Controller
         $sql = <<<EOL
             SELECT
                 conditions.id,
-                conditions.name,
-                conditions.urgency
+                conditions.name
             FROM
                 conditions
             WHERE

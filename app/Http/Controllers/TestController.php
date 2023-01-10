@@ -34,8 +34,7 @@ class TestController extends Controller
         $sql = <<<EOL
             SELECT
                 tests.id,
-                tests.name,
-                tests.delay
+                tests.name
             FROM
                 tests
             WHERE

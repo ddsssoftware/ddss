@@ -76,8 +76,7 @@ class SymptomController extends Controller
         $sql = <<<EOL
             SELECT
                 symptoms.id,
-                symptoms.name,
-                symptoms.delay
+                symptoms.name
             FROM
                 symptoms
             WHERE
