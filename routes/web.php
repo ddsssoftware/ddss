@@ -24,7 +24,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\FactsheetController;
 
 Route::get('/', [CaseController::class, 'index'])->name('case.index');
-Route::post('/', [CaseController::class, 'updateDescription'])->name('case.updatedescription');
+Route::post('/description-update', [CaseController::class, 'updateDescription'])->name('case.description.update');
 
 Route::get('/factsheet/condition/{id}', [FactsheetController::class, 'condition'])->name('factsheet.condition');
 Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->name('factsheet.symptom');
