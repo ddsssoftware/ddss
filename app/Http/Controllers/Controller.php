@@ -63,7 +63,7 @@ class Controller extends BaseController
     public function saveCase($case)
     {
         $case = serialize($case);
-        $case = gzcompress($case);
+        $case = gzcompress($case, 9);
         $case = base64_encode($case);
 
         return $case;
