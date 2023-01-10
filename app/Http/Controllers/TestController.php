@@ -19,9 +19,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
+    public function add(Request $request)
+    {
+        extract($request->validate([
+            'test' => ['bail', 'required', 'exists:tests,id'],
+            'case' => ['bail', 'required'],
+            'notes' => ['bail', 'nullable', 'string'],
+        ]));
+
+        $sql = <<<EOL
+            SELECT
+                tests.id,
+                tests.name,
+                tests.delay
+            FROM
+                tests
+            WHERE
+                tests.id = ?
+        EOL;
+        $data = DB::select($sql, [$test])[0];
+        $data->notes = htmlentities($notes);
+        $case = $this->loadCase($case);
+        $case['tests'][$test] = $data;
+        $savedCase = $this->saveCase($case);
+
+        return view('index', compact('case', 'savedCase'));
+    }
+
     public function remove(Request $request)
     {
         extract($request->validate([

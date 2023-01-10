@@ -33,7 +33,6 @@ Route::get('/factsheet/test/{id}', [FactsheetController::class, 'test'])->name('
 Route::post('/symptom-search', [SymptomController::class, 'search'])->name('case.symptom.search');
 Route::post('/symptom-present', [SymptomController::class, 'present'])->name('case.symptom.present');
 Route::post('/symptom-notpresent', [SymptomController::class, 'notPresent'])->name('case.symptom.notpresent');
-Route::post('/add-test', [SymptomController::class, 'addTest'])->name('case.symptom.addtest');
 Route::post('/symptom-remove', [SymptomController::class, 'remove'])->name('case.symptom.remove');
 
 Route::post('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
@@ -42,4 +41,5 @@ Route::post('/condition-notpresent', [ConditionController::class, 'notPresent'])
 Route::post('/condition-remove', [ConditionController::class, 'remove'])->name('case.condition.remove');
 
 Route::post('/test-remove', [TestController::class, 'remove'])->name('case.test.remove');
+Route::post('/test-add', [TestController::class, 'add'])->name('case.test.add');
 
