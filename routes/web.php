@@ -33,6 +33,7 @@ Route::post('/symptom-search', [SymptomController::class, 'search'])->name('case
 Route::post('/symptom-present', [SymptomController::class, 'present'])->name('case.symptom.present');
 Route::post('/symptom-notpresent', [SymptomController::class, 'notPresent'])->name('case.symptom.notpresent');
 Route::post('/add-test', [SymptomController::class, 'addTest'])->name('case.symptom.addtest');
+Route::post('/symptom-remove', [SymptomController::class, 'remove'])->name('case.symptom.remove');
 
 Route::post('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
 Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');

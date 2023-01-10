@@ -120,4 +120,18 @@ class SymptomController extends Controller
         return view('index', compact('case', 'savedCase'));
     }
 
+    public function remove(Request $request)
+    {
+        extract($request->validate([
+            'case' => ['bail', 'required'],
+            'symptom' => ['bail', 'required', 'integer'],
+        ]));
+
+        $case = $this->loadCase($case);
+        unset($case['symptoms'][$symptom]);
+        $savedCase = $this->saveCase($case);
+
+        return view('index', compact('case', 'savedCase'));
+    }
+
 }
