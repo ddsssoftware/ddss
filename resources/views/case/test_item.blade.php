@@ -6,7 +6,12 @@
         <a id="test_item_details_factsheet_{{ $test->id }}"
             href="{{ route('factsheet.test', [$test->id])}}"
             target="_blank">{{ __('ddss.case_test_item_details_factsheet')}}</a>
-        <p>Notes</p>
-        <button>{{ __('ddss.case_test_item_details_remove')}}</button>
+        <p>{{ $test->notes }}</p>
+        <form action="{{ route('case.test.remove') }}"
+            method="POST">
+            <input type="hidden" name="test" value="{{ $test->id }}">
+            <input type="hidden" name="case" value="{{ $savedCase }}" />
+            <button>{{ __('ddss.case_test_item_details_remove')}}</button>
+        </form>
     </div>
 </div>

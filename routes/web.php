@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CaseController;
 use App\Http\Controllers\SymptomController;
 use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\FactsheetController;
 
 Route::get('/', [CaseController::class, 'index'])->name('case.index');
@@ -39,3 +40,6 @@ Route::post('/condition-search', [ConditionController::class, 'search'])->name('
 Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');
 Route::post('/condition-notpresent', [ConditionController::class, 'notPresent'])->name('case.condition.notpresent');
 Route::post('/condition-remove', [ConditionController::class, 'remove'])->name('case.condition.remove');
+
+Route::post('/test-remove', [TestController::class, 'remove'])->name('case.test.remove');
+
