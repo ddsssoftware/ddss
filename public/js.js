@@ -1,11 +1,5 @@
-//#region Util
-
 function toggle(el) {
-    if (el.style.display == 'none') {
-        el.style.display = '';
-    } else {
-        el.style.display = 'none';
-    }
+    el.style.display = el.style.display == 'none' ? '' : 'none';
 }
 
 document.querySelectorAll('[data-has-collapsed-details="true"]').forEach(el => {
@@ -29,20 +23,6 @@ document.querySelectorAll('[data-has-notes]').forEach(el => {
     });
 });
 
-//#endregion
-
-//#region Case
-
 document.getElementById('case_description_form_textarea').addEventListener('change', function() {
     document.getElementById('case_description_form_submit').style.backgroundColor = '#fed';
 });
-
-//#endregion
-
-//#region Symptoms
-
-//#endregion
-
-//#region Conditions
-
-//#endregion
