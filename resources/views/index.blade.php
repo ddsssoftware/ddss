@@ -2,8 +2,9 @@
 
 @section('header') 
 <nav>
-    <button>{{ __('ddss.index_header_new') }}</button>
-    <button>{{ __('ddss.index_header_load') }}</button>
+    <form action="{{ route('case.index') }}">
+        <button>{{ __('ddss.index_header_new') }}</button>
+    </form>
 </nav>
 @endsection
 
