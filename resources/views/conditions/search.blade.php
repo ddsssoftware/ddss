@@ -1,7 +1,6 @@
 <section id="conditions_search">
     <h3>{{ __('ddss.conditions_search_title') }}</h3>
     <form id="conditions_search_form"
-          method="POST"
           action="{{ route('case.condition.search') }}"
           data-form-needs-case="true">
         <input type="hidden" name="c" value="{{ $savedCase }}" />

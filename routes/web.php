@@ -30,12 +30,12 @@ Route::get('/factsheet/condition/{id}', [FactsheetController::class, 'condition'
 Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->name('factsheet.symptom');
 Route::get('/factsheet/test/{id}', [FactsheetController::class, 'test'])->name('factsheet.test');
 
-Route::post('/symptom-search', [SymptomController::class, 'search'])->name('case.symptom.search');
+Route::get('/symptom-search', [SymptomController::class, 'search'])->name('case.symptom.search');
 Route::post('/symptom-present', [SymptomController::class, 'present'])->name('case.symptom.present');
 Route::post('/symptom-notpresent', [SymptomController::class, 'notPresent'])->name('case.symptom.notpresent');
 Route::post('/symptom-remove', [SymptomController::class, 'remove'])->name('case.symptom.remove');
 
-Route::post('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
+Route::get('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
 Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');
 Route::post('/condition-notpresent', [ConditionController::class, 'notPresent'])->name('case.condition.notpresent');
 Route::post('/condition-remove', [ConditionController::class, 'remove'])->name('case.condition.remove');

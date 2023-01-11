@@ -1,7 +1,6 @@
 <section id="symptoms_search">
     <h3>{{ __('ddss.symptoms_search_title') }}</h3>
     <form id="symptoms_search_form"
-          method="POST"
           action="{{ route('case.symptom.search') }}"
           data-form-needs-case="true">
         <input type="hidden" name="c" value="{{ $savedCase }}" />
