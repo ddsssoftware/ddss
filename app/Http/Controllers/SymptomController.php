@@ -21,9 +21,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Diagnosis;
+use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class SymptomController extends Controller
 {
+    use ValidatesRequests;
+
     public function search(Request $request)
     {
         extract($request->validate([
@@ -50,7 +54,7 @@ class SymptomController extends Controller
         EOL;
         $term = '%'.strtolower($term).'%';
         $symptomSearchResult = DB::select($sql, [$term]);
-        $this->collapseData($symptomSearchResult, false, false, true);
+        Diagnosis::collapseData($symptomSearchResult, false, false, true);
         $case = Diagnosis::load($c);
         $savedCase = Diagnosis::save($case);
 

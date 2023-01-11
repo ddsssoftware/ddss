@@ -18,11 +18,15 @@
  */
 namespace App\Http\Controllers;
 
+use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use App\Models\Diagnosis;
 
 class CaseController extends Controller
 {
+    use ValidatesRequests;
+
     public function index(Request $request)
     {
         extract($request->validate([

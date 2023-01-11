@@ -21,9 +21,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Diagnosis;
+use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class ConditionController extends Controller
 {
+    use ValidatesRequests;
+
     public function search(Request $request)
     {
         extract($request->validate([
