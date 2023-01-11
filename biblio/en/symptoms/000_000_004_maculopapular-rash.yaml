@@ -14,14 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>
 
-id: 1
-name: "Dengue"
-desc: "acute infectious, eruptive, febrile disease caused by four antigenically related but distinct serotypes of the dengue virus; transmitted by the bite of infected Aedes mosquitoes, especially A. aegypti; classical dengue (dengue fever) is self-limiting and characterized by fever, myalgia, headache, and rash; dengue hemorrhagic fever is a more virulent form of dengue virus infection"
-urgency: -1;
-symptoms:
+id: 4
+name: "Maculopapular rash"
+desc: "An exanthema consisting of widespread pink-to-red macules (flat spots of 2-10 mm in diameter) or papules (red bumps) that blanch with pressure. The macules and papules may cluster and merge to form sheets over several days"
+aka:
+  - "Morbilliform rash"
+tests:
   - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6

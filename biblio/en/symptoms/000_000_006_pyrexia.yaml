@@ -1,0 +1,10 @@
+id: 6
+name: Pyrexia
+desc: "Body temperature elevated above the normal range"
+aka:
+  - "Body temperature increased"
+  - "Hyperthermia"
+  - "Fever"
+  - "Febrile"
+tests:
+  - 1

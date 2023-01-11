@@ -14,14 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>
 
-id: 1
-name: "Dengue"
-desc: "acute infectious, eruptive, febrile disease caused by four antigenically related but distinct serotypes of the dengue virus; transmitted by the bite of infected Aedes mosquitoes, especially A. aegypti; classical dengue (dengue fever) is self-limiting and characterized by fever, myalgia, headache, and rash; dengue hemorrhagic fever is a more virulent form of dengue virus infection"
-urgency: -1;
-symptoms:
+id: 3
+name: "Lymphadenopathy"
+desc: "Lymphadenopathy: the abnormal enlargement of lymph nodes"
+aka:
+  - "Lymph nodes enlarged"
+  - "Lymphadenitis"
+tests:
   - 1
-  - 2
-  - 3
-  - 4
-  - 5
-  - 6
