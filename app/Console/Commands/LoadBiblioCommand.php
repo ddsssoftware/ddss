@@ -49,7 +49,6 @@ class LoadBiblioCommand extends Command
         $this->loadSymptoms();
         $this->loadConditions();
         $this->fillData();
-        $this->loadSuggestionsTable();
 
         $this->info('Ended loading biblio');
 
@@ -67,7 +66,6 @@ class LoadBiblioCommand extends Command
             'symptom_test',
             'conditionsaka',
             'symptomsaka',
-            'suggestions',
         ];
         $tables = array_reverse($tables);
         foreach ($tables as $table) {
@@ -114,7 +112,7 @@ class LoadBiblioCommand extends Command
             $content = Yaml::parseFile($file);
             $values = Arr::only($content, $fields);
             $values = array_values($values);
-            DB::insert("INSERT INTO symptoms (id, name, desc, delay) VALUES (?, ?, ?, -1)", $values);
+            DB::insert("INSERT INTO symptoms (id, name, desc, delay, urgency) VALUES (?, ?, ?, -1, -1)", $values);
             
             if (!isset($content['aka'])) {
                 $content['aka'] = [];
@@ -172,6 +170,7 @@ class LoadBiblioCommand extends Command
         $this->fillMissingTestDelay();
         $this->fillMissingConditionUrgency();
         $this->fillSymptomDelay();
+        $this->fillSymptomUrgency();
     }
 
     protected function fillMissingTestDelay()
@@ -208,33 +207,23 @@ class LoadBiblioCommand extends Command
         DB::commit();       
     }
 
-    protected function loadSuggestionsTable()
+    protected function fillSymptomUrgency()
     {
         $sql = <<<EOL
-            INSERT INTO
-                suggestions
             SELECT
-                conditions.id AS condition_id,
-                conditions.name AS condition_name,
-                conditions.urgency AS condition_urgency,
-                symptoms.id AS symptom_id,
-                symptoms.name AS symptom_name,
-                symptoms.delay AS symptom_delay,
-                tests.id AS test_id,
-                tests.name AS test_name,
-                tests.delay AS test_delay
+                condition_symptom.symptom_id AS symptom_id,
+                min(conditions.urgency) AS urgency
             FROM
-                conditions
-                JOIN condition_symptom ON conditions.id = condition_symptom.condition_id
-                JOIN symptoms ON symptoms.id = condition_symptom.symptom_id
-                JOIN symptom_test ON symptoms.id = symptom_test.symptom_id
-                JOIN tests ON tests.id = symptom_test.test_id
-            ORDER BY
-                conditions.urgency ASC,
-                symptoms.delay ASC,
-                tests.delay ASC
+                condition_symptom
+                JOIN conditions ON condition_symptom.condition_id = conditions.id
+            GROUP BY
+                condition_symptom.symptom_id
         EOL;
-
-        DB::insert($sql);
+        $urgencies = DB::select($sql);
+        DB::beginTransaction();
+        foreach ($urgencies as $urgency) {
+            DB::update("UPDATE symptoms SET urgency = ? WHERE id = ?", [$urgency->urgency, $urgency->symptom_id]);
+        }
+        DB::commit();       
     }
 }

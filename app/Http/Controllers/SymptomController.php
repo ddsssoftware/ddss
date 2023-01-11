@@ -35,26 +35,22 @@ class SymptomController extends Controller
             'c' => ['bail', 'required'],
         ]));
         $sql = <<<EOL
-            SELECT
-                suggestions.symptom_id,
-                suggestions.symptom_name,
-                suggestions.test_id,
-                suggestions.test_name
+            SELECT DISTINCT
+                symptoms.id,
+                symptoms.name
             FROM
-                suggestions
+                symptoms
+                JOIN symptomsaka ON symptoms.id = symptomsaka.symptom_id
             WHERE
-                suggestions.symptom_id IN (
-                        SELECT
-                            symptomsaka.symptom_id
-                        FROM
-                            symptomsaka
-                        WHERE
-                            name LIKE ?
-                    )
+                symptomsaka.name LIKE ?
+            ORDER BY
+                symptoms.urgency ASC,
+                symptoms.delay ASC
         EOL;
         $term = '%'.strtolower($term).'%';
         $symptomSearchResult = DB::select($sql, [$term]);
-        Diagnosis::collapseData($symptomSearchResult, false, false, true);
+        Diagnosis::addTestsToSymptoms($symptomSearchResult);
+
         $case = Diagnosis::load($c);
         $savedCase = Diagnosis::save($case);
 

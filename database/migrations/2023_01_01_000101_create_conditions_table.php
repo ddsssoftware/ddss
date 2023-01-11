@@ -30,6 +30,8 @@ class CreateConditionsTable extends Migration
             $table->string('name');
             $table->string('desc');
             $table->integer('urgency');
+
+            $table->index('urgency');
         });
     }
 

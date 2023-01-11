@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
+
 abstract class Diagnosis {
 
     public const DESCRIPTION = 'd';
@@ -43,31 +45,38 @@ abstract class Diagnosis {
         return $diagnosis;
     }
 
-    public static function collapseData(&$data, $conditionFlag = true, $symptomFlag = true, $testFlag = true)
+    public static function addTestsToSymptoms(&$symptoms)
     {
-        if ($testFlag) {
-            $keys = array_keys($data);
-            $previousKey = $keys[0];
-            foreach ($keys as $key) {
-                if ($previousKey != $key &&
-                    $data[$previousKey]->symptom_id == $data[$key]->symptom_id) {
-                    if (!isset($data[$previousKey]->tests)) {
-                        $data[$previousKey]->tests = [];
-                    }
-                    $data[$previousKey]->tests[] = $data[$key];
-                    unset($data[$key]);
-                } else {
-                    if (!isset($data[$key]->tests)) {
-                        $data[$key]->tests = [];
-                        $data[$key]->tests[] = $data[$key];
-                    }
-                    $previousKey = $key;
+        $sql = <<<EOL
+            SELECT
+                tests.id,
+                tests.name,
+                symptom_test.symptom_id
+            FROM
+                tests
+            JOIN symptom_test ON symptom_test.test_id = tests.id
+            WHERE
+                symptom_test.symptom_id IN (?)
+            ORDER BY
+                tests.delay ASC
+        EOL;
+        $sql = str_replace('?', implode(',', array_column($symptoms, 'id')), $sql);
+        $tests = DB::select($sql);
+        self::mergeData($symptoms, 'id', $tests, 'symptom_id', 'tests');
+    }
+
+    public static function mergeData(&$set1, $key1, &$set2, $key2, $attribute)
+    {
+        foreach ($set1 as $item1) {
+            if (!isset($item1->$attribute)) {
+                $item1->$attribute = [];
+            }
+            foreach ($set2 as $item2) {
+                if ($item1->$key1 == $item2->$key2) {
+                    $item1->$attribute[] = $item2;
                 }
             }
         }
     }
-
-
-
 
 }

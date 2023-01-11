@@ -30,6 +30,10 @@ class CreateSymptomsTable extends Migration
             $table->string('name');
             $table->string('desc');
             $table->integer('delay');
+            $table->integer('urgency');
+
+            $table->index('delay');
+            $table->index('urgency');
         });
     }
 
