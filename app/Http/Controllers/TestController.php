@@ -20,6 +20,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Diagnosis;
 
 class TestController extends Controller
 {
@@ -27,39 +28,39 @@ class TestController extends Controller
     {
         extract($request->validate([
             'test' => ['bail', 'required', 'exists:tests,id'],
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'notes' => ['bail', 'nullable', 'string'],
         ]));
 
         $sql = <<<EOL
             SELECT
-                tests.id,
-                tests.name
+                tests.id AS i,
+                tests.name AS n
             FROM
                 tests
             WHERE
                 tests.id = ?
         EOL;
-        $data = DB::select($sql, [$test])[0];
-        $data->notes = htmlentities($notes);
-        $case = $this->loadCase($case);
-        $case['tests'][$test] = $data;
-        $savedCase = $this->saveCase($case);
+        $data = (array) DB::select($sql, [$test])[0];
+        $data[Diagnosis::NOTES] = htmlentities($notes);
+        $case = Diagnosis::load($c);
+        $case[Diagnosis::TESTS][$test] = $data;
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 
     public function remove(Request $request)
     {
         extract($request->validate([
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'test' => ['bail', 'required', 'integer'],
         ]));
 
-        $case = $this->loadCase($case);
-        unset($case['tests'][$test]);
-        $savedCase = $this->saveCase($case);
+        $case = Diagnosis::load($c);
+        unset($case[Diagnosis::TESTS][$test]);
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 }

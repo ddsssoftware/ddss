@@ -14,7 +14,7 @@
             <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
                   method="POST"
                   action="{{ route('case.symptom.present') }}">
-                <input type="hidden" name="case" value="{{ $savedCase }}" />
+                <input type="hidden" name="c" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
                         type="button"
@@ -24,7 +24,7 @@
             <form id="symptom_item_details_presence_form_{{ $result->symptom_id }}"
                   method="POST"
                   action="{{ route('case.symptom.notpresent') }}">
-                <input type="hidden" name="case" value="{{ $savedCase }}" />
+                <input type="hidden" name="c" value="{{ $savedCase }}" />
                 <input type="hidden" name="symptom" value="{{ $result->symptom_id }}">
                 <button id="symptom_item_details_presence_form_submit_{{ $result->symptom_id }}"
                         type="button"
@@ -40,7 +40,7 @@
                       action="{{ route('case.test.add') }}"
                       id="symptom_item_details_tests_form_{{ $test->test_id }}"
                       class="symptom_item_details_tests_form">
-                    <input type="hidden" name="case" value="{{ $savedCase }}" />
+                    <input type="hidden" name="c" value="{{ $savedCase }}" />
                     <input type="hidden" name="test" value="{{ $test->test_id }}">
                     <button type="button" 
                         data-has-notes="symptom_item_details_notes_text_{{ $result->symptom_id }}" >{{ $test->test_name }}</button>

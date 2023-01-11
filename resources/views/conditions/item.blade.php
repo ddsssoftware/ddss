@@ -15,7 +15,7 @@
                   method="POST"
                   action="{{ route('case.condition.present') }}">
                 <input type="hidden" name="condition" value="{{ $result->id }}">
-                <input type="hidden" name="case" value="{{ $savedCase }}" />
+                <input type="hidden" name="c" value="{{ $savedCase }}" />
                 <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
                         data-has-notes="condition_item_details_notes_text_{{ $result->id }}"
                         type="button"
@@ -24,7 +24,7 @@
             <form id="condition_item_details_presence_form_{{ $result->id }}"
                   method="POST"
                   action="{{ route('case.condition.notpresent') }}">
-                <input type="hidden" name="case" value="{{ $savedCase }}" />
+                <input type="hidden" name="c" value="{{ $savedCase }}" />
                 <input type="hidden" name="condition" value="{{ $result->id }}">
                 <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
                         data-has-notes="condition_item_details_notes_text_{{ $result->id }}"

@@ -20,6 +20,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Diagnosis;
 
 class SymptomController extends Controller
 {
@@ -27,7 +28,7 @@ class SymptomController extends Controller
     {
         extract($request->validate([
             'term' => ['bail', 'required', 'string', 'min:1'],
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
         ]));
         $sql = <<<EOL
             SELECT
@@ -50,8 +51,8 @@ class SymptomController extends Controller
         $term = '%'.strtolower($term).'%';
         $symptomSearchResult = DB::select($sql, [$term]);
         $this->collapseData($symptomSearchResult, false, false, true);
-        $case = $this->loadCase($case);
-        $savedCase = $this->saveCase($case);
+        $case = Diagnosis::load($c);
+        $savedCase = Diagnosis::save($case);
 
         return view('index', compact('symptomSearchResult', 'case', 'savedCase'));
     }
@@ -70,40 +71,40 @@ class SymptomController extends Controller
     {
         extract($request->validate([
             'symptom' => ['bail', 'required', 'exists:symptoms,id'],
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'notes' => ['bail', 'nullable', 'string'],
         ]));
         $sql = <<<EOL
             SELECT
-                symptoms.id,
-                symptoms.name
+                symptoms.id AS i,
+                symptoms.name AS n
             FROM
                 symptoms
             WHERE
                 symptoms.id = ?
         EOL;
-        $data = DB::select($sql, [$symptom])[0];
-        $data->present = $present;
-        $data->notes = htmlentities($notes);
-        $case = $this->loadCase($case);
-        $case['symptoms'][$symptom] = $data;
-        $savedCase = $this->saveCase($case);
+        $data = (array) DB::select($sql, [$symptom])[0];
+        $data[Diagnosis::PRESENCE] = $present;
+        $data[Diagnosis::NOTES] = htmlentities($notes);
+        $case = Diagnosis::load($c);
+        $case[Diagnosis::SYMPTOMS][$symptom] = $data;
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 
     public function remove(Request $request)
     {
         extract($request->validate([
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'symptom' => ['bail', 'required', 'integer'],
         ]));
 
-        $case = $this->loadCase($case);
-        unset($case['symptoms'][$symptom]);
-        $savedCase = $this->saveCase($case);
+        $case = Diagnosis::load($c);
+        unset($case[Diagnosis::SYMPTOMS][$symptom]);
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 
 }

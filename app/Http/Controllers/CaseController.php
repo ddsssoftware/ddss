@@ -19,27 +19,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Diagnosis;
 
 class CaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $case = $this->newCase();
-        $savedCase = $this->saveCase($case);
-
+        extract($request->validate([
+            'c' => ['bail', 'nullable', 'string'],
+        ]));
+        if (isset($c)) {
+            $case = Diagnosis::load($c);
+            $savedCase = $c;
+        } else {
+            $case = Diagnosis::new();
+            $savedCase = Diagnosis::save($case);
+        }
+        
         return view('index', compact('case', 'savedCase'));
     }
 
     public function updateDescription(Request $request)
     {
         extract($request->validate([
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'description' => ['bail', 'nullable', 'string'],
         ]));
-        $case = $this->loadCase($case);
-        $case['description'] = $description;
-        $savedCase = $this->saveCase($case);
+        $case = Diagnosis::load($c);
+        $case[Diagnosis::DESCRIPTION] = $description;
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 }

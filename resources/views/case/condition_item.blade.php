@@ -1,17 +1,17 @@
 <div class="case_condition_item">
     <div class="case_condition_item_header">
-        <span id="case_condition_item_name_{{ $condition->id }}" class="case_condition_item_name" data-has-collapsed-details="true">{{ $condition->name }}</span>
-        <span class="case_condition_item_presence">{{ __($condition->present ? 'ddss.case_condition_item_presence_present' : 'ddss.case_condition_item_presence_not-present') }}</span>
+        <span id="case_condition_item_name_{{ $condition[Diagnosis::ID] }}" class="case_condition_item_name" data-has-collapsed-details="true">{{ $condition[Diagnosis::NAME] }}</span>
+        <span class="case_condition_item_presence">{{ __($condition[Diagnosis::PRESENCE] ? 'ddss.case_condition_item_presence_present' : 'ddss.case_condition_item_presence_not-present') }}</span>
     </div>
-    <div id="case_condition_item_details_{{ $condition->id }}" class="case_condition_item_details" style="display: none;">
-        <a id="condition_item_details_factsheet_{{ $condition->id }}"
-            href="{{ route('factsheet.condition', [$condition->id])}}"
+    <div id="case_condition_item_details_{{ $condition[Diagnosis::ID] }}" class="case_condition_item_details" style="display: none;">
+        <a id="condition_item_details_factsheet_{{ $condition[Diagnosis::ID] }}"
+            href="{{ route('factsheet.condition', [$condition[Diagnosis::ID]])}}"
             target="_blank">{{ __('ddss.case_condition_item_details_factsheet')}}</a>
-        <p>{{ $condition->notes }}</p>
+        <p>{{ $condition[Diagnosis::NOTES] }}</p>
         <form action="{{ route('case.condition.remove') }}"
             method="POST">
-            <input type="hidden" name="condition" value="{{ $condition->id }}">
-            <input type="hidden" name="case" value="{{ $savedCase }}" />
+            <input type="hidden" name="condition" value="{{ $condition[Diagnosis::ID] }}">
+            <input type="hidden" name="c" value="{{ $savedCase }}" />
             <button>{{ __('ddss.case_condition_item_details_remove') }}</button>
         </form>
     </div>

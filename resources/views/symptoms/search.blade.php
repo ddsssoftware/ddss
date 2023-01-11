@@ -4,7 +4,7 @@
           method="POST"
           action="{{ route('case.symptom.search') }}"
           data-form-needs-case="true">
-        <input type="hidden" name="case" value="{{ $savedCase }}" />
+        <input type="hidden" name="c" value="{{ $savedCase }}" />
         <input name="term" required>
         <button>{{ __('ddss.symptoms_search_form_search') }}</button>
     </form>

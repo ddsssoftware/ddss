@@ -20,6 +20,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Diagnosis;
 
 class ConditionController extends Controller
 {
@@ -27,13 +28,12 @@ class ConditionController extends Controller
     {
         extract($request->validate([
             'term' => ['bail', 'required', 'string', 'min:1'],
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
         ]));
         $sql = <<<EOL
             SELECT DISTINCT
                 conditions.id,
-                conditions.name,
-                conditions.urgency
+                conditions.name
             FROM
                 conditionsaka
                 JOIN conditions ON conditions.id = conditionsaka.condition_id
@@ -44,8 +44,8 @@ class ConditionController extends Controller
         EOL;
         $term = '%'.strtolower($term).'%';
         $conditionSearchResult = DB::select($sql, [$term]);
-        $case = $this->loadCase($case);
-        $savedCase = $this->saveCase($case);
+        $case = Diagnosis::load($c);
+        $savedCase = Diagnosis::save($case);
 
         return view('index', compact('conditionSearchResult', 'case', 'savedCase'));
     }
@@ -64,39 +64,39 @@ class ConditionController extends Controller
     {
         extract($request->validate([
             'condition' => ['bail', 'required', 'exists:conditions,id'],
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'notes' => ['bail', 'nullable', 'string'],
         ]));
         $sql = <<<EOL
             SELECT
-                conditions.id,
-                conditions.name
+                conditions.id AS i,
+                conditions.name AS n
             FROM
                 conditions
             WHERE
                 conditions.id = ?
         EOL;
-        $data = DB::select($sql, [$condition])[0];
-        $data->present = $present;
-        $data->notes = htmlentities($notes);
-        $case = $this->loadCase($case);
-        $case['conditions'][$condition] = $data;
-        $savedCase = $this->saveCase($case);
+        $data = (array) DB::select($sql, [$condition])[0];
+        $data[Diagnosis::PRESENCE] = $present;
+        $data[Diagnosis::NOTES] = htmlentities($notes);
+        $case = Diagnosis::load($c);
+        $case[Diagnosis::CONDITIONS][$condition] = $data;
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 
     public function remove(Request $request)
     {
         extract($request->validate([
-            'case' => ['bail', 'required'],
+            'c' => ['bail', 'required'],
             'condition' => ['bail', 'required', 'integer'],
         ]));
 
-        $case = $this->loadCase($case);
-        unset($case['conditions'][$condition]);
-        $savedCase = $this->saveCase($case);
+        $case = Diagnosis::load($c);
+        unset($case[Diagnosis::CONDITIONS][$condition]);
+        $c = Diagnosis::save($case);
 
-        return view('index', compact('case', 'savedCase'));
+        return redirect()->route('case.index', compact('c'));
     }
 }

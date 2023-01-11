@@ -50,33 +50,4 @@ class Controller extends BaseController
             }
         }
     }
-
-    public function loadCase($case)
-    {
-        $case = base64_decode($case);
-        $case = gzuncompress($case);
-        $case = unserialize($case);
-
-        return $case;
-    }
-
-    public function saveCase($case)
-    {
-        $case = serialize($case);
-        $case = gzcompress($case, 9);
-        $case = base64_encode($case);
-
-        return $case;
-    }
-
-    public function newCase()
-    {
-        $case = [];
-        $case['description'] = '';
-        $case['symptoms'] = [];
-        $case['tests'] = [];
-        $case['conditions'] = [];
-        
-        return $case;
-    }
 }
