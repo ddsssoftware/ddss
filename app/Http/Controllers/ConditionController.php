@@ -34,20 +34,13 @@ class ConditionController extends Controller
             'term' => ['bail', 'required', 'string', 'min:1'],
             'c' => ['bail', 'required'],
         ]));
-        $sql = <<<EOL
-            SELECT DISTINCT
-                conditions.id,
-                conditions.name
-            FROM
-                conditionsaka
-                JOIN conditions ON conditions.id = conditionsaka.condition_id
-            WHERE
-                conditionsaka.searchname LIKE ?
-            ORDER BY
-                conditions.urgency
-        EOL;
-        $term = '%'.strtolower($term).'%';
-        $conditionSearchResult = DB::select($sql, [$term]);
+        $conditionSearchResult = DB::table('conditions')
+            ->select('conditions.id', 'conditions.name')
+            ->join('conditionsaka', 'conditions.id', '=', 'conditionsaka.condition_id')
+            ->where('conditionsaka.searchname', 'LIKE', '%'.strtolower($term).'%')
+            ->orderBy('conditions.urgency')
+            ->distinct()
+            ->get();
         $case = Diagnosis::load($c);
         $savedCase = Diagnosis::save($case);
 
