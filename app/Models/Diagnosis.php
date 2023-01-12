@@ -79,4 +79,14 @@ abstract class Diagnosis {
         }
     }
 
+    public static function suggestConditions(&$case)
+    {
+        $conditions = DB::table('conditions')
+            ->select('conditions.id', 'conditions.name')
+            ->orderBy('conditions.urgency', 'ASC')
+            ->get();
+
+        return $conditions;
+    }
+
 }
