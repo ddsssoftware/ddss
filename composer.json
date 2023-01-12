@@ -11,10 +11,7 @@
         "symfony/yaml": "^5.4"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.7",
-        "fakerphp/faker": "^1.9.1",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "barryvdh/laravel-debugbar": "^3.7"
     },
     "autoload": {
         "psr-4": {
