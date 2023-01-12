@@ -74,16 +74,10 @@ class SymptomController extends Controller
             'c' => ['bail', 'required'],
             'notes' => ['bail', 'nullable', 'string'],
         ]));
-        $sql = <<<EOL
-            SELECT
-                symptoms.id AS i,
-                symptoms.name AS n
-            FROM
-                symptoms
-            WHERE
-                symptoms.id = ?
-        EOL;
-        $data = (array) DB::select($sql, [$symptom])[0];
+        $data = (array) DB::table('symptoms')
+            ->select('symptoms.id AS i', 'symptoms.name AS n')
+            ->where('symptoms.id', '=', $symptom)
+            ->first();
         $data[Diagnosis::PRESENCE] = $present;
         $data[Diagnosis::NOTES] = htmlentities($notes);
         $case = Diagnosis::load($c);
