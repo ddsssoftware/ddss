@@ -64,16 +64,10 @@ class ConditionController extends Controller
             'c' => ['bail', 'required'],
             'notes' => ['bail', 'nullable', 'string'],
         ]));
-        $sql = <<<EOL
-            SELECT
-                conditions.id AS i,
-                conditions.name AS n
-            FROM
-                conditions
-            WHERE
-                conditions.id = ?
-        EOL;
-        $data = (array) DB::select($sql, [$condition])[0];
+        $data = (array) DB::table('conditions')
+            ->select('conditions.id AS i', 'conditions.name AS n')
+            ->where('conditions.id', '=', $condition)
+            ->first();
         $data[Diagnosis::PRESENCE] = $present;
         $data[Diagnosis::NOTES] = htmlentities($notes);
         $case = Diagnosis::load($c);
