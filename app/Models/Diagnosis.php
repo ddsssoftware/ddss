@@ -47,21 +47,12 @@ abstract class Diagnosis {
 
     public static function addTestsToSymptoms(&$symptoms)
     {
-        $sql = <<<EOL
-            SELECT
-                tests.id,
-                tests.name,
-                symptom_test.symptom_id
-            FROM
-                tests
-            JOIN symptom_test ON symptom_test.test_id = tests.id
-            WHERE
-                symptom_test.symptom_id IN (?)
-            ORDER BY
-                tests.delay ASC
-        EOL;
-        $sql = str_replace('?', implode(',', array_column($symptoms, 'id')), $sql);
-        $tests = DB::select($sql);
+        $tests = DB::table('tests')
+            ->select('tests.id', 'tests.name', 'symptom_test.symptom_id')
+            ->join('symptom_test', 'symptom_test.test_id', '=', 'tests.id')
+            ->whereIn('symptom_test.symptom_id', $symptoms->pluck('id'))
+            ->orderBy('tests.delay', 'ASC')
+            ->get();
         self::mergeData($symptoms, 'id', $tests, 'symptom_id', 'tests');
     }
 

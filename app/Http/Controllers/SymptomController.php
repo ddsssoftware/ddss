@@ -34,23 +34,15 @@ class SymptomController extends Controller
             'term' => ['bail', 'required', 'string', 'min:1'],
             'c' => ['bail', 'required'],
         ]));
-        $sql = <<<EOL
-            SELECT DISTINCT
-                symptoms.id,
-                symptoms.name
-            FROM
-                symptoms
-                JOIN symptomsaka ON symptoms.id = symptomsaka.symptom_id
-            WHERE
-                symptomsaka.searchname LIKE ?
-            ORDER BY
-                symptoms.urgency ASC,
-                symptoms.delay ASC
-        EOL;
-        $term = '%'.strtolower($term).'%';
-        $symptomSearchResult = DB::select($sql, [$term]);
+        $symptomSearchResult = DB::table('symptoms')
+            ->select('symptoms.id', 'symptoms.name')
+            ->join('symptomsaka', 'symptoms.id', '=', 'symptomsaka.symptom_id')
+            ->where('symptomsaka.searchname', 'LIKE', '%'.strtolower($term).'%')
+            ->orderBy('symptoms.urgency', 'ASC')
+            ->orderBy('symptoms.delay', 'ASC')
+            ->distinct()
+            ->get();
         Diagnosis::addTestsToSymptoms($symptomSearchResult);
-
         $case = Diagnosis::load($c);
         $savedCase = Diagnosis::save($case);
 
