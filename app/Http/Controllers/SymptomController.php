@@ -42,7 +42,7 @@ class SymptomController extends Controller
                 symptoms
                 JOIN symptomsaka ON symptoms.id = symptomsaka.symptom_id
             WHERE
-                symptomsaka.name LIKE ?
+                symptomsaka.searchname LIKE ?
             ORDER BY
                 symptoms.urgency ASC,
                 symptoms.delay ASC

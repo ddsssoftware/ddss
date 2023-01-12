@@ -27,9 +27,12 @@ class CreateSymptomsakaTable extends Migration
         Schema::create('symptomsaka', function (Blueprint $table) {
             $table->unsignedBigInteger('symptom_id');
             $table->string('name');
+            $table->string('searchname');
  
             $table->foreign('symptom_id')->references('id')->on('symptoms');
-            $table->index(['symptomsaka_search_ix', DB::raw('lower(name)')]);
+            
+            $table->index('condition_id');
+            $table->index('searchname');
         });
     }
 

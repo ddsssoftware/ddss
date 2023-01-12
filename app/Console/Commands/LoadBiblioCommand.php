@@ -119,7 +119,7 @@ class LoadBiblioCommand extends Command
             }
             $content['aka'][] = $content['name'];
             foreach ($content['aka'] as $alias) {
-                DB::insert("INSERT INTO symptomsaka VALUES (?, ?)", [$content['id'], $alias]);
+                DB::insert("INSERT INTO symptomsaka VALUES (?, ?, ?)", [$content['id'], $alias, strtolower($alias)]);
             }
 
             if (isset($content['tests'])) {
@@ -151,7 +151,7 @@ class LoadBiblioCommand extends Command
             }
             $content['aka'][] = $content['name'];
             foreach ($content['aka'] as $alias) {
-                DB::insert("INSERT INTO conditionsaka VALUES (?, ?)", [$content['id'], $alias]);
+                DB::insert("INSERT INTO conditionsaka VALUES (?, ?, ?)", [$content['id'], $alias, strtolower($alias)]);
             }
 
             if (isset($content['symptoms'])) {

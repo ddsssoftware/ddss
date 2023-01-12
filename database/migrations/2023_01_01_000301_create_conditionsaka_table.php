@@ -27,9 +27,12 @@ class CreateConditionsakaTable extends Migration
         Schema::create('conditionsaka', function (Blueprint $table) {
             $table->unsignedBigInteger('condition_id');
             $table->string('name');
+            $table->string('searchname');
  
             $table->foreign('condition_id')->references('id')->on('conditions');
-            $table->index(['conditionsaka_search_ix', DB::raw('lower(name)')]);
+
+            $table->index('condition_id');
+            $table->index('searchname');
         });
     }
 

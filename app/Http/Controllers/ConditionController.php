@@ -42,7 +42,7 @@ class ConditionController extends Controller
                 conditionsaka
                 JOIN conditions ON conditions.id = conditionsaka.condition_id
             WHERE
-                conditionsaka.name LIKE ?
+                conditionsaka.searchname LIKE ?
             ORDER BY
                 conditions.urgency
         EOL;
