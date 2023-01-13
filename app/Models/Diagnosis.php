@@ -72,9 +72,15 @@ abstract class Diagnosis {
 
     public static function suggestConditions(&$case)
     {
+        $caseConditions = collect($case[self::CONDITIONS]);
+        $caseSymptoms = collect($case[self::SYMPTOMS]);
         $conditions = DB::table('conditions')
             ->select('conditions.id', 'conditions.name')
+            ->join('condition_symptom', 'condition_symptom.condition_id', '=', 'conditions.id')
+            ->whereNotIn('conditions.id', $caseConditions->where(self::PRESENCE, '=', false)->pluck(self::ID)->toArray())
+            ->whereIn('condition_symptom.symptom_id', $caseSymptoms->where(self::PRESENCE, '=', true)->pluck(self::ID)->toArray())
             ->orderBy('conditions.urgency', 'ASC')
+            ->distinct()
             ->get();
 
         return $conditions;

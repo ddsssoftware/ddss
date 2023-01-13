@@ -35,10 +35,10 @@ class CaseController extends Controller
         if (isset($c)) {
             $case = Diagnosis::load($c);
             $savedCase = $c;
-            $suggestedConditions = null;
+            $suggestedConditions = Diagnosis::suggestConditions($case);
         } else {
             $case = Diagnosis::new();
-            $suggestedConditions = Diagnosis::suggestConditions($case);
+            $suggestedConditions = null;
             $savedCase = Diagnosis::save($case);
         }
         
