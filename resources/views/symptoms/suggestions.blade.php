@@ -1,3 +1,10 @@
 <section id="symptoms_suggestions">
     <h3>{{ __('ddss.symptoms_suggestions_title') }}</h3>
+    @if(isset($suggestedSymptoms))
+        @forelse ($suggestedSymptoms as $result)
+            @include('symptoms.item')
+        @empty
+            @include('symptoms.noitem')
+        @endforelse    
+    @endif
 </section>

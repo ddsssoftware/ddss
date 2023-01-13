@@ -36,13 +36,15 @@ class CaseController extends Controller
             $case = Diagnosis::load($c);
             $savedCase = $c;
             $suggestedConditions = Diagnosis::suggestConditions($case);
+            $suggestedSymptoms = Diagnosis::suggestSymptoms($case, $suggestedConditions);
         } else {
             $case = Diagnosis::new();
             $suggestedConditions = null;
+            $suggestedSymptoms = null;
             $savedCase = Diagnosis::save($case);
         }
         
-        return view('index', compact('case', 'savedCase', 'suggestedConditions'));
+        return view('index', compact('case', 'savedCase', 'suggestedConditions', 'suggestedSymptoms'));
     }
 
     public function updateDescription(Request $request)

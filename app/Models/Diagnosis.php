@@ -86,4 +86,23 @@ abstract class Diagnosis {
         return $conditions;
     }
 
+    public static function suggestSymptoms(&$case, &$suggestedConditions)
+    {
+        $caseSymptoms = collect($case[self::SYMPTOMS])->pluck(self::ID)->toArray();
+
+        $symptoms = DB::table('symptoms')
+            ->select('symptoms.id', 'symptoms.name')
+            ->join('condition_symptom', 'condition_symptom.symptom_id', '=', 'symptoms.id')
+            ->whereNotIn('symptoms.id', $caseSymptoms)
+            ->whereIn('condition_symptom.condition_id', $suggestedConditions->pluck('id'))
+            ->orderBy('symptoms.urgency', 'ASC')
+            ->orderBy('symptoms.delay', 'ASC')
+            ->distinct()
+            ->get();
+
+        Diagnosis::addTestsToSymptoms($symptoms);
+
+        return $symptoms;
+    }
+
 }
