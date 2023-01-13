@@ -2,10 +2,9 @@ function toggle(el) {
     el.style.display = el.style.display == 'none' ? '' : 'none';
 }
 
-document.querySelectorAll('[data-has-collapsed-details="true"]').forEach(el => {
+document.querySelectorAll('[data-has-details]').forEach(el => {
     el.addEventListener('click', function(event) {
-        id = event.target.id.replace('name', 'details');
-        toggle(document.getElementById(id));
+        toggle(document.getElementById(event.target.dataset.hasDetails));
     });
 });
 

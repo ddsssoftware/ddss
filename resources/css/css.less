@@ -1,0 +1,152 @@
+@import (inline) "reset.css";
+
+@textlighter: #b1b9c4;
+@textlight: #4d5156;
+@textdark: #202124;
+@bluelight: #1a0dab;
+
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    color: @textlight;
+    font-size: 1.1rem;
+}
+
+a {
+    color: @bluelight;
+    text-decoration: none;
+}
+
+form {
+    width: 100%;
+    text-align: right;
+    input, textarea {
+        width: 100%;
+        background-color: #fff;
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.3rem;
+        border-radius: 0.3rem;
+        border-left: 2px solid @textlighter;
+        border-top: 2px solid @textlighter;
+        border-right: 2px solid @textlight;
+        border-bottom: 2px solid @textlight;
+    }
+    textarea {
+        height: 7rem;
+    }
+    button {
+        background-color: #fff;
+        font-size: 1.1rem;
+        padding: 0.5rem 2rem;
+        border-radius: 0.3rem;
+        border-left: 2px dotted @textlight;
+        border-top: 2px dotted @textlight;
+        border-right: 2px solid @textdark;
+        border-bottom: 2px solid @textdark;
+    }
+}
+
+h1 {
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+h2 {
+    font-size: 1.4rem;
+    margin: 0;
+    color: @textdark;
+    padding: 1.2rem 0 0.6rem 0;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: @textdark;
+    padding: 0.6rem 0 0.3rem 0;
+}
+
+h4 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: @textdark;
+    padding: 0.6rem 0 0.3rem 0;
+}
+
+p {
+    margin:0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+article#case {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    section {
+        flex: 33%;
+        padding: 0rem 1rem;
+        & > section {
+            form, div, p {
+                padding: 0 0 0 1rem;
+            }
+        }
+    }
+}
+
+section.list {
+    div.item {
+        border-bottom: 1px solid @textlighter;
+        header {
+            span {
+                cursor: pointer;
+                &:nth-of-type(2) {
+                    font-style: italic;
+                    color: @textlighter;
+                }
+            }
+        }
+        form {
+            text-align: left;
+            margin-bottom: 0.6rem;
+        }
+        a {
+            display: block;
+            padding-bottom: 1.2rem;
+        }
+    }
+    div:last-of-type {
+        border: 0;
+    }
+}
+
+article#factsheet {
+    margin: 2rem;
+}
+
+footer {
+    color: @textlighter;
+    text-align: center;
+    font-size: 0.6rem;
+    margin: 7rem 0 4rem 0;
+    a {
+        color: @textlighter;
+    }
+    p {
+        display: inline;
+    }
+}
+

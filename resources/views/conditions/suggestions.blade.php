@@ -1,7 +1,7 @@
-<section id="conditions_suggestions">
+<section>
     <h3>{{ __('ddss.conditions_suggestions_title') }}</h3>
     @if(isset($suggestedConditions))
-        @forelse($suggestedConditions as $result)
+        @forelse($suggestedConditions as $condition)
             @include('conditions.item')
         @empty
             @include('conditions.noitem')

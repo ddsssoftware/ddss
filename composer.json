@@ -33,6 +33,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "build-css": [
+            "lessc resources/css/css.less public/css.css"
         ]
     },
     "extra": {

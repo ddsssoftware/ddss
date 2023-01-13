@@ -7,11 +7,13 @@
         <input name="term" required>
         <button>{{ __('ddss.conditions_search_form_search') }}</button>
     </form>
-    @if(isset($conditionSearchResult))
-        @forelse($conditionSearchResult as $result)
-            @include('conditions.item')
-        @empty
-            @include('conditions.noitem')
-        @endforelse
-    @endif
+    <section class="list">
+        @if(isset($conditionSearchResult))
+            @forelse($conditionSearchResult as $condition)
+                @include('conditions.item')
+            @empty
+                @include('conditions.noitem')
+            @endforelse
+        @endif
+    </section>
 </section>

@@ -1,40 +1,21 @@
-<div class="condition_item">
-    <span id="condition_item_name_{{ $result->id }}"
-          class="condition_item_name"
-          data-has-collapsed-details="true">{{ $result->name }}</span>
-    <div id="condition_item_details_{{ $result->id }}" 
-        class="condition_item_details"
-        style="display: none;">
-
-        <a id="condition_item_details_factsheet_{{ $result->id }}"
-            href="{{ route('factsheet.condition', [$result->id])}}"
-            target="_blank">{{ __('ddss.condition_item_details_factsheet')}}</a>
-    
-        <div id="condition_item_details_presence_{{ $result->id }}" class="condition_item_details_presence">
-            <form id="condition_item_details_presence_form_{{ $result->id }}"
-                  method="POST"
-                  action="{{ route('case.condition.present') }}">
-                <input type="hidden" name="condition" value="{{ $result->id }}">
-                <input type="hidden" name="c" value="{{ $savedCase }}" />
-                <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
-                        data-has-notes="condition_item_details_notes_text_{{ $result->id }}"
-                        type="button"
-                        class="condition_item_details_presence_form_submit">{{ __('ddss.condition_item_details_presence_present') }}</button>
-            </form>
-            <form id="condition_item_details_presence_form_{{ $result->id }}"
-                  method="POST"
-                  action="{{ route('case.condition.notpresent') }}">
-                <input type="hidden" name="c" value="{{ $savedCase }}" />
-                <input type="hidden" name="condition" value="{{ $result->id }}">
-                <button id="condition_item_details_presence_form_submit_{{ $result->id }}"
-                        data-has-notes="condition_item_details_notes_text_{{ $result->id }}"
-                        type="button"
-                        class="condition_item_details_presence_form_submit">{{ __('ddss.condition_item_details_presence_not-present') }}</button>
-            </form>
-        </div>
-
-        <div id="condition_item_details_notes_{{ $result->id }}" class="condition_item_details_notes">
-            <textarea id="condition_item_details_notes_text_{{ $result->id }}" placeholder="Notes"></textarea>
-        </div>
-    </div>
+<div class="item">
+    <header>
+        <span data-has-details="condition_item_details_{{ $condition->id }}">{{ $condition->name }}</span>
+    </header>
+    <section id="condition_item_details_{{ $condition->id }}" style="display: none;">
+        <a href="{{ route('factsheet.condition', [$condition->id])}}" target="_blank">{{ __('ddss.condition_item_details_factsheet')}}</a>
+        <form method="POST" action="{{ route('case.condition.present') }}">
+            <input type="hidden" name="condition" value="{{ $condition->id }}">
+            <input type="hidden" name="c" value="{{ $savedCase }}" />
+            <button data-has-notes="condition_item_notes_{{ $condition->id }}" type="button">{{ __('ddss.condition_item_details_presence_present') }}</button>
+        </form>
+        <form method="POST" action="{{ route('case.condition.notpresent') }}">
+            <input type="hidden" name="c" value="{{ $savedCase }}" />
+            <input type="hidden" name="condition" value="{{ $condition->id }}">
+            <button data-has-notes="condition_item_notes_{{ $condition->id }}" type="button">{{ __('ddss.condition_item_details_presence_not-present') }}</button>
+        </form>
+        <form>
+            <textarea id="condition_item_notes_{{ $condition->id }}" placeholder="Notes"></textarea>
+        </form>
+    </section>
 </div>

@@ -1,7 +1,6 @@
-<section id="case_description">
+<section>
     <h3>{{ __('ddss.case_description_title') }}</h3>
-    <form id="case_description_form"
-          method="POST"
+    <form id="case_description_form" method="POST"
           action="{{ route('case.description.update') }}">
         <input type="hidden" name="c" value="{{ $savedCase }}" />
         <textarea id="case_description_form_textarea" name="description">{{ ($case[Diagnosis::DESCRIPTION] ?? '') }}</textarea>

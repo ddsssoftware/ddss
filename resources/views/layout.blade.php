@@ -1,7 +1,7 @@
 @include('header')
 
 <header>
-    <h1>{{ __('ddss.index_header_title') }}</h1>
+    <h1 title="{{ __('ddss.index_header_title') }}">DDSS</h1>
     @yield('header')
 </header>
 

@@ -1,4 +1,4 @@
-<section id="case_symptoms">
+<section class="list">
     <h3>{{ __('ddss.case_symptoms_title')}}</h3>
     @foreach ($case[Diagnosis::SYMPTOMS] as $symptom)
         @include('case.symptom_item')

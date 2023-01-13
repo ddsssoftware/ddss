@@ -1,4 +1,4 @@
-<section id="case">
+<section>
     <h2>{{ __('ddss.case_title') }}</h2>
     @include('case.description')
     @include('case.symptoms')
