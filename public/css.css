@@ -119,6 +119,10 @@ section.list div:last-of-type {
 article#factsheet {
   margin: 2rem;
 }
+article#summary {
+  margin: 2rem;
+  word-break: break-all;
+}
 footer {
   color: #b1b9c4;
   text-align: center;

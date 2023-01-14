@@ -59,4 +59,16 @@ class CaseController extends Controller
 
         return redirect()->route('case.index', compact('c'));
     }
+
+    public function summary(Request $request)
+    {
+        extract($request->validate([
+            'c' => ['bail', 'required'],
+        ]));
+        $case = Diagnosis::load($c);
+        $savedCase = $c;
+
+        return view('case.synopsis', compact('case', 'savedCase'));
+
+    }
 }

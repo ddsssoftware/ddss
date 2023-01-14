@@ -25,6 +25,7 @@ use App\Http\Controllers\FactsheetController;
 
 Route::get('/', [CaseController::class, 'index'])->name('case.index');
 Route::post('/description-update', [CaseController::class, 'updateDescription'])->name('case.description.update');
+Route::get('/summary', [CaseController::class, 'summary'])->name('case.summary');
 
 Route::get('/factsheet/condition/{id}', [FactsheetController::class, 'condition'])->name('factsheet.condition');
 Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->name('factsheet.symptom');

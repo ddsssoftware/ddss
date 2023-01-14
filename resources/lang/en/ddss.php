@@ -54,4 +54,16 @@ return [
     'factsheet_test_title' => 'Factsheet - Test',
     'factsheet_test_symptoms_title' => 'Symptoms',
     'factsheet_test_conditions_title' => 'Conditions',
+
+    'summary_title' => 'SUMMARY',
+    'summary_symptoms' => 'Symptoms',
+    'summary_symptoms_empty' => 'No data',
+    'summary_symptoms_present' => 'Present',
+    'summary_symptoms_not-present' => 'Not present',
+    'summary_tests' => 'Tests',
+    'summary_tests_empty' => 'No data',
+    'summary_conditions' => 'Conditions',
+    'summary_conditions_empty' => 'No data',
+    'summary_conditions_present' => 'Present',
+    'summary_conditions_not-present' => 'Not present',
 ];
