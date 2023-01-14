@@ -67,7 +67,7 @@ class SymptomController extends Controller
             'notes' => ['bail', 'nullable', 'string'],
         ]));
         $data = (array) DB::table('symptoms')
-            ->select('symptoms.id AS i', 'symptoms.name AS n')
+            ->select('symptoms.name AS n')
             ->where('symptoms.id', '=', $symptom)
             ->first();
         $data[Diagnosis::PRESENCE] = $present;

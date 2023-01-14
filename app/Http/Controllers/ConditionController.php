@@ -65,7 +65,7 @@ class ConditionController extends Controller
             'notes' => ['bail', 'nullable', 'string'],
         ]));
         $data = (array) DB::table('conditions')
-            ->select('conditions.id AS i', 'conditions.name AS n')
+            ->select('conditions.name AS n')
             ->where('conditions.id', '=', $condition)
             ->first();
         $data[Diagnosis::PRESENCE] = $present;

@@ -38,7 +38,6 @@ class TestController extends Controller
 
         $sql = <<<EOL
             SELECT
-                tests.id AS i,
                 tests.name AS n
             FROM
                 tests

@@ -11,7 +11,6 @@ abstract class Diagnosis {
     public const TESTS = 't';
     public const CONDITIONS = 'c';
 
-    public const ID = 'i';
     public const NAME = 'n';
     public const PRESENCE = 'p';
     public const NOTES = 'c';
@@ -77,8 +76,8 @@ abstract class Diagnosis {
         $conditions = DB::table('conditions')
             ->select('conditions.id', 'conditions.name')
             ->join('condition_symptom', 'condition_symptom.condition_id', '=', 'conditions.id')
-            ->whereNotIn('conditions.id', $caseConditions->where(self::PRESENCE, '=', false)->pluck(self::ID)->toArray())
-            ->whereIn('condition_symptom.symptom_id', $caseSymptoms->where(self::PRESENCE, '=', true)->pluck(self::ID)->toArray())
+            ->whereNotIn('conditions.id', $caseConditions->where(self::PRESENCE, '=', false)->keys())
+            ->whereIn('condition_symptom.symptom_id', $caseSymptoms->where(self::PRESENCE, '=', true)->keys())
             ->orderBy('conditions.urgency', 'ASC')
             ->distinct()
             ->get();
@@ -88,7 +87,7 @@ abstract class Diagnosis {
 
     public static function suggestSymptoms(&$case, &$suggestedConditions)
     {
-        $caseSymptoms = collect($case[self::SYMPTOMS])->pluck(self::ID)->toArray();
+        $caseSymptoms = array_keys($case[self::SYMPTOMS]);
 
         $symptoms = DB::table('symptoms')
             ->select('symptoms.id', 'symptoms.name')
