@@ -56,6 +56,7 @@ return [
     'factsheet_test_conditions_title' => 'Conditions',
 
     'summary_title' => 'SUMMARY',
+    'summary_no-description' => 'No description',
     'summary_symptoms' => 'Symptoms',
     'summary_symptoms_empty' => 'No data',
     'summary_symptoms_present' => 'Present',

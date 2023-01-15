@@ -3,7 +3,7 @@
 {{ __('ddss.summary_title') }}
 <br>
 <br>
-{{ $case[Diagnosis::DESCRIPTION] }}
+{{ $case[Diagnosis::DESCRIPTION] == null ||  $case[Diagnosis::DESCRIPTION] == '' ? __('ddss.summary_no-description') : $case[Diagnosis::DESCRIPTION] }}
 
 <br>
 <br>
