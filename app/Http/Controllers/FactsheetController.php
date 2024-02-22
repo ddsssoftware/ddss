@@ -16,22 +16,24 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class FactsheetController extends Controller
 {
     public function condition($id)
     {
-        $condition = DB::select("SELECT * FROM conditions WHERE id = ?", [$id]);
+        $condition = DB::select('SELECT * FROM conditions WHERE id = ?', [$id]);
 
-        if (count($condition) == 0) abort(404);
+        if (count($condition) == 0) {
+            abort(404);
+        }
         $condition = $condition[0];
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 symptoms.id,
                 symptoms.name
@@ -45,7 +47,7 @@ class FactsheetController extends Controller
         EOL;
         $symptoms = DB::select($sql, [$id]);
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT DISTINCT
                 tests.id,
                 tests.name,
@@ -67,12 +69,14 @@ class FactsheetController extends Controller
 
     public function symptom($id)
     {
-        $symptom = DB::select("SELECT * FROM symptoms WHERE id = ?", [$id]);
+        $symptom = DB::select('SELECT * FROM symptoms WHERE id = ?', [$id]);
 
-        if (count($symptom) == 0) abort(404);
+        if (count($symptom) == 0) {
+            abort(404);
+        }
         $symptom = $symptom[0];
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 tests.id,
                 tests.name
@@ -84,9 +88,9 @@ class FactsheetController extends Controller
             ORDER BY
                 tests.delay ASC
         EOL;
-        $tests = DB::select($sql, [$id]); 
+        $tests = DB::select($sql, [$id]);
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 conditions.id,
                 conditions.name
@@ -105,12 +109,14 @@ class FactsheetController extends Controller
 
     public function test($id)
     {
-        $test = DB::select("SELECT * FROM tests WHERE id = ?", [$id]);
+        $test = DB::select('SELECT * FROM tests WHERE id = ?', [$id]);
 
-        if (count($test) == 0) abort(404);
+        if (count($test) == 0) {
+            abort(404);
+        }
         $test = $test[0];
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 symptoms.id,
                 symptoms.name
@@ -120,9 +126,9 @@ class FactsheetController extends Controller
             WHERE
                 symptom_test.test_id = ?
         EOL;
-        $symptoms = DB::select($sql, [$id]); 
+        $symptoms = DB::select($sql, [$id]);
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT DISTINCT
                 conditions.id,
                 conditions.name,
@@ -136,7 +142,7 @@ class FactsheetController extends Controller
             ORDER BY
                 conditions.urgency
         EOL;
-        $conditions = DB::select($sql, [$id]); 
+        $conditions = DB::select($sql, [$id]);
 
         return view('factsheets.test', compact('test', 'symptoms', 'conditions'));
     }

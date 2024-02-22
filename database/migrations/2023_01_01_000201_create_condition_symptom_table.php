@@ -27,7 +27,7 @@ class CreateConditionSymptomTable extends Migration
         Schema::create('condition_symptom', function (Blueprint $table) {
             $table->unsignedBigInteger('condition_id');
             $table->unsignedBigInteger('symptom_id');
- 
+
             $table->index('condition_id');
             $table->index('symptom_id');
             $table->foreign('condition_id')->references('id')->on('conditions');

@@ -17,8 +17,6 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
 
 return [
     'default' => env('LOG_CHANNEL', 'daily'),

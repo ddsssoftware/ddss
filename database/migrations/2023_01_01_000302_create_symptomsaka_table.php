@@ -28,9 +28,9 @@ class CreateSymptomsakaTable extends Migration
             $table->unsignedBigInteger('symptom_id');
             $table->string('name');
             $table->string('searchname');
- 
+
             $table->foreign('symptom_id')->references('id')->on('symptoms');
-            
+
             $table->index('condition_id');
             $table->index('searchname');
         });

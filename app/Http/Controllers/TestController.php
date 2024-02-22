@@ -16,13 +16,14 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
+use App\Models\Diagnosis;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Models\Diagnosis;
 
 class TestController extends Controller
 {
@@ -36,7 +37,7 @@ class TestController extends Controller
             'notes' => ['bail', 'nullable', 'string'],
         ]));
 
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 tests.name AS n
             FROM

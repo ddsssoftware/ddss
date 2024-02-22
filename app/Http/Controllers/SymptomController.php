@@ -16,13 +16,14 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Diagnosis;
-use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class SymptomController extends Controller
 {
@@ -92,5 +93,4 @@ class SymptomController extends Controller
 
         return redirect()->route('case.index', compact('c'));
     }
-
 }

@@ -16,13 +16,14 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
-use Illuminate\Support\Arr;
 
 class LoadBiblioCommand extends Command
 {
@@ -31,6 +32,7 @@ class LoadBiblioCommand extends Command
     protected $description = 'Loads biblio file into database';
 
     public $locale;
+
     public $biblioPath;
 
     public function __construct()
@@ -72,18 +74,18 @@ class LoadBiblioCommand extends Command
             DB::delete('DELETE FROM '.$table);
         }
     }
-        
+
     protected function loadLocale()
     {
         $this->locale = app()->getLocale();
-        $this->info("Locale=".$this->locale);
+        $this->info('Locale='.$this->locale);
         $this->biblioPath = base_path().'/biblio/'.$this->locale.'/';
         $this->info('Path='.$this->biblioPath);
     }
 
     protected function loadTests()
     {
-        $this->info("Loading tests");
+        $this->info('Loading tests');
 
         $finder = new Finder();
         $finder->files()->name('*.yaml')->in($this->biblioPath.'/tests');
@@ -94,14 +96,14 @@ class LoadBiblioCommand extends Command
             $content = Yaml::parseFile($file);
             $content = Arr::only($content, $fields);
             $content = array_values($content);
-            DB::insert("INSERT INTO tests (id, name, desc, delay) VALUES (?, ?, ?, ?)", $content);
+            DB::insert('INSERT INTO tests (id, name, desc, delay) VALUES (?, ?, ?, ?)', $content);
         }
         DB::commit();
     }
 
     protected function loadSymptoms()
     {
-        $this->info("Loading symptoms");
+        $this->info('Loading symptoms');
 
         $finder = new Finder();
         $finder->files()->name('*.yaml')->in($this->biblioPath.'/symptoms');
@@ -112,19 +114,19 @@ class LoadBiblioCommand extends Command
             $content = Yaml::parseFile($file);
             $values = Arr::only($content, $fields);
             $values = array_values($values);
-            DB::insert("INSERT INTO symptoms (id, name, desc, delay, urgency) VALUES (?, ?, ?, -1, -1)", $values);
-            
-            if (!isset($content['aka'])) {
+            DB::insert('INSERT INTO symptoms (id, name, desc, delay, urgency) VALUES (?, ?, ?, -1, -1)', $values);
+
+            if (! isset($content['aka'])) {
                 $content['aka'] = [];
             }
             $content['aka'][] = $content['name'];
             foreach ($content['aka'] as $alias) {
-                DB::insert("INSERT INTO symptomsaka VALUES (?, ?, ?)", [$content['id'], $alias, strtolower($alias)]);
+                DB::insert('INSERT INTO symptomsaka VALUES (?, ?, ?)', [$content['id'], $alias, strtolower($alias)]);
             }
 
             if (isset($content['tests'])) {
                 foreach ($content['tests'] as $test) {
-                    DB::insert("INSERT INTO symptom_test VALUES (?, ?)", [$content['id'], $test]);
+                    DB::insert('INSERT INTO symptom_test VALUES (?, ?)', [$content['id'], $test]);
                 }
             }
         }
@@ -133,7 +135,7 @@ class LoadBiblioCommand extends Command
 
     protected function loadConditions()
     {
-        $this->info("Loading conditions");
+        $this->info('Loading conditions');
 
         $finder = new Finder();
         $finder->files()->name('*.yaml')->in($this->biblioPath.'/conditions');
@@ -144,19 +146,19 @@ class LoadBiblioCommand extends Command
             $content = Yaml::parseFile($file);
             $values = Arr::only($content, $fields);
             $values = array_values($values);
-            DB::insert("INSERT INTO conditions (id, name, desc, urgency) VALUES (?, ?, ?, ?)", $values);
+            DB::insert('INSERT INTO conditions (id, name, desc, urgency) VALUES (?, ?, ?, ?)', $values);
 
-            if (!isset($content['aka'])) {
+            if (! isset($content['aka'])) {
                 $content['aka'] = [];
             }
             $content['aka'][] = $content['name'];
             foreach ($content['aka'] as $alias) {
-                DB::insert("INSERT INTO conditionsaka VALUES (?, ?, ?)", [$content['id'], $alias, strtolower($alias)]);
+                DB::insert('INSERT INTO conditionsaka VALUES (?, ?, ?)', [$content['id'], $alias, strtolower($alias)]);
             }
 
             if (isset($content['symptoms'])) {
                 foreach ($content['symptoms'] as $symptom) {
-                    DB::insert("INSERT INTO condition_symptom VALUES (?, ?)", [$content['id'], $symptom]);
+                    DB::insert('INSERT INTO condition_symptom VALUES (?, ?)', [$content['id'], $symptom]);
                 }
             }
         }
@@ -175,21 +177,21 @@ class LoadBiblioCommand extends Command
 
     protected function fillMissingTestDelay()
     {
-        $average = DB::select("SELECT avg(delay) AS avgdelay FROM tests WHERE delay >= 0");
+        $average = DB::select('SELECT avg(delay) AS avgdelay FROM tests WHERE delay >= 0');
         $average = intval($average[0]->avgdelay);
-        DB::update("UPDATE tests SET delay = ? WHERE delay < 0", [$average]);
+        DB::update('UPDATE tests SET delay = ? WHERE delay < 0', [$average]);
     }
 
     protected function fillMissingConditionUrgency()
     {
-        $urgency = DB::select("SELECT avg(urgency) AS avgurgency FROM conditions WHERE urgency >= 0");
+        $urgency = DB::select('SELECT avg(urgency) AS avgurgency FROM conditions WHERE urgency >= 0');
         $urgency = intval($urgency[0]->avgurgency);
-        DB::update("UPDATE conditions SET urgency = ? WHERE urgency < 0", [$urgency]);
+        DB::update('UPDATE conditions SET urgency = ? WHERE urgency < 0', [$urgency]);
     }
 
     protected function fillSymptomDelay()
     {
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 symptom_test.symptom_id AS symptom_id,
                 min(tests.delay) AS delay
@@ -202,14 +204,14 @@ class LoadBiblioCommand extends Command
         $delays = DB::select($sql);
         DB::beginTransaction();
         foreach ($delays as $delay) {
-            DB::update("UPDATE symptoms SET delay = ? WHERE id = ?", [$delay->delay, $delay->symptom_id]);
+            DB::update('UPDATE symptoms SET delay = ? WHERE id = ?', [$delay->delay, $delay->symptom_id]);
         }
-        DB::commit();       
+        DB::commit();
     }
 
     protected function fillSymptomUrgency()
     {
-        $sql = <<<EOL
+        $sql = <<<'EOL'
             SELECT
                 condition_symptom.symptom_id AS symptom_id,
                 min(conditions.urgency) AS urgency
@@ -222,8 +224,8 @@ class LoadBiblioCommand extends Command
         $urgencies = DB::select($sql);
         DB::beginTransaction();
         foreach ($urgencies as $urgency) {
-            DB::update("UPDATE symptoms SET urgency = ? WHERE id = ?", [$urgency->urgency, $urgency->symptom_id]);
+            DB::update('UPDATE symptoms SET urgency = ? WHERE id = ?', [$urgency->urgency, $urgency->symptom_id]);
         }
-        DB::commit();       
+        DB::commit();
     }
 }

@@ -4,15 +4,20 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 
-abstract class Diagnosis {
-
+abstract class Diagnosis
+{
     public const DESCRIPTION = 'd';
+
     public const SYMPTOMS = 's';
+
     public const TESTS = 't';
+
     public const CONDITIONS = 'c';
 
     public const NAME = 'n';
+
     public const PRESENCE = 'p';
+
     public const NOTES = 'c';
 
     public static function new()
@@ -22,7 +27,7 @@ abstract class Diagnosis {
         $diagnosis[self::SYMPTOMS] = [];
         $diagnosis[self::TESTS] = [];
         $diagnosis[self::CONDITIONS] = [];
-        
+
         return $diagnosis;
     }
 
@@ -37,7 +42,7 @@ abstract class Diagnosis {
 
     public static function save($diagnosis)
     {
-        $diagnosis = json_encode($diagnosis);        
+        $diagnosis = json_encode($diagnosis);
         $diagnosis = gzcompress($diagnosis, 9);
         $diagnosis = base64_encode($diagnosis);
 
@@ -58,7 +63,7 @@ abstract class Diagnosis {
     public static function mergeData(&$set1, $key1, &$set2, $key2, $attribute)
     {
         foreach ($set1 as $item1) {
-            if (!isset($item1->$attribute)) {
+            if (! isset($item1->$attribute)) {
                 $item1->$attribute = [];
             }
             foreach ($set2 as $item2) {
@@ -103,5 +108,4 @@ abstract class Diagnosis {
 
         return $symptoms;
     }
-
 }

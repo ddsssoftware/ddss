@@ -16,12 +16,12 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CaseController;
-use App\Http\Controllers\SymptomController;
 use App\Http\Controllers\ConditionController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\FactsheetController;
+use App\Http\Controllers\SymptomController;
+use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CaseController::class, 'index'])->name('case.index');
 Route::post('/description-update', [CaseController::class, 'updateDescription'])->name('case.description.update');
@@ -43,4 +43,3 @@ Route::post('/condition-remove', [ConditionController::class, 'remove'])->name('
 
 Route::post('/test-remove', [TestController::class, 'remove'])->name('case.test.remove');
 Route::post('/test-add', [TestController::class, 'add'])->name('case.test.add');
-

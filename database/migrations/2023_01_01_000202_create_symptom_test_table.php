@@ -27,7 +27,7 @@ class CreateSymptomTestTable extends Migration
         Schema::create('symptom_test', function (Blueprint $table) {
             $table->unsignedBigInteger('symptom_id');
             $table->unsignedBigInteger('test_id');
- 
+
             $table->index('symptom_id');
             $table->index('test_id');
 

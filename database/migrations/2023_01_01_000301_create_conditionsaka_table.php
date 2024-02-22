@@ -28,7 +28,7 @@ class CreateConditionsakaTable extends Migration
             $table->unsignedBigInteger('condition_id');
             $table->string('name');
             $table->string('searchname');
- 
+
             $table->foreign('condition_id')->references('id')->on('conditions');
 
             $table->index('condition_id');

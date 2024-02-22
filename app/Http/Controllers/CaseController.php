@@ -16,12 +16,13 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
+use App\Models\Diagnosis;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use App\Models\Diagnosis;
+use Illuminate\Routing\Controller;
 
 class CaseController extends Controller
 {
@@ -43,7 +44,7 @@ class CaseController extends Controller
             $suggestedSymptoms = null;
             $savedCase = Diagnosis::save($case);
         }
-        
+
         return view('index', compact('case', 'savedCase', 'suggestedConditions', 'suggestedSymptoms'));
     }
 
