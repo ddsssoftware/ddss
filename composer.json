@@ -6,12 +6,12 @@
     "license": "GPLv3",
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^10.17",
-        "symfony/finder": "^6.3",
-        "symfony/yaml": "^6.3"
+        "laravel/framework": "^10.45",
+        "symfony/finder": "^6.4",
+        "symfony/yaml": "^6.4"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.8"
+        "barryvdh/laravel-debugbar": "^3.10"
     },
     "autoload": {
         "psr-4": {
