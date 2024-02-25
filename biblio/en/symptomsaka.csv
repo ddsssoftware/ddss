@@ -1,0 +1,77 @@
+1	Haemoglobinura	haemoglobinura
+1	Hematuria	hematuria
+1	"Urinary tract bleeding"	"urinary tract bleeding"
+1	"Blood in urine"	"blood in urine"
+1	Haematuria	haematuria
+2	Hemoptysis	hemoptysis
+2	"Blood-stained sputum"	"blood-stained sputum"
+2	"Coughing blood"	"coughing blood"
+2	Haemoptysis	haemoptysis
+3	"Lymph nodes enlarged"	"lymph nodes enlarged"
+3	Lymphadenitis	lymphadenitis
+3	Lymphadenopathy	lymphadenopathy
+4	"Morbilliform rash"	"morbilliform rash"
+4	"Maculopapular rash"	"maculopapular rash"
+5	Ecchymoses	ecchymoses
+5	Ecchymosis	ecchymosis
+5	Peliosis	peliosis
+5	Petechiae	petechiae
+5	"Petechial rash"	"petechial rash"
+5	Purpura	purpura
+6	"Body temperature increased"	"body temperature increased"
+6	Hyperthermia	hyperthermia
+6	Fever	fever
+6	Febrile	febrile
+6	Pyrexia	pyrexia
+7	"Sore throat"	"sore throat"
+7	"Throat sore"	"throat sore"
+8	"Neck lymph node enlarged"	"neck lymph node enlarged"
+8	"Cervical lymphadenopathy"	"cervical lymphadenopathy"
+9	"Dental pain"	"dental pain"
+9	"Tooth ache"	"tooth ache"
+9	Toothache	toothache
+10	"Jaw muscle spasm"	"jaw muscle spasm"
+10	Trismus	trismus
+11	Delerium	delerium
+11	"Acute confusional state"	"acute confusional state"
+11	"Acute brain failure"	"acute brain failure"
+11	"Acute brain syndrome"	"acute brain syndrome"
+11	Delirium	delirium
+12	Lymphedema	lymphedema
+12	Lymphoedema	lymphoedema
+13	Rash	rash
+13	"Skin lesions"	"skin lesions"
+13	Spots	spots
+13	"Cutaneous eruptions"	"cutaneous eruptions"
+13	Dermatosis	dermatosis
+13	Exanthema	exanthema
+13	"Skin rash"	"skin rash"
+14	"Lymph nodes enlarged"	"lymph nodes enlarged"
+14	Lymphadenitis	lymphadenitis
+14	Lymphadenopathy	lymphadenopathy
+15	"Calf pain"	"calf pain"
+16	"Homans' sign"	"homans' sign"
+17	"Leg pain"	"leg pain"
+18	"Edema localized"	"edema localized"
+18	"Oedemea localized"	"oedemea localized"
+19	"Puerperal pyrexia"	"puerperal pyrexia"
+20	"Disproportionate short stature"	"disproportionate short stature"
+21	Exostosis	exostosis
+21	Osteophyma	osteophyma
+21	Osteophyte	osteophyte
+21	Osteophytosis	osteophytosis
+21	"Bone spur"	"bone spur"
+21	Exostoses	exostoses
+22	Hemangioma	hemangioma
+23	"Dermal nodules"	"dermal nodules"
+23	"Subcutaneous nodule"	"subcutaneous nodule"
+24	Anisocytosis	anisocytosis
+25	"MCV raised (red cell)"	"mcv raised (red cell)"
+25	"Red blood cell enlarged"	"red blood cell enlarged"
+25	"Macrocytic red blood cell"	"macrocytic red blood cell"
+25	"Macrocytosis (erythrocyte)"	"macrocytosis (erythrocyte)"
+26	"Megaloblastic anemia"	"megaloblastic anemia"
+26	"Megaloblastic anaemia"	"megaloblastic anaemia"
+27	Hyperglycemia	hyperglycemia
+27	"Glucose levels raised"	"glucose levels raised"
+27	Hyperglycaemia	hyperglycaemia

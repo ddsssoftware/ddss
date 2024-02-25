@@ -1,0 +1,27 @@
+1	Haematuria	"Presence of blood in the urine"	0	-1;
+2	Haemoptysis	"Coughing up (expectoration) of blood or blood-streaked sputum from the larynx, trachea, bronchi, or lungs"	0	-1;
+3	Lymphadenopathy	"Lymphadenopathy: the abnormal enlargement of lymph nodes"	0	-1;
+4	"Maculopapular rash"	"An exanthema consisting of widespread pink-to-red macules (flat spots of 2-10 mm in diameter) or papules (red bumps) that blanch with pressure. The macules and papules may cluster and merge to form sheets over several days"	0	-1;
+5	Purpura	"Small hemorrhage in the skin, mucous membrane or serosal surface, or a group of hemorrhagic diseases characterized by purpuric lesions"	0	-1;
+6	Pyrexia	"Body temperature elevated above the normal range"	0	-1
+7	"Throat sore"	"A disorder characterized by marked discomfort in the throat"	0	-1
+8	"Cervical lymphadenopathy"	"Enlarged lymph nodes in the neck"	0	-1
+9	Toothache	"Pain in the adjacent areas of the teeth"	0	-1
+10	Trismus	"A disorder characterized by lack of ability to open the mouth fully due to a decrease in the range of motion of the muscles of mastication"	0	-1
+11	Delirium	"A state of sudden and severe confusion"	0	-1;
+12	Lymphoedema	"Edema due to obstruction of lymph vessels or disorders of the lymph nodes"	0	-1;
+13	"Skin rash"	"A red eruption of the skin"	0	-1;
+14	Lymphadenopathy	"Enlargement (swelling) of a lymph node"	0	-1;
+15	"Calf pain"	"Pain in calf"	0	-1;
+16	"Homans' sign"	"Increased resistance, involuntary flexure of the knee or pain in the calf upon forced dorsiflexion"	0	-1;
+17	"Leg pain"	"Pain in leg"	0	-1;
+18	"Oedemea localized"	"Swelling due to an excessive accumulation of fluid at a specific anatomic site"	0	-1;
+19	"Puerperal pyrexia"	"A sustained temperature of 38C (100.4F) or greater beyond the first 24 hours following birth, or a temperature of 39C (102.2F) within the first 24 hours following birth"	0	-1;
+20	"Disproportionate short stature"	"A kind of short stature in which different regions of the body are shortened to differing extents"	0	-1;
+21	Exostoses	"Benign hypertrophy that projects outward from the surface of bone, often containing a cartilaginous component"	0	-1;
+22	Hemangioma		0	-1;
+23	"Subcutaneous nodule"	"A small palpable mass in the subcutaneous tissues"	0	-1;
+24	Anisocytosis	"The presence of erythrocytes with excessive variation in size in the blood"	0	-1;
+25	"Macrocytosis (erythrocyte)"	"An abnormally large red blood cell occurring mainly in anemias (as pernicious anemia)"	0	-1;
+26	"Megaloblastic anaemia"	"Anemia characterized by the presence of erythroblasts that are larger than normal"	0	-1;
+27	Hyperglycaemia	"An increased concentration of glucose in the blood"	0	-1;
