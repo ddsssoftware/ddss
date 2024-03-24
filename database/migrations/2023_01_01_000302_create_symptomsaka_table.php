@@ -24,7 +24,7 @@ class CreateSymptomsakaTable extends Migration
 {
     public function up()
     {
-        Schema::create('symptomsaka', function (Blueprint $table) {
+        Schema::create('symptom_akas', function (Blueprint $table) {
             $table->unsignedBigInteger('symptom_id');
             $table->string('name');
             $table->string('searchname');

@@ -19,7 +19,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diagnosis;
+use App\Models\Condition;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -29,66 +29,64 @@ class ConditionController extends Controller
 {
     use ValidatesRequests;
 
-    public function search(Request $request)
-    {
-        extract($request->validate([
-            'term' => ['bail', 'required', 'string', 'min:1'],
-            'c' => ['bail', 'required'],
-        ]));
-        $conditionSearchResult = DB::table('conditions')
-            ->select('conditions.id', 'conditions.name')
-            ->join('conditionsaka', 'conditions.id', '=', 'conditionsaka.condition_id')
-            ->where('conditionsaka.searchname', 'LIKE', '%'.strtolower($term).'%')
-            ->orderBy('conditions.urgency')
-            ->distinct()
-            ->get();
-        $case = Diagnosis::load($c);
-        $savedCase = Diagnosis::save($case);
+    private $rules = [
+        'name' => 'required|max:'.Condition::NAME_SIZE_MAX,
+        'desc' => 'required',
+        'urgency' => 'required',
+    ];
 
-        return view('index', compact('conditionSearchResult', 'case', 'savedCase'));
+    public function index()
+    {
+        $conditions = Condition::select('id', 'name')->orderBy('name')->get();
+
+        return view('conditions.index', compact('conditions'));
     }
 
-    public function present(Request $request)
+    public function create()
     {
-        return $this->presence($request, true);
+        return view('conditions.create');
     }
 
-    public function notPresent(Request $request)
+    public function store(Request $request)
     {
-        return $this->presence($request, false);
+        Condition::create($request->validate($this->rules));
+
+        return redirect(route('conditions.index'));
     }
 
-    public function presence(Request $request, $present)
+    public function show($id)
     {
-        extract($request->validate([
-            'condition' => ['bail', 'required', 'exists:conditions,id'],
-            'c' => ['bail', 'required'],
-            'notes' => ['bail', 'nullable', 'string'],
-        ]));
-        $data = (array) DB::table('conditions')
-            ->select('conditions.name AS n')
-            ->where('conditions.id', '=', $condition)
-            ->first();
-        $data[Diagnosis::PRESENCE] = $present;
-        $data[Diagnosis::NOTES] = htmlentities($notes);
-        $case = Diagnosis::load($c);
-        $case[Diagnosis::CONDITIONS][$condition] = $data;
-        $c = Diagnosis::save($case);
+        $condition = Condition::findOrFail($id);
 
-        return redirect()->route('case.index', compact('c'));
+        return view('conditions.show', compact('condition'));
     }
 
-    public function remove(Request $request)
+    public function edit($id)
     {
-        extract($request->validate([
-            'c' => ['bail', 'required'],
-            'condition' => ['bail', 'required', 'integer'],
-        ]));
+        $condition = Condition::findOrFail($id);
 
-        $case = Diagnosis::load($c);
-        unset($case[Diagnosis::CONDITIONS][$condition]);
-        $c = Diagnosis::save($case);
+        return view('conditions.edit', compact('condition'));
+    }
 
-        return redirect()->route('case.index', compact('c'));
+    public function update(Request $request, $id)
+    {
+        $condition = Condition::findOrFail($id);
+
+        $condition->update($request->validate($this->rules));
+
+        return redirect(route('conditions.update', $condition));
+    }
+
+    public function destroy($id)
+    {
+        $condition = Condition::findOrFail($id);
+
+        DB::transaction(function () use ($condition) {
+            $condition->symptoms()->detach();
+            $condition->aka()->delete();
+            $condition->delete();
+        });
+
+        return redirect(route('conditions.index'));
     }
 }

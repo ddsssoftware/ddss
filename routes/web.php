@@ -18,28 +18,28 @@
  */
 use App\Http\Controllers\CaseController;
 use App\Http\Controllers\ConditionController;
-use App\Http\Controllers\FactsheetController;
 use App\Http\Controllers\SymptomController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [CaseController::class, 'index'])->name('case.index');
-Route::post('/description-update', [CaseController::class, 'updateDescription'])->name('case.description.update');
-Route::get('/summary', [CaseController::class, 'summary'])->name('case.summary');
+Route::get('/', function () {
+    return redirect()->route('case.index');
+});
 
-Route::get('/factsheet/condition/{id}', [FactsheetController::class, 'condition'])->name('factsheet.condition');
-Route::get('/factsheet/symptom/{id}', [FactsheetController::class, 'symptom'])->name('factsheet.symptom');
-Route::get('/factsheet/test/{id}', [FactsheetController::class, 'test'])->name('factsheet.test');
+Route::get('/case', [CaseController::class, 'index'])->name('case.index');
+Route::post('/case/description', [CaseController::class, 'updateDescription'])->name('case.description.update');
+Route::get('/case/summary', [CaseController::class, 'summary'])->name('case.summary');
+Route::get('/case/symptom/search', [CaseController::class, 'symptomSearch'])->name('case.symptom.search');
+Route::post('/case/symptom/present', [CaseController::class, 'symptompresent'])->name('case.symptom.present');
+Route::post('/case/symptom/notpresent', [caseController::class, 'symptomNotPresent'])->name('case.symptom.notpresent');
+Route::post('/case/symptom/remove', [CaseController::class, 'symptomRemove'])->name('case.symptom.remove');
+Route::get('/case/condition/search', [CaseController::class, 'conditionSearch'])->name('case.condition.search');
+Route::post('/case/condition/present', [CaseController::class, 'conditionPresent'])->name('case.condition.present');
+Route::post('/case/condition/notpresent', [CaseController::class, 'conditionNotPresent'])->name('case.condition.notpresent');
+Route::post('/case/condition/remove', [CaseController::class, 'conditionRemove'])->name('case.condition.remove');
+Route::post('/case/test/remove', [CaseController::class, 'testRemove'])->name('case.test.remove');
+Route::post('/case/test/-add', [CaseController::class, 'testAdd'])->name('case.test.add');
 
-Route::get('/symptom-search', [SymptomController::class, 'search'])->name('case.symptom.search');
-Route::post('/symptom-present', [SymptomController::class, 'present'])->name('case.symptom.present');
-Route::post('/symptom-notpresent', [SymptomController::class, 'notPresent'])->name('case.symptom.notpresent');
-Route::post('/symptom-remove', [SymptomController::class, 'remove'])->name('case.symptom.remove');
-
-Route::get('/condition-search', [ConditionController::class, 'search'])->name('case.condition.search');
-Route::post('/condition-present', [ConditionController::class, 'present'])->name('case.condition.present');
-Route::post('/condition-notpresent', [ConditionController::class, 'notPresent'])->name('case.condition.notpresent');
-Route::post('/condition-remove', [ConditionController::class, 'remove'])->name('case.condition.remove');
-
-Route::post('/test-remove', [TestController::class, 'remove'])->name('case.test.remove');
-Route::post('/test-add', [TestController::class, 'add'])->name('case.test.add');
+Route::resource('conditions', ConditionController::class);
+Route::resource('symptoms', SymptomController::class);
+Route::resource('tests', TestController::class);

@@ -19,52 +19,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diagnosis;
+use App\Models\Test;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
     use ValidatesRequests;
 
-    public function add(Request $request)
+    public function index()
     {
-        extract($request->validate([
-            'test' => ['bail', 'required', 'exists:tests,id'],
-            'c' => ['bail', 'required'],
-            'notes' => ['bail', 'nullable', 'string'],
-        ]));
+        $tests = Test::select('id', 'name')->orderBy('name')->get();
 
-        $sql = <<<'EOL'
-            SELECT
-                tests.name AS n
-            FROM
-                tests
-            WHERE
-                tests.id = ?
-        EOL;
-        $data = (array) DB::select($sql, [$test])[0];
-        $data[Diagnosis::NOTES] = htmlentities($notes);
-        $case = Diagnosis::load($c);
-        $case[Diagnosis::TESTS][$test] = $data;
-        $c = Diagnosis::save($case);
-
-        return redirect()->route('case.index', compact('c'));
+        return view('tests.index', compact('tests'));
     }
 
-    public function remove(Request $request)
+    public function show($id)
     {
-        extract($request->validate([
-            'c' => ['bail', 'required'],
-            'test' => ['bail', 'required', 'integer'],
-        ]));
+        $test = Test::findOrFail($id);
 
-        $case = Diagnosis::load($c);
-        unset($case[Diagnosis::TESTS][$test]);
-        $c = Diagnosis::save($case);
-
-        return redirect()->route('case.index', compact('c'));
+        return view('tests.show', compact('test'));
     }
 }

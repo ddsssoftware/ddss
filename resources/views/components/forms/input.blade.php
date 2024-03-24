@@ -1,0 +1,1 @@
+<input name="{{ $fld }}" value="{{ old($fld, (isset($obj) && $obj != null) ? $obj->$fld : '') }}">

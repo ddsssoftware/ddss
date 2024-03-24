@@ -19,78 +19,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diagnosis;
+use App\Models\Symptom;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 
 class SymptomController extends Controller
 {
     use ValidatesRequests;
 
-    public function search(Request $request)
+    public function index()
     {
-        extract($request->validate([
-            'term' => ['bail', 'required', 'string', 'min:1'],
-            'c' => ['bail', 'required'],
-        ]));
-        $symptomSearchResult = DB::table('symptoms')
-            ->select('symptoms.id', 'symptoms.name')
-            ->join('symptomsaka', 'symptoms.id', '=', 'symptomsaka.symptom_id')
-            ->where('symptomsaka.searchname', 'LIKE', '%'.strtolower($term).'%')
-            ->orderBy('symptoms.urgency', 'ASC')
-            ->orderBy('symptoms.delay', 'ASC')
-            ->distinct()
-            ->get();
-        Diagnosis::addTestsToSymptoms($symptomSearchResult);
-        $case = Diagnosis::load($c);
-        $savedCase = Diagnosis::save($case);
+        $symptoms = Symptom::select('id', 'name')->orderBy('name')->get();
 
-        return view('index', compact('symptomSearchResult', 'case', 'savedCase'));
+        return view('symptoms.index', compact('symptoms'));
     }
 
-    public function present(Request $request)
+    public function show($id)
     {
-        return $this->presence($request, true);
-    }
+        $symptom = Symptom::findOrFail($id);
 
-    public function notPresent(Request $request)
-    {
-        return $this->presence($request, false);
-    }
-
-    public function presence(Request $request, $present)
-    {
-        extract($request->validate([
-            'symptom' => ['bail', 'required', 'exists:symptoms,id'],
-            'c' => ['bail', 'required'],
-            'notes' => ['bail', 'nullable', 'string'],
-        ]));
-        $data = (array) DB::table('symptoms')
-            ->select('symptoms.name AS n')
-            ->where('symptoms.id', '=', $symptom)
-            ->first();
-        $data[Diagnosis::PRESENCE] = $present;
-        $data[Diagnosis::NOTES] = htmlentities($notes);
-        $case = Diagnosis::load($c);
-        $case[Diagnosis::SYMPTOMS][$symptom] = $data;
-        $c = Diagnosis::save($case);
-
-        return redirect()->route('case.index', compact('c'));
-    }
-
-    public function remove(Request $request)
-    {
-        extract($request->validate([
-            'c' => ['bail', 'required'],
-            'symptom' => ['bail', 'required', 'integer'],
-        ]));
-
-        $case = Diagnosis::load($c);
-        unset($case[Diagnosis::SYMPTOMS][$symptom]);
-        $c = Diagnosis::save($case);
-
-        return redirect()->route('case.index', compact('c'));
+        return view('symptoms.show', compact('symptom'));
     }
 }

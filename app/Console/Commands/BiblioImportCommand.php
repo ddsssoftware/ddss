@@ -32,7 +32,7 @@ class BiblioImportCommand extends Command
 
     protected $description = 'Import files into database';
 
-    public $tables = ['conditions', 'symptoms', 'tests', 'condition_symptom', 'symptom_test', 'conditionsaka', 'symptomsaka'];
+    public $tables = ['conditions', 'symptoms', 'tests', 'condition_symptom', 'symptom_test', 'condition_akas', 'symptom_akas'];
 
     public $filenames = [];
 
@@ -56,25 +56,25 @@ class BiblioImportCommand extends Command
         if ($this->dbExist()) {
             $this->warn('Please remove database file and try again');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
         if (! $this->filesExist()) {
             $this->warn('Please create file and try again');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         if ($this->createDb() === false) {
             $this->warn('Could not create database');
 
-            return Command::FAILURE;
+            return static::FAILURE;
         }
 
         $this->importTables();
 
         $this->info('Ended DDSS import');
 
-        return Command::SUCCESS;
+        return static::SUCCESS;
     }
 
     protected function loadLocale()

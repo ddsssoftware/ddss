@@ -1,0 +1,1 @@
+<button>{{ __('ddss.forms__submit') }}</button>

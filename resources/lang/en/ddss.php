@@ -19,7 +19,23 @@ return [
     'case_test_item_details_factsheet' => 'Factsheet',
     'case_test_item_details_remove' => 'Remove',
 
-    'conditions_title' => 'Conditions',
+    'condtions_edit__nav_delete' => 'Delete',
+
+    'conditions_index__title' => 'Conditions',
+    'conditions_index__thead_condition' => 'Condition',
+    'conditions_index__thead_view' => 'View',
+    'conditions_index__thead_edit' => 'Edit',
+    'conditions_index__table_empty' => 'No conditions found',
+    'conditions_index__row_view' => 'View',
+    'conditions_index__row_edit' => 'Edit',
+    'conditions_index__nav_create' => 'Create',
+
+    'conditions_show__title' => 'Condition',
+    'conditions_show__symptom_title' => 'Symptom',
+    'conditions_show__test_title' => 'Test',
+    'conditions_show__nav_browse' => 'Browse all',
+    'conditions_show__nav_edit' => 'Edit',
+
     'conditions_search_title' => 'Search',
     'conditions_search_form_search' => 'Search',
     'conditions_suggestions_title' => 'Case suggestions',
@@ -28,6 +44,31 @@ return [
     'condition_item_details_factsheet' => 'Factsheet',
     'condition_item_details_presence_present' => 'Present',
     'condition_item_details_presence_not-present' => 'Not present',
+
+    'forms__submit' => 'Save',
+
+    'symptoms_index__title' => 'Symptoms',
+    'symptoms_index__thead_symptom' => 'Sympton',
+    'symptoms_index__thead_view' => 'View',
+    'symptoms_index__thead_edit' => 'Edit',
+    'symptoms_index__table_empty' => 'No symptoms found',
+    'symptoms_index__row_view' => 'View',
+    'symptoms_index__row_edit' => 'Edit',
+
+    'tests_index__title' => 'Tests',
+    'tests_index__thead_symptom' => 'Test',
+    'tests_index__thead_view' => 'View',
+    'tests_index__thead_edit' => 'Edit',
+    'tests_index__table_empty' => 'No tests found',
+    'tests_index__row_view' => 'View',
+    'tests_index__row_edit' => 'Edit',
+    'tests_show__title' => 'Test',
+    'tests_show__symptom_title' => 'Symptoms',
+    'tests_show__condition_title' => 'Conditions',
+
+    'symptoms_show__title' => 'Symptom',
+    'symptoms_show__conditions_title' => 'Conditions',
+    'symptoms_show__tests_title' => 'Tests',
 
     'symptoms_index_title' => 'Symptoms',
     'symptoms_search_title' => 'Search',

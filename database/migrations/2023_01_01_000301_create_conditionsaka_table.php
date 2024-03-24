@@ -24,7 +24,7 @@ class CreateConditionsakaTable extends Migration
 {
     public function up()
     {
-        Schema::create('conditionsaka', function (Blueprint $table) {
+        Schema::create('condition_akas', function (Blueprint $table) {
             $table->unsignedBigInteger('condition_id');
             $table->string('name');
             $table->string('searchname');
