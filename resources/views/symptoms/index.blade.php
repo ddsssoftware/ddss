@@ -1,8 +1,11 @@
 @include('header')
 
 
-<section>
+<section id="symptoms-index" class="main">
     <h2>{{ __('ddss.symptoms_index__title') }}</h2>
+    <nav>
+        <a href="{{ route('symptoms.create') }}">{{ __('ddss.symptoms_index__nav_create') }}</a>
+    </nav>
     <table>
         <thead>
             <tr>

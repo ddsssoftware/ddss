@@ -26,5 +26,6 @@
         <a href="{{ route('conditions.edit', $condition) }}">{{ __('ddss.conditions_show__nav_edit') }}</a>
         <a href="{{ route('conditions.index') }}">{{ __('ddss.conditions_show__nav_browse') }}</a>
     <nav>
+</section>
 
 @include('footer')

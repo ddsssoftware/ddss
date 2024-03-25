@@ -22,6 +22,10 @@
             @endforeach
         </ul>
     <section>
+    <nav>
+        <a href="{{ route('symptoms.edit', $symptom) }}">{{ __('ddss.symptoms_show__nav_edit') }}</a>
+        <a href="{{ route('symptoms.index') }}">{{ __('ddss.symptoms_show__nav_browse') }}</a>
+    <nav>
 <section>
 
 

@@ -21,11 +21,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Symptom;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class SymptomController extends Controller
 {
     use ValidatesRequests;
+
+    private $rules = [
+        'name' => 'required|max:'.Symptom::NAME_SIZE_MAX,
+        'desc' => 'required',
+        'delay' => 'required',
+        'urgency' => 'required',
+    ];
 
     public function index()
     {
@@ -34,10 +43,52 @@ class SymptomController extends Controller
         return view('symptoms.index', compact('symptoms'));
     }
 
+    public function create()
+    {
+        return view('symptoms.create');
+    }
+
+    public function store(Request $request)
+    {
+        Symptom::create($request->validate($this->rules));
+
+        return redirect(route('symptoms.index'));
+    }
+
     public function show($id)
     {
         $symptom = Symptom::findOrFail($id);
 
         return view('symptoms.show', compact('symptom'));
+    }
+
+    public function edit($id)
+    {
+        $symptom = Symptom::findOrFail($id);
+
+        return view('symptoms.edit', compact('symptom'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $symptom = Symptom::findOrFail($id);
+
+        $symptom->update($request->validate($this->rules));
+
+        return redirect(route('symptoms.update', $symptom));
+    }
+
+    public function destroy($id)
+    {
+        $symptom = Symptom::findOrFail($id);
+
+        DB::transaction(function () use ($symptom) {
+            $symptom->conditions()->detach();
+            $symptom->tests()->detach();
+            $symptom->aka()->delete();
+            $symptom->delete();
+        });
+
+        return redirect(route('symptoms.index'));
     }
 }

@@ -16,6 +16,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
+use App\Models\Symptom;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -26,7 +27,7 @@ class CreateSymptomsTable extends Migration
     {
         Schema::create('symptoms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', Symptom::NAME_SIZE_MAX);
             $table->string('desc');
             $table->integer('delay');
             $table->integer('urgency');

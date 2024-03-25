@@ -28,7 +28,7 @@ return [
     'conditions_index__table_empty' => 'No conditions found',
     'conditions_index__row_view' => 'View',
     'conditions_index__row_edit' => 'Edit',
-    'conditions_index__nav_create' => 'Create',
+    'conditions_index__nav_create' => 'Add',
 
     'conditions_show__title' => 'Condition',
     'conditions_show__symptom_title' => 'Symptom',
@@ -54,6 +54,9 @@ return [
     'symptoms_index__table_empty' => 'No symptoms found',
     'symptoms_index__row_view' => 'View',
     'symptoms_index__row_edit' => 'Edit',
+    'symptoms_index__nav_create' => 'Add',
+
+    'symptoms_edit__nav_delete' => 'Delete',
 
     'tests_index__title' => 'Tests',
     'tests_index__thead_symptom' => 'Test',
@@ -69,6 +72,8 @@ return [
     'symptoms_show__title' => 'Symptom',
     'symptoms_show__conditions_title' => 'Conditions',
     'symptoms_show__tests_title' => 'Tests',
+    'symptoms_show__nav_browse' => 'Browse all',
+    'symptoms_show__nav_edit' => 'Edit',
 
     'symptoms_index_title' => 'Symptoms',
     'symptoms_search_title' => 'Search',
