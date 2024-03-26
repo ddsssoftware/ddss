@@ -11,6 +11,12 @@ class Test extends Model
 {
     use HasRelationships;
 
+    const NAME_SIZE_MAX = 256;
+
+    public $timestamps = false;
+
+    protected $fillable = ['name', 'desc', 'delay'];
+
     public function symptoms(): BelongsToMany
     {
         return $this->belongsToMany(Symptom::class);

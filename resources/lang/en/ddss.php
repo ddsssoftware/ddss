@@ -58,6 +58,8 @@ return [
 
     'symptoms_edit__nav_delete' => 'Delete',
 
+    'tests_edit__nav_delete' => 'Delete',
+
     'tests_index__title' => 'Tests',
     'tests_index__thead_symptom' => 'Test',
     'tests_index__thead_view' => 'View',
@@ -65,6 +67,8 @@ return [
     'tests_index__table_empty' => 'No tests found',
     'tests_index__row_view' => 'View',
     'tests_index__row_edit' => 'Edit',
+    'tests_index__nav_create' => 'Add',
+
     'tests_show__title' => 'Test',
     'tests_show__symptom_title' => 'Symptoms',
     'tests_show__condition_title' => 'Conditions',

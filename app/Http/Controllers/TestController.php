@@ -21,11 +21,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Test;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
     use ValidatesRequests;
+
+    private $rules = [
+        'name' => 'required|max:'.Test::NAME_SIZE_MAX,
+        'desc' => 'required',
+        'delay' => 'required',
+    ];
 
     public function index()
     {
@@ -34,10 +42,50 @@ class TestController extends Controller
         return view('tests.index', compact('tests'));
     }
 
+    public function create()
+    {
+        return view('tests.create');
+    }
+
+    public function store(Request $request)
+    {
+        Test::create($request->validate($this->rules));
+
+        return redirect(route('tests.index'));
+    }
+
     public function show($id)
     {
         $test = Test::findOrFail($id);
 
         return view('tests.show', compact('test'));
+    }
+
+    public function edit($id)
+    {
+        $test = Test::findOrFail($id);
+
+        return view('tests.edit', compact('test'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $test = Test::findOrFail($id);
+
+        $test->update($request->validate($this->rules));
+
+        return redirect(route('tests.update', $test));
+    }
+
+    public function destroy($id)
+    {
+        $test = Test::findOrFail($id);
+
+        DB::transaction(function () use ($test) {
+            $test->symptoms()->detach();
+            $test->delete();
+        });
+
+        return redirect(route('tests.index'));
     }
 }

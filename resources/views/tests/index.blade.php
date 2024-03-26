@@ -1,8 +1,11 @@
 @include('header')
 
 
-<section>
+<section id="tests-index" class="main">
     <h2>{{ __('ddss.tests_index__title') }}</h2>
+    <nav>
+        <a href="{{ route('tests.create') }}">{{ __('ddss.tests_index__nav_create') }}</a>
+    </nav>
     <table>
         <thead>
             <tr>
