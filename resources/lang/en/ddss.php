@@ -21,6 +21,10 @@ return [
 
     'condtions_edit__nav_delete' => 'Delete',
 
+    'conditions_form__name' => 'Name',
+    'conditions_form__desc' => 'Description',
+    'conditions_form__urgency' => 'Urgency',
+
     'conditions_index__title' => 'Conditions',
     'conditions_index__thead_condition' => 'Condition',
     'conditions_index__thead_view' => 'View',
@@ -58,7 +62,16 @@ return [
 
     'symptoms_edit__nav_delete' => 'Delete',
 
+    'symptoms_form__name' => 'Name',
+    'symptoms_form__desc' => 'Description',
+    'symptoms_form__delay' => 'Delay',
+    'symptoms_form__urgency' => 'Urgency',
+
     'tests_edit__nav_delete' => 'Delete',
+
+    'tests_form__name' => 'Name',
+    'tests_form__desc' => 'Description',
+    'tests_form__delay' => 'Delay',
 
     'tests_index__title' => 'Tests',
     'tests_index__thead_symptom' => 'Test',
