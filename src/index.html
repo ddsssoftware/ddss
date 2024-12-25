@@ -1,0 +1,40 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DDSS</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">DDSS</a>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <template x-route="/diagnose" x-template.target.main-container="/diagnose/diagnose.html"></template>
+        <main id="main-container" class="container is-widescreen content">
+
+        </main>
+    </section>
+    <footer class="footer">
+        <section class="content has-text-centered">
+            <p>DDSS &copy; 2024 - Version: 0.0.1</p>
+        </section>
+    </footer>
+
+    <script type="module" src="app.ts"></script>
+</body>
+
+</html>

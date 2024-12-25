@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "parcel": "^2.13.2"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.7",
+    "bulma": "^1.0.2",
+    "pinecone-router": "^4.4.1"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist",
+    "init": "",
+    "start": "npm run init && parcel src/index.html",
+    "build": "npm run init && parcel build src/index.html"
+  }
+}
