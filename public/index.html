@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DDSS</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/css.css">
 </head>
 
 <body>
@@ -13,12 +13,18 @@
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">DDSS</a>
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="headernavbar">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
+            </div>
+            <div id="headernavbar" class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="/diagnose" class="navbar-item">Diagnose</a>
+                </div>
             </div>
         </nav>
     </header>

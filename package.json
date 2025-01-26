@@ -1,16 +1,15 @@
 {
-  "devDependencies": {
-    "parcel": "^2.13.2"
-  },
   "dependencies": {
-    "alpinejs": "^3.14.7",
-    "bulma": "^1.0.2",
-    "pinecone-router": "^4.4.1"
+    "alpinejs": "^3.14",
+    "bulma": "^1.0"
   },
   "scripts": {
-    "clean": "rm -rf dist && mkdir dist",
-    "init": "",
-    "start": "npm run init && parcel src/index.html",
-    "build": "npm run init && parcel build src/index.html"
+    "ts": "tsc",
+    "css": "node node_modules/sass/sass.js --embed-sources src/sass/index.sass public/css/css.css",
+    "serve": "npx http-server public"
+  },
+  "devDependencies": {
+    "http-server": "^14.1",
+    "sass": "^1.83"
   }
 }
