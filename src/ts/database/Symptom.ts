@@ -2,6 +2,6 @@ export class Symptom {
 
     aka: string[];
 
-    constructor(id: string, name: string) { }
+    constructor(private id: string, private name: string) { }
 
 }
