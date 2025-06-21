@@ -1,19 +1,14 @@
 {
-    "compilerOptions": {
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "target": "ES2022",
-        "strictNullChecks": true,
-        "strictFunctionTypes": true,
-        "sourceMap": true,
-        "removeComments": false,
-        "outDir": "public/js"
-    },
-    "include": [
-        "src/ts/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/node_modules/*"
-    ]
+  "compilerOptions": {
+    "module": "none",
+    "target": "es2015",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outFile": "public/js/app.js",
+    "sourceMap": true
+  },
+  "files": [
+    "src/main.ts"
+  ],
 }

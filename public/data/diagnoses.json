@@ -1,0 +1,14 @@
+[
+    {
+        "id": "1",
+        "name": "D1",
+        "criticality": 0,
+        "symptoms": []
+    },
+    {
+        "id": "2",
+        "name": "D2",
+        "criticality": 1,
+        "symptoms": []
+    }
+]
