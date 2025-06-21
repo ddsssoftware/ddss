@@ -7,6 +7,16 @@ class Diagnosis {
 class DiagnosisEntry {
 }
 class Case {
+    getPresentSymptoms() {
+        return this.getSymptomsByPresence(Presence.Present);
+    }
+    getSymptomsByPresence(presence) {
+        return this.symptoms.filter(symptomEntry => {
+            return symptomEntry.presence == presence;
+        }).map(symptomEntry => {
+            return symptomEntry.symptom;
+        });
+    }
 }
 var Presence;
 (function (Presence) {
@@ -117,10 +127,19 @@ class Engine {
         });
     }
     suggest(caze) {
-        return null;
+        const present = caze.getPresentSymptoms();
+        const diagnoses = new Set();
+        present.forEach(symptom => {
+            this.diagnosesBySymptom.get(symptom.id).forEach(diagnoses.add, diagnoses);
+        });
+        return new CaseSuggestion(Array.from(diagnoses.values()), present);
     }
 }
 class CaseSuggestion {
+    constructor(diagnoses, symptoms) {
+        this.diagnoses = diagnoses;
+        this.symptoms = symptoms;
+    }
 }
 class Controller {
     constructor(engine) {
