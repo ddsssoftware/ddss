@@ -4,6 +4,7 @@ abstract class Component {
 
     public setCase(caze: Case): void {
         this.caze = caze;
+        this.reset();
     }
 
     public getElement(): HTMLElement {

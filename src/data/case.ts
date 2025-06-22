@@ -1,5 +1,5 @@
 class Case {
-    public notes: string;
+    public notes: string = '';
     public symptoms: SymptomEntry[];
     public diagnosis: DiagnosisEntry[];
 

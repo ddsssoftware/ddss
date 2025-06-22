@@ -7,6 +7,9 @@ class Diagnosis {
 class DiagnosisEntry {
 }
 class Case {
+    constructor() {
+        this.notes = '';
+    }
     getPresentSymptoms() {
         return this.getSymptomsByPresence(Presence.Present);
     }
@@ -151,9 +154,25 @@ class Component {
     }
     setCase(caze) {
         this.caze = caze;
+        this.reset();
     }
     getElement() {
         return document.getElementById(this.id);
+    }
+}
+class NewButtonComponent extends Component {
+    constructor(controller) {
+        super("sys__new", null);
+        this.controller = controller;
+    }
+    reset() {
+        throw new Error("Method not implemented.");
+    }
+    innit() {
+        this.getElement().addEventListener('click', this.onClick.bind(this));
+    }
+    onClick() {
+        this.controller.load(new Case());
     }
 }
 class NotesComponent extends Component {
@@ -176,10 +195,15 @@ class Controller {
         this.engine = engine;
         this.engine = engine;
         this.caze = new Case();
-        this.notesComponents = new NotesComponent(this.caze);
+        this.newButtonComponent = new NewButtonComponent(this);
+        this.notesComponent = new NotesComponent(this.caze);
     }
     innit() {
-        this.notesComponents.innit();
+        this.newButtonComponent.innit();
+        this.notesComponent.innit();
+    }
+    load(caze) {
+        this.notesComponent.setCase(caze);
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
