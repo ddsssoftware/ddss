@@ -107,6 +107,9 @@ Repository.HEAD_METHOD = { method: 'HEAD' };
 Repository.GET_METHOD = { method: 'GET' };
 class Engine {
     constructor(repository) {
+        this.diagnosesByIndex = new Map();
+        this.symptomsByIndex = new Map();
+        this.diagnosesBySymptom = new Map();
         this.repository = repository;
         this.loadDataStructures();
     }
@@ -141,12 +144,47 @@ class CaseSuggestion {
         this.symptoms = symptoms;
     }
 }
+class Component {
+    constructor(id, caze) {
+        this.id = id;
+        this.caze = caze;
+    }
+    setCase(caze) {
+        this.caze = caze;
+    }
+    getElement() {
+        return document.getElementById(this.id);
+    }
+}
+class NotesComponent extends Component {
+    constructor(caze) {
+        super("case__notes", caze);
+    }
+    innit() {
+        this.getElement().addEventListener('input', this.onInput.bind(this));
+    }
+    reset() {
+        this.getElement().value = this.caze.notes;
+    }
+    onInput(event) {
+        const target = event.target;
+        this.caze.notes = target.value;
+    }
+}
 class Controller {
     constructor(engine) {
         this.engine = engine;
+        this.engine = engine;
+        this.caze = new Case();
+        this.notesComponents = new NotesComponent(this.caze);
+    }
+    innit() {
+        this.notesComponents.innit();
     }
 }
-let engine = new Engine(new Repository());
-let controller = new Controller(engine);
-console.log("DDSS ready");
-//# sourceMappingURL=app.js.map
+document.addEventListener('DOMContentLoaded', () => {
+    const engine = new Engine(new Repository());
+    const controller = new Controller(engine);
+    controller.innit();
+    console.log("DDSS ready");
+});

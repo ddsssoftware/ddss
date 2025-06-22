@@ -4,9 +4,9 @@ class Engine {
     private readonly repository: Repository;
     private diagnoses: Diagnosis[];
     private symptoms: Symptom[];
-    private diagnosesByIndex: Map<string, Diagnosis>;
-    private symptomsByIndex: Map<string, Symptom>;
-    private diagnosesBySymptom: Map<string, Diagnosis[]>
+    private diagnosesByIndex: Map<string, Diagnosis> = new Map();
+    private symptomsByIndex: Map<string, Symptom> = new Map();
+    private diagnosesBySymptom: Map<string, Diagnosis[]> = new Map();
 
     public constructor(repository: Repository) {
         this.repository = repository;

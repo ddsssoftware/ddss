@@ -1,9 +1,19 @@
+/// <reference path="./component.ts" />
+/// <reference path="./notes.ts" />
+
 class Controller {
 
-    private engine: Engine;
+    private caze: Case;
+    private notesComponents: NotesComponent;
 
-    public constructor(engine: Engine) {
+    public constructor(private engine: Engine) {
         this.engine = engine;
+        this.caze = new Case();
+        this.notesComponents = new NotesComponent(this.caze);
+    }
+
+    public innit(): void {
+        this.notesComponents.innit();
     }
 
 }
