@@ -1,7 +1,7 @@
 class Case {
     public notes: string = '';
-    public symptoms: SymptomEntry[];
-    public diagnosis: DiagnosisEntry[];
+    public symptoms: SymptomEntry[] = [];
+    public diagnosis: DiagnosisEntry[] = [];
 
     public getPresentSymptoms(): Symptom[] {
         return this.getSymptomsByPresence(Presence.Present);
