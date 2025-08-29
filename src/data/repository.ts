@@ -29,7 +29,8 @@ class Repository {
             const url = '/data/' + dataType;
             fetch(url, Repository.HEAD_METHOD)
                 .then(response => {
-                    if (this.isExpired(response)) {
+                    const etagKey = response.url + "__ETAG__";
+                    if (this.isExpired(etagKey, response)) {
                         fetch(url, Repository.GET_METHOD)
                             .then(response => {
                                 if (response.ok) {
@@ -38,6 +39,7 @@ class Repository {
                                             window.localStorage.setItem(dataType, body);
                                         }, this.httpLogError)
                                         .catch(this.httpLogError);
+                                    window.localStorage.setItem(etagKey, response.headers.get('ETag'));
                                 } else {
                                     this.httpLogError('Response not ok ' + response.status + ' ' + response.statusText);
                                 }
@@ -49,12 +51,11 @@ class Repository {
         });
     }
 
-    private isExpired(response: Response): boolean {
-        const key = response.url + "__ETAG__";
+    private isExpired(etagKey: string, response: Response): boolean {
         return !response.ok
             || response.headers.get('ETag') == null
-            || window.localStorage.getItem(key) == null
-            || response.headers.get('ETag') != window.localStorage.getItem(key);
+            || window.localStorage.getItem(etagKey) == null
+            || response.headers.get('ETag') != window.localStorage.getItem(etagKey);
     }
 
     private httpLogError(reason: any) {

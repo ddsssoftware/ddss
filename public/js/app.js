@@ -1,7 +1,19 @@
 class Symptom {
 }
+class SymptomEntry {
+}
 class Diagnosis {
 }
+class DiagnosisEntry {
+}
+class Case {
+}
+var Presence;
+(function (Presence) {
+    Presence["Present"] = "Present";
+    Presence["NotPresent"] = "Not Present";
+    Presence["Unknown"] = "Unknown";
+})(Presence || (Presence = {}));
 class Repository {
     constructor() {
         this.init();
@@ -22,7 +34,8 @@ class Repository {
             const url = '/data/' + dataType;
             fetch(url, Repository.HEAD_METHOD)
                 .then(response => {
-                if (this.isExpired(response)) {
+                const etagKey = response.url + "__ETAG__";
+                if (this.isExpired(etagKey, response)) {
                     fetch(url, Repository.GET_METHOD)
                         .then(response => {
                         if (response.ok) {
@@ -31,6 +44,7 @@ class Repository {
                                 window.localStorage.setItem(dataType, body);
                             }, this.httpLogError)
                                 .catch(this.httpLogError);
+                            window.localStorage.setItem(etagKey, response.headers.get('ETag'));
                         }
                         else {
                             this.httpLogError('Response not ok ' + response.status + ' ' + response.statusText);
@@ -42,12 +56,11 @@ class Repository {
                 .catch(this.httpLogError);
         });
     }
-    isExpired(response) {
-        const key = response.url + "__ETAG__";
+    isExpired(etagKey, response) {
         return !response.ok
             || response.headers.get('ETag') == null
-            || window.localStorage.getItem(key) == null
-            || response.headers.get('ETag') != window.localStorage.getItem(key);
+            || window.localStorage.getItem(etagKey) == null
+            || response.headers.get('ETag') != window.localStorage.getItem(etagKey);
     }
     httpLogError(reason) {
         alert('Failed to make http request. See logs for details.');
@@ -93,12 +106,29 @@ class Engine {
         this.symptoms = this.repository.getSymptoms();
         this.diagnoses.forEach(diagnosis => {
             this.diagnosesByIndex.set(diagnosis.id, diagnosis);
+            diagnosis.symptoms.forEach(symptom => {
+                if (!this.diagnosesBySymptom.has(symptom.id)) {
+                    this.diagnosesBySymptom.set(symptom.id, []);
+                }
+                this.diagnosesBySymptom.get(symptom.id).push(diagnosis);
+            });
         });
         this.symptoms.forEach(symptom => {
             this.symptomsByIndex.set(symptom.id, symptom);
         });
     }
+    suggest(caze) {
+        return null;
+    }
+}
+class CaseSuggestion {
+}
+class Controller {
+    constructor(engine) {
+        this.engine = engine;
+    }
 }
 let engine = new Engine(new Repository());
-console.log("DDSS");
+let controller = new Controller(engine);
+console.log("DDSS ready");
 //# sourceMappingURL=app.js.map
