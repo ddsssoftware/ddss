@@ -7,6 +7,6 @@ class Diagnosis {
 
 class DiagnosisEntry {
     public diagnosis: Diagnosis;
-    public presence: Presence;
+    public precense: Presence;
     public comments: string;
 }

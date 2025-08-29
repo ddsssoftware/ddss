@@ -1,9 +1,20 @@
 [
     {
-        "id": "1",
-        "name": "D1",
+        "id": "african-tick-bite-fever",
+        "name": "African tick-bite fever",
+        "icd": "A77.1",
         "criticality": 0,
-        "symptoms": []
+        "symptoms": [
+            "rickettsia-africae-infection",
+            "fever",
+            "headache",
+            "muscle-pain",
+            "rash",
+            "lymphadenitis",
+            "regional-lymphadenopathy",
+            "inoculation-eschars",
+            "red-skin-sore-dark-center"
+        ]
     },
     {
         "id": "2",

@@ -5,10 +5,7 @@
 /// <reference path="./engine/engine.ts" />
 /// <reference path="./ui/controller.ts" />
 
-document.addEventListener('DOMContentLoaded', () => {
-    const engine: Engine = new Engine(new Repository());
-    const controller: Controller = new Controller(engine);
-    controller.innit();
-    console.log("DDSS ready");
-});
+let engine: Engine = new Engine(new Repository());
+let controller: Controller = new Controller(engine);
 
+console.log("DDSS ready");

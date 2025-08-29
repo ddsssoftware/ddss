@@ -1,34 +1,10 @@
 :root {
-    --white: #fafafa;
-    --l-gray: #e3e3e3;
-    --m-gray: #b3b3b3;
-    --d-gray: #939393;
+    --white: #f9f9f9;
     --black: #3f3f3f;
 }
 
 body {
     font-family: sans-serif;
     color: var(--black);
-    padding: 0.5rem 1.25rem 4rem 1.25rem;
     background-color: var(--white);
-}
-
-button {
-    font-size: 1rem;
-    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-    background-color: var(--l-gray);
-    border-right: 0.125rem solid var(--d-gray);
-    border-bottom: 0.125rem solid var(--d-gray);
-    border-left: 0.125rem solid var(--m-gray);
-    border-top: 0.125rem solid var(--m-gray);
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-}
-
-header span {
-    font-size: 2rem;
-    font-weight: bold;
 }

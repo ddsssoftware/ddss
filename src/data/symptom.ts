@@ -5,6 +5,6 @@ class Symptom {
 
 class SymptomEntry {
     public symptom: Symptom;
-    public presence: Presence;
+    public precense: Presence;
     public comments: string;
 }

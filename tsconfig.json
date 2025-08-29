@@ -6,7 +6,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "outFile": "public/js/app.js",
-    "sourceMap": false
+    "sourceMap": true
   },
   "files": [
     "src/main.ts"

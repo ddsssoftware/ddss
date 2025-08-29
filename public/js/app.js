@@ -7,19 +7,6 @@ class Diagnosis {
 class DiagnosisEntry {
 }
 class Case {
-    constructor() {
-        this.notes = '';
-    }
-    getPresentSymptoms() {
-        return this.getSymptomsByPresence(Presence.Present);
-    }
-    getSymptomsByPresence(presence) {
-        return this.symptoms.filter(symptomEntry => {
-            return symptomEntry.presence == presence;
-        }).map(symptomEntry => {
-            return symptomEntry.symptom;
-        });
-    }
 }
 var Presence;
 (function (Presence) {
@@ -47,7 +34,8 @@ class Repository {
             const url = '/data/' + dataType;
             fetch(url, Repository.HEAD_METHOD)
                 .then(response => {
-                if (this.isExpired(response)) {
+                const etagKey = response.url + "__ETAG__";
+                if (this.isExpired(etagKey, response)) {
                     fetch(url, Repository.GET_METHOD)
                         .then(response => {
                         if (response.ok) {
@@ -56,6 +44,7 @@ class Repository {
                                 window.localStorage.setItem(dataType, body);
                             }, this.httpLogError)
                                 .catch(this.httpLogError);
+                            window.localStorage.setItem(etagKey, response.headers.get('ETag'));
                         }
                         else {
                             this.httpLogError('Response not ok ' + response.status + ' ' + response.statusText);
@@ -67,12 +56,11 @@ class Repository {
                 .catch(this.httpLogError);
         });
     }
-    isExpired(response) {
-        const key = response.url + "__ETAG__";
+    isExpired(etagKey, response) {
         return !response.ok
             || response.headers.get('ETag') == null
-            || window.localStorage.getItem(key) == null
-            || response.headers.get('ETag') != window.localStorage.getItem(key);
+            || window.localStorage.getItem(etagKey) == null
+            || response.headers.get('ETag') != window.localStorage.getItem(etagKey);
     }
     httpLogError(reason) {
         alert('Failed to make http request. See logs for details.');
@@ -110,9 +98,6 @@ Repository.HEAD_METHOD = { method: 'HEAD' };
 Repository.GET_METHOD = { method: 'GET' };
 class Engine {
     constructor(repository) {
-        this.diagnosesByIndex = new Map();
-        this.symptomsByIndex = new Map();
-        this.diagnosesBySymptom = new Map();
         this.repository = repository;
         this.loadDataStructures();
     }
@@ -133,82 +118,17 @@ class Engine {
         });
     }
     suggest(caze) {
-        const present = caze.getPresentSymptoms();
-        const diagnoses = new Set();
-        present.forEach(symptom => {
-            this.diagnosesBySymptom.get(symptom.id).forEach(diagnoses.add, diagnoses);
-        });
-        return new CaseSuggestion(Array.from(diagnoses.values()), present);
+        return null;
     }
 }
 class CaseSuggestion {
-    constructor(diagnoses, symptoms) {
-        this.diagnoses = diagnoses;
-        this.symptoms = symptoms;
-    }
-}
-class Component {
-    constructor(id, caze) {
-        this.id = id;
-        this.caze = caze;
-    }
-    setCase(caze) {
-        this.caze = caze;
-        this.reset();
-    }
-    getElement() {
-        return document.getElementById(this.id);
-    }
-}
-class NewButtonComponent extends Component {
-    constructor(controller) {
-        super("sys__new", null);
-        this.controller = controller;
-    }
-    reset() {
-        throw new Error("Method not implemented.");
-    }
-    innit() {
-        this.getElement().addEventListener('click', this.onClick.bind(this));
-    }
-    onClick() {
-        this.controller.load(new Case());
-    }
-}
-class NotesComponent extends Component {
-    constructor(caze) {
-        super("case__notes", caze);
-    }
-    innit() {
-        this.getElement().addEventListener('input', this.onInput.bind(this));
-    }
-    reset() {
-        this.getElement().value = this.caze.notes;
-    }
-    onInput(event) {
-        const target = event.target;
-        this.caze.notes = target.value;
-    }
 }
 class Controller {
     constructor(engine) {
         this.engine = engine;
-        this.engine = engine;
-        this.caze = new Case();
-        this.newButtonComponent = new NewButtonComponent(this);
-        this.notesComponent = new NotesComponent(this.caze);
-    }
-    innit() {
-        this.newButtonComponent.innit();
-        this.notesComponent.innit();
-    }
-    load(caze) {
-        this.notesComponent.setCase(caze);
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const engine = new Engine(new Repository());
-    const controller = new Controller(engine);
-    controller.innit();
-    console.log("DDSS ready");
-});
+let engine = new Engine(new Repository());
+let controller = new Controller(engine);
+console.log("DDSS ready");
+//# sourceMappingURL=app.js.map
