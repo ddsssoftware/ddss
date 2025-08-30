@@ -5,21 +5,15 @@
         "icd": "A77.1",
         "criticality": 0,
         "symptoms": [
-            "rickettsia-africae-infection",
             "fever",
             "headache",
+            "inoculation-eschars",
+            "lymphadenitis",
             "muscle-pain",
             "rash",
-            "lymphadenitis",
+            "red-skin-sore-dark-center",
             "regional-lymphadenopathy",
-            "inoculation-eschars",
-            "red-skin-sore-dark-center"
+            "rickettsia-africae-infection"
         ]
-    },
-    {
-        "id": "2",
-        "name": "D2",
-        "criticality": 1,
-        "symptoms": []
     }
 ]

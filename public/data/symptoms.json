@@ -1,15 +1,19 @@
 [
     {
-        "id": "rickettsia-africae-infection",
-        "name": "Rickettsia africae infection"
-    },
-    {
         "id": "fever",
         "name": "Fever"
     },
     {
         "id": "headache",
         "name": "Headache"
+    },
+    {
+        "id": "inoculation-eschars",
+        "name": "Inoculation eschars"
+    },
+    {
+        "id": "lymphadenitis",
+        "name": "Lymphadenitis"
     },
     {
         "id": "muscle-pain",
@@ -20,19 +24,15 @@
         "name": "Rash"
     },
     {
-        "id": "lymphadenitis",
-        "name": "Lymphadenitis"
+        "id": "red-skin-sore-dark-center",
+        "name": "Red skin sore with a dark center"
     },
     {
         "id": "regional-lymphadenopathy",
         "name": "Regional lymphadenopathy"
     },
     {
-        "id": "inoculation-eschars",
-        "name": "Inoculation eschars"
-    },
-    {
-        "id": "red-skin-sore-dark-center",
-        "name": "Red skin sore with a dark center"
+        "id": "rickettsia-africae-infection",
+        "name": "Rickettsia africae infection"
     }
 ]
