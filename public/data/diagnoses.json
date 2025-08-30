@@ -15,5 +15,21 @@
             "regional-lymphadenopathy",
             "rickettsia-africae-infection"
         ]
+    },
+    {
+        "id": "aagenaes-syndrome",
+        "name": "Aagenaes syndrome",
+        "icd": "Q82.0",
+        "criticality": 0,
+        "symptoms": [
+            "abdominal-pain",
+            "cholestasis",
+            "dark-urine",
+            "enlarged-spleen",
+            "gene-mutation-unc45a",
+            "giant-cell-hepatitis",
+            "light-colored-stool",
+            "lymphedema"
+        ]
     }
 ]

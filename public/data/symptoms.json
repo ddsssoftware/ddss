@@ -1,7 +1,31 @@
 [
     {
+        "id": "abdominal-pain",
+        "name": "Abdominal pain"
+    },
+    {
+        "id": "cholestasis",
+        "name": "Cholestasis"
+    },
+    {
+        "id": "dark-urine",
+        "name": "Dark urine"
+    },
+    {
+        "id": "enlarged-spleen",
+        "name": "Enlarged spleen"
+    },
+    {
         "id": "fever",
         "name": "Fever"
+    },
+    {
+        "id": "gene-mutation-unc45a",
+        "name": "Gene mutation UNC45A"
+    },
+    {
+        "id": "giant-cell-hepatitis",
+        "name": "Giant cell hepatitis"
     },
     {
         "id": "headache",
@@ -12,8 +36,16 @@
         "name": "Inoculation eschars"
     },
     {
+        "id": "light-colored-stool",
+        "name": "Light-colored stool"
+    },
+    {
         "id": "lymphadenitis",
         "name": "Lymphadenitis"
+    },
+    {
+        "id": "lymphedema",
+        "name": "Lymphedema"
     },
     {
         "id": "muscle-pain",
