@@ -12,4 +12,18 @@ function slug($str)
     return $str;
 }
 
+function getDiagnosisById($id)
+{
+    global $diagnoses;
+    $d = null;
+    foreach ($diagnoses as $diag) {
+        if ($diag['id'] == $id) {
+            $d = $diag;
+            break;
+        }
+    }
+
+    return $d;
+}
+
 
