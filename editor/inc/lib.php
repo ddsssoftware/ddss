@@ -12,18 +12,42 @@ function slug($str)
     return $str;
 }
 
-function getDiagnosisById($id)
+function getDiagnosisById(string $id): array|null
 {
     global $diagnoses;
     $d = null;
-    foreach ($diagnoses as $diag) {
-        if ($diag['id'] == $id) {
-            $d = $diag;
+    foreach ($diagnoses as $key => $value) {
+        if ($value['id'] == $id) {
+            $d = compact('key', 'value');
             break;
         }
     }
 
     return $d;
+}
+
+function saveDiagnoses($diagnosisEntry)
+{
+    global $diagnoses, $DIAGNOSES_FILE_PATH;
+    $diagnoses[$diagnosisEntry['key']] = $diagnosisEntry['value'];
+
+    file_put_contents($DIAGNOSES_FILE_PATH, json_encode($diagnoses, JSON_PRETTY_PRINT));
+}
+
+function getUrl()
+{
+    $uri = $_SERVER['REQUEST_URI'];
+
+    return getBaseUrl() . $uri;
+}
+
+function getBaseUrl()
+{
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+
+    $host = $_SERVER['HTTP_HOST'];
+
+    return $protocol . "://" . $host;
 }
 
 
