@@ -26,18 +26,27 @@ function getDiagnosisById(string $id): array|null
     return $d;
 }
 
-function saveDiagnoses($diagnosisEntry)
+function saveDiagnosis($diagnosisEntry)
 {
-    global $diagnoses, $DIAGNOSES_FILE_PATH;
+    global $diagnoses;
+
     $diagnoses[$diagnosisEntry['key']] = $diagnosisEntry['value'];
 
-    file_put_contents($DIAGNOSES_FILE_PATH, json_encode($diagnoses, JSON_PRETTY_PRINT));
+    saveDiagnoses();
 }
 
 function addDiagnosis($diagnosis)
 {
-    global $diagnoses, $DIAGNOSES_FILE_PATH;
+    global $diagnoses;
+
     $diagnoses[] = $diagnosis;
+
+    saveDiagnoses();
+}
+
+function saveDiagnoses()
+{
+    global $diagnoses, $DIAGNOSES_FILE_PATH;
 
     file_put_contents($DIAGNOSES_FILE_PATH, json_encode($diagnoses, JSON_PRETTY_PRINT));
 }

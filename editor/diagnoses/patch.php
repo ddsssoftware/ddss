@@ -6,6 +6,6 @@ $diagnosis = getDiagnosisById($_POST['id']);
 $diagnosis['value']['icd'] = $_POST['icd'];
 $diagnosis['value']['name'] = $_POST['name'];
 
-saveDiagnoses($diagnosis);
+saveDiagnosis($diagnosis);
 
 header('Location: ' . getBaseUrl() . '/diagnoses/edit.php?id=' . $diagnosis['value']['id']);
