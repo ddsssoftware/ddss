@@ -65,6 +65,22 @@ function getSymptomById(string $id): array|null
     return $d;
 }
 
+function saveSymptom($symptomEntry)
+{
+    global $symptoms;
+
+    $symptoms[$symptomEntry['key']] = $symptomEntry['value'];
+
+    saveSymptoms();
+}
+
+function saveSymptoms()
+{
+    global $symptoms, $SYMPTOMS_FILE_PATH;
+
+    file_put_contents($SYMPTOMS_FILE_PATH, json_encode($symptoms, JSON_PRETTY_PRINT));
+}
+
 function getUrl()
 {
     $uri = $_SERVER['REQUEST_URI'];
