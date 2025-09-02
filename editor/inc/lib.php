@@ -74,12 +74,23 @@ function saveSymptom($symptomEntry)
     saveSymptoms();
 }
 
+function addSymptom($symptom)
+{
+    global $symptoms;
+
+    $symptoms[] = $symptom;
+
+    saveSymptoms();
+}
+
 function saveSymptoms()
 {
     global $symptoms, $SYMPTOMS_FILE_PATH;
 
     file_put_contents($SYMPTOMS_FILE_PATH, json_encode($symptoms, JSON_PRETTY_PRINT));
 }
+
+
 
 function getUrl()
 {

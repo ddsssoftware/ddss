@@ -66,5 +66,9 @@
     {
         "id": "rickettsia-africae-infection",
         "name": "Rickettsia africae infection"
+    },
+    {
+        "id": "banana-melao",
+        "name": "Banana melao"
     }
 ]
