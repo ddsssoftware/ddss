@@ -17,8 +17,8 @@
 
         <div class="navbar-menu">
             <div class="navbar-start">
-                <a href="diagnoses/index.php" class="navbar-item">Diagnoses</a>
-                <a href="symptoms/index.php" class="navbar-item">Symptoms</a>
+                <a href="/diagnoses/index.php" class="navbar-item">Diagnoses</a>
+                <a href="/symptoms/index.php" class="navbar-item">Symptoms</a>
             </div>
         </div>
     </nav>
