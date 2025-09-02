@@ -1,4 +1,4 @@
-<pre><?php
+<?php
 
 include_once __DIR__ . '/../inc/data.php';
 
