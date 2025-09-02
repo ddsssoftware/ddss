@@ -51,6 +51,20 @@ function saveDiagnoses()
     file_put_contents($DIAGNOSES_FILE_PATH, json_encode($diagnoses, JSON_PRETTY_PRINT));
 }
 
+function getSymptomById(string $id): array|null
+{
+    global $symptoms;
+    $d = null;
+    foreach ($symptoms as $key => $value) {
+        if ($value['id'] == $id) {
+            $d = compact('key', 'value');
+            break;
+        }
+    }
+
+    return $d;
+}
+
 function getUrl()
 {
     $uri = $_SERVER['REQUEST_URI'];
