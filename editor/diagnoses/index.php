@@ -9,7 +9,7 @@ foreach ($diagnoses as $diag) {
 }
 $diagnosesJs .= ']}).render(document.getElementById("diagnoses_table_wrapper"));' . PHP_EOL;
 ?>
-<h1 class="title">Diagnoses</h1>
+<h1 class="title">Diagnoses <a href="/diagnoses/create.php" class="button is-link">New</a></h1>
 <div id="diagnoses_table_wrapper"></div>
 <script><?= $diagnosesJs ?></script>
 
