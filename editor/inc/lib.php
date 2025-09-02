@@ -34,6 +34,14 @@ function saveDiagnoses($diagnosisEntry)
     file_put_contents($DIAGNOSES_FILE_PATH, json_encode($diagnoses, JSON_PRETTY_PRINT));
 }
 
+function addDiagnosis($diagnosis)
+{
+    global $diagnoses, $DIAGNOSES_FILE_PATH;
+    $diagnoses[] = $diagnosis;
+
+    file_put_contents($DIAGNOSES_FILE_PATH, json_encode($diagnoses, JSON_PRETTY_PRINT));
+}
+
 function getUrl()
 {
     $uri = $_SERVER['REQUEST_URI'];
