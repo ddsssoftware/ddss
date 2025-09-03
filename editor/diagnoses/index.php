@@ -9,6 +9,7 @@ foreach ($diagnoses as $diag) {
 }
 $diagnosesJs .= ']}).render(document.getElementById("diagnoses_table_wrapper"));' . PHP_EOL;
 ?>
+<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
 <h1 class="title">Diagnoses <a href="/diagnoses/create.php" class="button is-link">New</a></h1>
 <div id="diagnoses_table_wrapper"></div>
 <script><?= $diagnosesJs ?></script>
