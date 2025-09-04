@@ -32,7 +32,7 @@
         </datalist>
     </div>
     <div class="control p-3 ml-3">
-        <table class="table is-striped is-hoverable is-bordered">
+        <table class="table is-striped is-hoverable is-bordered" id="symptomtable">
             <?php
             foreach ($diagnosis['symptoms'] as $s) {
                 $d = ' data-symptomid="' . $s . '" ';

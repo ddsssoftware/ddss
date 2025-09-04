@@ -6,6 +6,9 @@ $diagnosis = [];
 $diagnosis['id'] = slug($_POST['name']);
 $diagnosis['icd'] = $_POST['icd'];
 $diagnosis['name'] = $_POST['name'];
+$s = array_unique($_POST['symptom']);
+sort($s);
+$diagnosis['symptoms'] = $s;
 
 addDiagnosis($diagnosis);
 
