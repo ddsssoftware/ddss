@@ -18,6 +18,7 @@
             <div class="navbar-start">
                 <a href="/diagnoses/index.php" class="navbar-item">Diagnoses</a>
                 <a href="/symptoms/index.php" class="navbar-item">Symptoms</a>
+                <a href="/tools/index.php" class="navbar-item">Tools</a>
             </div>
         </div>
     </nav>
