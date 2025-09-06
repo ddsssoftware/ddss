@@ -8,4 +8,10 @@ $symptom['name'] = $_POST['name'];
 
 addSymptom($symptom);
 
+if (isset($_POST['diagnosisid'])) {
+    $diagnosisEntry = getDiagnosisById($_POST['diagnosisid']);
+    $diagnosisEntry['value']['symptoms'][] = $symptom['id'];
+    saveDiagnosis($diagnosisEntry);
+}
+
 header('Location: ' . getBaseUrl() . '/symptoms/edit.php?id=' . $symptom['id']);
