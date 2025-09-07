@@ -5,27 +5,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DDSS</title>
-    <link rel="stylesheet" href="css/css.css">
-
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="icon" href="data:;base64,=">
 </head>
 
 <body>
 
     <header>
-        <h1 title="Differential Diagnosis Support System">DDSS</h1>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <span class="navbar-item title is-family-monospace" title="Differential Diagnosis Support System">DDSS</span>
+            </div>
+        </nav>
     </header>
-    <section id="case">
-        <h2>Case</h2>
+    <section class="section" id="case">
+        <h2 class="title is-family-monospace is-size-4">Case</h2>
         <textarea id="case__notes"></textarea>
     </section>
-    <section id="symptoms">
-        <h2>Symptoms</h2>
+    <section class="section" id="symptoms">
+        <h2 class="title is-family-monospace is-size-4">Symptoms</h2>
     </section>
-    <section id="diagnoses">
-        <h2>Diagnoses</h2>
+    <section class="section" id="diagnoses">
+        <h2 class="title is-family-monospace is-size-4">Diagnoses</h2>
     </section>
     <script src="js/app.js"></script>
 
