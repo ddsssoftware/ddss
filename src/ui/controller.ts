@@ -6,4 +6,8 @@ class Controller {
         this.engine = engine;
     }
 
+    public innit() {
+
+    }
+
 }

@@ -1,11 +1,7 @@
 abstract class Component {
 
-    public constructor(protected id: string, protected caze: Case) { }
+    public constructor(protected id: string, protected controller: Controller) { }
 
-    public setCase(caze: Case): void {
-        this.caze = caze;
-        this.reset();
-    }
 
     public getElement(): HTMLElement {
         return document.getElementById(this.id);

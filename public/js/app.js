@@ -127,8 +127,33 @@ class Controller {
     constructor(engine) {
         this.engine = engine;
     }
+    innit() {
+    }
+}
+class Component {
+    constructor(id, controller) {
+        this.id = id;
+        this.controller = controller;
+    }
+    getElement() {
+        return document.getElementById(this.id);
+    }
+}
+class SymptomsSearchComponent extends Component {
+    constructor(controller) {
+        super("symptoms__input_search", controller);
+    }
+    reset() {
+        throw new Error("Method not implemented.");
+    }
+    innit() {
+        this.getElement().addEventListener('input', this.onInput.bind(this));
+    }
+    onInput() {
+    }
 }
 let engine = new Engine(new Repository());
 let controller = new Controller(engine);
+controller.innit();
 console.log("DDSS ready");
 //# sourceMappingURL=app.js.map
