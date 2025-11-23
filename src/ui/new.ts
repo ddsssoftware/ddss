@@ -1,7 +1,7 @@
 class NewButtonComponent extends Component {
 
-    public constructor(private controller: Controller) {
-        super("sys__new", null);
+    public constructor(caze: Case, controller: Controller) {
+        super("sys__new", caze, controller);
     }
 
     public reset(): void {
@@ -13,7 +13,7 @@ class NewButtonComponent extends Component {
     }
 
     public onClick() {
-        this.controller.load(new Case());
+        throw new Error("Method not implemented.");
     }
 
 }

@@ -1,7 +1,7 @@
 class SymptomsSearchComponent extends Component {
 
-    public constructor(controller: Controller) {
-        super("symptoms__input_search", controller);
+    public constructor(caze: Case, controller: Controller) {
+        super("symptoms__input_search", caze, controller);
     }
 
     public reset(): void {

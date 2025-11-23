@@ -1,7 +1,7 @@
 class NotesComponent extends Component {
 
-    public constructor(caze: Case) {
-        super("case__notes", caze);
+    public constructor(caze: Case, controller: Controller) {
+        super("case__notes", caze, controller);
     }
 
     public innit(): void {

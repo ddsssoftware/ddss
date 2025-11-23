@@ -1,13 +1,5 @@
 class Controller {
 
-    private engine: Engine;
-
-    public constructor(engine: Engine) {
-        this.engine = engine;
-    }
-
-    public innit() {
-
-    }
+    public constructor(protected engine: Engine) { };
 
 }
