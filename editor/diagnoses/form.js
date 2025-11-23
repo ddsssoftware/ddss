@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const $list = document.getElementById('symptomslist');
     $list.addEventListener('input', () => {
-        $option = document.querySelector("option[value='" + $list.value + "']");
+        const $option = document.querySelector("option[value='" + $list.value + "']");
         if ($option) {
-            $row = document.getElementById('symptomtable').insertRow(0)
-            $cell = $row.insertCell(-1);
+            const $row = document.getElementById('symptomtable').insertRow(0)
+            let $cell = $row.insertCell(-1);
             const id = $option.dataset.symptomid;
             const dataset = ' data-symptomid="' + id + '" ';
             $cell.insertAdjacentHTML('beforeend', '<input type="hidden" name="symptom[]" value="' + id + '"' + dataset + '>');
