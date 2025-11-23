@@ -16,18 +16,20 @@ class Engine {
     private loadDataStructures(): void {
         this.diagnoses = this.repository.getDiagnoses();
         this.symptoms = this.repository.getSymptoms();
-        this.diagnoses.forEach(diagnosis => {
-            this.diagnosesByIndex.set(diagnosis.id, diagnosis);
-            diagnosis.symptoms.forEach(symptom => {
-                if (!this.diagnosesBySymptom.has(symptom.id)) {
-                    this.diagnosesBySymptom.set(symptom.id, []);
+
+        for (let d of this.diagnoses) {
+            this.diagnosesByIndex.set(d.id, d);
+            for (let s of d.symptoms) {
+                if (!this.diagnosesBySymptom.has(s.id)) {
+                    this.diagnosesBySymptom.set(s.id, []);
                 }
-                this.diagnosesBySymptom.get(symptom.id).push(diagnosis);
-            });
-        });
-        this.symptoms.forEach(symptom => {
-            this.symptomsByIndex.set(symptom.id, symptom);
-        });
+                this.diagnosesBySymptom.get(s.id).push(d);
+            }
+        }
+
+        for (let s of this.symptoms) {
+            this.symptomsByIndex.set(s.id, s);
+        }
     }
 
     public suggest(caze: Case): CaseSuggestion {
