@@ -24,8 +24,7 @@ class Repository {
     }
 
     private loadData() {
-        const dataTypes: string[] = [Repository.DIAGNOSES_JSON, Repository.SYMPTOMS_JSON];
-        dataTypes.forEach(dataType => {
+        for (let dataType of [Repository.DIAGNOSES_JSON, Repository.SYMPTOMS_JSON]) {
             const url = '/data/' + dataType;
             fetch(url, Repository.HEAD_METHOD)
                 .then(response => {
@@ -36,10 +35,10 @@ class Repository {
                                 if (response.ok) {
                                     response.text()
                                         .then(body => {
-                                            window.localStorage.setItem(dataType, body);
+                                            globalThis.localStorage.setItem(dataType, body);
+                                            globalThis.localStorage.setItem(etagKey, response.headers.get('ETag'));
                                         }, this.httpLogError)
                                         .catch(this.httpLogError);
-                                    window.localStorage.setItem(etagKey, response.headers.get('ETag'));
                                 } else {
                                     this.httpLogError('Response not ok ' + response.status + ' ' + response.statusText);
                                 }
@@ -48,14 +47,14 @@ class Repository {
                     }
                 }, this.httpLogError)
                 .catch(this.httpLogError);
-        });
+        }
     }
 
     private isExpired(etagKey: string, response: Response): boolean {
         return !response.ok
             || response.headers.get('ETag') == null
-            || window.localStorage.getItem(etagKey) == null
-            || response.headers.get('ETag') != window.localStorage.getItem(etagKey);
+            || globalThis.localStorage.getItem(etagKey) == null
+            || response.headers.get('ETag') != globalThis.localStorage.getItem(etagKey);
     }
 
     private httpLogError(reason: any) {
@@ -71,12 +70,11 @@ class Repository {
         let available: boolean = false;
 
         try {
-            const storages: Storage[] = [window.localStorage, window.sessionStorage];
             const x = "__STORAGE__TEST__";
-            storages.forEach(storage => {
+            for (let storage of [globalThis.localStorage, globalThis.sessionStorage]) {
                 storage.setItem(x, x);
                 storage.removeItem(x);
-            });
+            }
 
             available = true;
         } catch (err) {
@@ -87,11 +85,11 @@ class Repository {
     }
 
     public getDiagnoses(): Diagnosis[] {
-        return JSON.parse(window.localStorage.getItem(Repository.DIAGNOSES_JSON)) as Diagnosis[];
+        return JSON.parse(globalThis.localStorage.getItem(Repository.DIAGNOSES_JSON)) as Diagnosis[];
     }
 
     public getSymptoms(): Symptom[] {
-        return JSON.parse(window.localStorage.getItem(Repository.SYMPTOMS_JSON)) as Symptom[];
+        return JSON.parse(globalThis.localStorage.getItem(Repository.SYMPTOMS_JSON)) as Symptom[];
     }
 
 }
