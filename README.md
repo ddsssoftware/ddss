@@ -34,10 +34,6 @@ First build the image
 docker build -t ddss-dev .
 ```
 
-### Typescript
-
-Simply call the `tsc` compiler at the project's root folder. It will compile the source at `src` folder and place it in `public\js` ready for use.
-
 ### Medical Knowledge
 
 You may edit the files `public\data\diagnoses.json` and `public\data\symptoms.json` directly.
