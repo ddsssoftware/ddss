@@ -27,16 +27,17 @@ php -S localhost:8080 -t ./public
 
 ## Contributing
 
+### Docker
+
+First build the image
+```bash
+docker build -t ddss-dev .
+```
+
 ### Typescript
 
 Simply call the `tsc` compiler at the project's root folder. It will compile the source at `src` folder and place it in `public\js` ready for use.
 
 ### Medical Knowledge
 
-The preferred way is to edit using the editor. You need PHP installed, then start the server using
-```bash
-php -S localhost:7070 -t ./editor
-```
-Then open your browser and open page http://localhost:7070
-
-You may also edit the files `public\data\diagnoses.json` and `public\data\symptoms.json` directly.
+You may edit the files `public\data\diagnoses.json` and `public\data\symptoms.json` directly.

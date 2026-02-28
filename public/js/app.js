@@ -29,8 +29,7 @@ class Repository {
         }
     }
     loadData() {
-        const dataTypes = [Repository.DIAGNOSES_JSON, Repository.SYMPTOMS_JSON];
-        dataTypes.forEach(dataType => {
+        for (let dataType of [Repository.DIAGNOSES_JSON, Repository.SYMPTOMS_JSON]) {
             const url = '/data/' + dataType;
             fetch(url, Repository.HEAD_METHOD)
                 .then(response => {
@@ -41,10 +40,10 @@ class Repository {
                         if (response.ok) {
                             response.text()
                                 .then(body => {
-                                window.localStorage.setItem(dataType, body);
+                                globalThis.localStorage.setItem(dataType, body);
+                                globalThis.localStorage.setItem(etagKey, response.headers.get('ETag'));
                             }, this.httpLogError)
                                 .catch(this.httpLogError);
-                            window.localStorage.setItem(etagKey, response.headers.get('ETag'));
                         }
                         else {
                             this.httpLogError('Response not ok ' + response.status + ' ' + response.statusText);
@@ -54,13 +53,13 @@ class Repository {
                 }
             }, this.httpLogError)
                 .catch(this.httpLogError);
-        });
+        }
     }
     isExpired(etagKey, response) {
         return !response.ok
             || response.headers.get('ETag') == null
-            || window.localStorage.getItem(etagKey) == null
-            || response.headers.get('ETag') != window.localStorage.getItem(etagKey);
+            || globalThis.localStorage.getItem(etagKey) == null
+            || response.headers.get('ETag') != globalThis.localStorage.getItem(etagKey);
     }
     httpLogError(reason) {
         alert('Failed to make http request. See logs for details.');
@@ -72,12 +71,11 @@ class Repository {
     storageAvailable() {
         let available = false;
         try {
-            const storages = [window.localStorage, window.sessionStorage];
             const x = "__STORAGE__TEST__";
-            storages.forEach(storage => {
+            for (let storage of [globalThis.localStorage, globalThis.sessionStorage]) {
                 storage.setItem(x, x);
                 storage.removeItem(x);
-            });
+            }
             available = true;
         }
         catch (err) {
@@ -86,10 +84,10 @@ class Repository {
         return available;
     }
     getDiagnoses() {
-        return JSON.parse(window.localStorage.getItem(Repository.DIAGNOSES_JSON));
+        return JSON.parse(globalThis.localStorage.getItem(Repository.DIAGNOSES_JSON));
     }
     getSymptoms() {
-        return JSON.parse(window.localStorage.getItem(Repository.SYMPTOMS_JSON));
+        return JSON.parse(globalThis.localStorage.getItem(Repository.SYMPTOMS_JSON));
     }
 }
 Repository.DIAGNOSES_JSON = 'diagnoses.json';
@@ -104,18 +102,18 @@ class Engine {
     loadDataStructures() {
         this.diagnoses = this.repository.getDiagnoses();
         this.symptoms = this.repository.getSymptoms();
-        this.diagnoses.forEach(diagnosis => {
-            this.diagnosesByIndex.set(diagnosis.id, diagnosis);
-            diagnosis.symptoms.forEach(symptom => {
-                if (!this.diagnosesBySymptom.has(symptom.id)) {
-                    this.diagnosesBySymptom.set(symptom.id, []);
+        for (let d of this.diagnoses) {
+            this.diagnosesByIndex.set(d.id, d);
+            for (let s of d.symptoms) {
+                if (!this.diagnosesBySymptom.has(s.id)) {
+                    this.diagnosesBySymptom.set(s.id, []);
                 }
-                this.diagnosesBySymptom.get(symptom.id).push(diagnosis);
-            });
-        });
-        this.symptoms.forEach(symptom => {
-            this.symptomsByIndex.set(symptom.id, symptom);
-        });
+                this.diagnosesBySymptom.get(s.id).push(d);
+            }
+        }
+        for (let s of this.symptoms) {
+            this.symptomsByIndex.set(s.id, s);
+        }
     }
     suggest(caze) {
         return null;
@@ -127,21 +125,50 @@ class Controller {
     constructor(engine) {
         this.engine = engine;
     }
-    innit() {
-    }
+    ;
 }
 class Component {
-    constructor(id, controller) {
+    constructor(id, caze, controller) {
         this.id = id;
+        this.caze = caze;
         this.controller = controller;
     }
     getElement() {
         return document.getElementById(this.id);
     }
 }
+class NewButtonComponent extends Component {
+    constructor(caze, controller) {
+        super("sys__new", caze, controller);
+    }
+    reset() {
+        throw new Error("Method not implemented.");
+    }
+    innit() {
+        this.getElement().addEventListener('click', this.onClick.bind(this));
+    }
+    onClick() {
+        throw new Error("Method not implemented.");
+    }
+}
+class NotesComponent extends Component {
+    constructor(caze, controller) {
+        super("case__notes", caze, controller);
+    }
+    innit() {
+        this.getElement().addEventListener('input', this.onInput.bind(this));
+    }
+    reset() {
+        this.getElement().value = this.caze.notes;
+    }
+    onInput(event) {
+        const target = event.target;
+        this.caze.notes = target.value;
+    }
+}
 class SymptomsSearchComponent extends Component {
-    constructor(controller) {
-        super("symptoms__input_search", controller);
+    constructor(caze, controller) {
+        super("symptoms__input_search", caze, controller);
     }
     reset() {
         throw new Error("Method not implemented.");
@@ -154,6 +181,5 @@ class SymptomsSearchComponent extends Component {
 }
 let engine = new Engine(new Repository());
 let controller = new Controller(engine);
-controller.innit();
 console.log("DDSS ready");
 //# sourceMappingURL=app.js.map
