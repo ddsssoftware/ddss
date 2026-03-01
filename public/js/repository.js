@@ -1,21 +1,23 @@
 const Repository = {
     load: function () {
-        if (!storageAvailable()) {
+        if (!this.isStorageAvailable()) {
             alert("Enable session and local storage in your browser and try again. See logs for details");
             return
         }
-        for (let dataType of ['diagnoses.json', 'symptoms.json']) {
-            const url = '/data/' + dataType;
-            fetch(url, 'HEAD')
+        const jsonFiles = ['diagnoses.json', 'symptoms.json'];
+        for (let jsonFile of jsonFiles) {
+            const url = '/data/' + jsonFile;
+            console.log(url);
+            fetch(url, {method: 'HEAD'})
                 .then(response => {
-                    const etagKey = response.url + "__ETAG__";
+                    const etagKey = jsonFile + "__ETAG__";
                     if (this.isExpired(etagKey, response)) {
-                        fetch(url, 'GET')
+                        fetch(url, {method: 'GET'})
                             .then(response => {
                                 if (response.ok) {
                                     response.text()
                                         .then(body => {
-                                            globalThis.localStorage.setItem(dataType, body);
+                                            globalThis.localStorage.setItem(jsonFile, body);
                                             globalThis.localStorage.setItem(etagKey, response.headers.get('ETag'));
                                         }, this.httpLogError)
                                         .catch(this.httpLogError);
@@ -42,7 +44,7 @@ const Repository = {
         console.error(reason);
     },
 
-    storageAvailable: function () {
+    isStorageAvailable: function () {
         let available = false;
 
         try {
@@ -58,5 +60,13 @@ const Repository = {
         }
 
         return available;
+    },
+
+    diagnoses: function() {
+        return globalThis.localStorage.getItem('diagnoses.json');
+    },
+
+    symptoms: function() {
+        return globalThis.localStorage.getItem('symptoms.json');
     }
 };
