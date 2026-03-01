@@ -1,3 +1,4 @@
+// #region Repository
 const Repository = {
     load: function () {
         if (!this.isStorageAvailable()) {
@@ -70,3 +71,4 @@ const Repository = {
         return globalThis.localStorage.getItem('symptoms.json');
     }
 };
+//#endregion
