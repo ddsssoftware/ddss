@@ -14,7 +14,7 @@ const Search = function () {
 
             if (typeof term === "string") {
                 term = term.toLowerCase();
-                Repository.symptoms().filter(symptom => 
+                symptoms = Repository.symptoms().filter(symptom => 
                         symptom.name &&
                         typeof symptom.name === "string" &&
                         symptom.name.toLowerCase().includes(term)
