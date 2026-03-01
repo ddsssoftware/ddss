@@ -71,4 +71,10 @@ const Repository = {
         return globalThis.localStorage.getItem('symptoms.json');
     }
 };
-//#endregion
+// #endregion
+
+// #region Case
+const Case = function() {
+
+}();
+// #endregion
