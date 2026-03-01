@@ -23,20 +23,27 @@
             </div>
         </nav>
     </header>
+
     <div class="container-fluid columns">
-        <section class="section column" id="case">
-            <h2 class="title is-family-monospace is-size-4">Case</h2>
-            <textarea class="textarea" id="case__notes" placeholder="Describe case"></textarea>
-        </section>
         <section class="section column" id="symptoms">
             <h2 class="title is-family-monospace is-size-4">Symptoms</h2>
-            <input type="text" id="symptoms__input_search" placeholder="Search symptom" list="symptoms__datalist_search" class="input">
+            <input type="text"
+                id="symptoms__input_search"
+                placeholder="Search symptom"
+                list="symptoms__datalist_search"
+                class="input"
+                hx-on:input="SymptomsSearchComponent.search(event)"
+                >
             <datalist id="symptoms__datalist_search"></datalist>
         </section>
         <section class="section column" id="diagnoses">
             <h2 class="title is-family-monospace is-size-4">Diagnoses</h2>
             <input type="text" id="diagnoses__input_search" placeholder="Search diagnosis" list="diagnosis__datalist_search" class="input">
             <datalist id="diagnosis__datalist_search"></datalist>
+        </section>
+        <section class="section column" id="case">
+            <h2 class="title is-family-monospace is-size-4">Case</h2>
+            <textarea class="textarea" id="case__notes" placeholder="Describe case"></textarea>
         </section>
     </div>
     
