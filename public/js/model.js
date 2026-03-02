@@ -1,11 +1,39 @@
+// #region Symptom
+class Symptom {
+    /** @type {string} */
+    id;
+    /** @type {string} */
+    name;
+
+    /**
+     * Creates a new symptom from a json string or object
+     * 
+     * @param {string|any} json - Source json
+     * @returns {Symptom} New Symptom object based on source
+     */
+    static from(json) {
+        if (typeof json === "string") {
+            JSON.parse(parse);
+        }
+        return Object.assign(new Symptom, json);
+    }
+}
+// #endregion
+
+// #region Diagnosis
+class Diagnosis {
+
+}
+// #endregion
+
 // #region Repository
 const Repository = function () {
 
     /** @type {array} */
     const jsonFiles = ['diagnoses.json', 'symptoms.json'];
-    /** @type {array} */
+    /** @type {array<Symptom>} */
     let symptoms = [];
-    /** @type {array} */
+    /** @type {array<Diagnosis>} */
     let diagnoses = [];
 
     return {
@@ -40,7 +68,7 @@ const Repository = function () {
         /**
          * Returns all diagnoses in the repository
          * 
-         * @returns {array} List of diagnoses
+         * @returns {array<Diagnosis>} List of diagnoses
          */
         diagnoses() {
             return diagnoses;
@@ -49,7 +77,7 @@ const Repository = function () {
         /**
          * Returns all symptoms in the repository
          * 
-         * @returns {array} List of symptoms
+         * @returns {array<Symptom>} List of symptoms
          */
         symptoms() {
             return symptoms;

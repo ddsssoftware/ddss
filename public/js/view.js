@@ -21,16 +21,17 @@ const SymptomsSearchComponent = function () {
 // #region SymptomItem
 class SymptomItem extends HTMLElement {
 
+    static TEMPLATE_ID = 'template__symptom_id';
+    symptom;
+
     constructor() {
         super();
     }
 
     connectedCallback() {
         const root = this.attachShadow({ mode: 'closed' });
-        root.innerHTML = `
-            <button hx-get="/my-component-clicked" hx-target="next div">Click me!</button>
-            <div></div>
-            `;
+        const template = document.getElementById(TEMPLATE_ID).content.cloneNode(true);
+        root.append(template);
         htmx.process(root);
     }
 }
