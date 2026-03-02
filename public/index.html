@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DDSS</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
+        integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
+        crossorigin="anonymous"></script>
     <script src="/js/model.js"></script>
     <script src="/js/controller.js"></script>
     <script src="/js/view.js"></script>
@@ -19,7 +21,8 @@
     <header>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <span class="navbar-item title is-family-monospace" title="Differential Diagnosis Support System">DDSS</span>
+                <span class="navbar-item title is-family-monospace"
+                    title="Differential Diagnosis Support System">DDSS</span>
             </div>
         </nav>
     </header>
@@ -27,18 +30,21 @@
     <div class="container-fluid columns">
         <section class="section column" id="symptoms">
             <h2 class="title is-family-monospace is-size-4">Symptoms</h2>
-            <input type="text"
-                id="symptoms__input_search"
-                placeholder="Search symptom"
-                list="symptoms__datalist_search"
-                class="input"
-                hx-on:input="SymptomsSearchComponent.search(event)"
-                >
-            <datalist id="symptoms__datalist_search"></datalist>
+            <input type="text" id="symptoms__input_search" placeholder="Search symptom" class="input"
+                hx-on:input="SymptomsSearchComponent.search(event)">
+            <section>
+                <h3 class="title is-family-monospace is-size-5 my-3">Search Results</h2>
+                <div id="symptom__results"></div>
+            </section>
+            <section>
+                <h3 class="title is-family-monospace is-size-5 my-3">Suggestions</h2>
+                <div id="symptom__suggestions"></div>
+            </section>
         </section>
         <section class="section column" id="diagnoses">
             <h2 class="title is-family-monospace is-size-4">Diagnoses</h2>
-            <input type="text" id="diagnoses__input_search" placeholder="Search diagnosis" list="diagnosis__datalist_search" class="input">
+            <input type="text" id="diagnoses__input_search" placeholder="Search diagnosis"
+                list="diagnosis__datalist_search" class="input">
             <datalist id="diagnosis__datalist_search"></datalist>
         </section>
         <section class="section column" id="case">
@@ -46,7 +52,7 @@
             <textarea class="textarea" id="case__notes" placeholder="Describe case"></textarea>
         </section>
     </div>
-    
+
 
 </body>
 
