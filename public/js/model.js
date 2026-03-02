@@ -15,14 +15,30 @@ class Symptom {
         if (typeof json === "string") {
             JSON.parse(parse);
         }
-        return Object.assign(new Symptom, json);
+        return Object.assign(new Symptom(), json);
     }
 }
 // #endregion
 
 // #region Diagnosis
 class Diagnosis {
+    /** @type {string} */
+    id;
+    /** @type {string} */
+    name;
 
+    /**
+     * Creates a new diagnosis from a json string or object
+     * 
+     * @param {string|any} json - Source json
+     * @returns {Symptom} New Symptom object based on source
+     */
+    static from(json) {
+        if (typeof json === "string") {
+            JSON.parse(parse);
+        }
+        return Object.assign(new Diagnosis(), json);
+    }
 }
 // #endregion
 
