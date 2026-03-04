@@ -4,19 +4,6 @@ class Symptom {
     id;
     /** @type {string} */
     name;
-
-    /**
-     * Creates a new symptom from a json string or object
-     * 
-     * @param {string|any} json - Source json
-     * @returns {Symptom} New Symptom object based on source
-     */
-    static from(json) {
-        if (typeof json === "string") {
-            JSON.parse(parse);
-        }
-        return Object.assign(new Symptom(), json);
-    }
 }
 // #endregion
 
@@ -26,19 +13,6 @@ class Diagnosis {
     id;
     /** @type {string} */
     name;
-
-    /**
-     * Creates a new diagnosis from a json string or object
-     * 
-     * @param {string|any} json - Source json
-     * @returns {Symptom} New Symptom object based on source
-     */
-    static from(json) {
-        if (typeof json === "string") {
-            JSON.parse(parse);
-        }
-        return Object.assign(new Diagnosis(), json);
-    }
 }
 // #endregion
 
@@ -78,7 +52,7 @@ const Repository = function () {
 
         httpLogError(reason) {
             alert('Failed to make http request. See logs for details.');
-            console.error(reason);
+            console.log(reason);
         },
 
         /**
