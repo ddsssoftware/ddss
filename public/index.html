@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DDSS</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
-        integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
-        crossorigin="anonymous"></script>
     <script src="/js/model.js"></script>
     <script src="/js/controller.js"></script>
     <script src="/js/view.js"></script>
@@ -31,14 +28,14 @@
         <section class="section column" id="symptoms">
             <h2 class="title is-family-monospace is-size-4">Symptoms</h2>
             <input type="text" id="symptoms__input_search" placeholder="Search symptom" class="input"
-                hx-on:input="SymptomsSearchComponent.search(event)">
+                oninput="SymptomsSearchComponent.search(event)">
             <section>
                 <h3 class="title is-family-monospace is-size-5 my-3">Search Results</h2>
-                <div id="symptom__results"></div>
+                <div id="symptoms__results"></div>
             </section>
             <section>
                 <h3 class="title is-family-monospace is-size-5 my-3">Suggestions</h2>
-                <div id="symptom__suggestions"></div>
+                <div id="symptoms__suggestions"></div>
             </section>
         </section>
         <section class="section column" id="diagnoses">
@@ -52,13 +49,6 @@
             <textarea class="textarea" id="case__notes" placeholder="Describe case"></textarea>
         </section>
     </div>
-
-<template id="template__symptom_item">
-    <div>
-        <span id="name"></span>
-        <button>Add</button>
-    </div>
-</template>
 
 </body>
 

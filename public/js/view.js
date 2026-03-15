@@ -17,9 +17,8 @@ const SymptomsSearchComponent = function () {
          */
         fill(symptoms) {
             const $resultsDiv = document.getElementById(SYMPTOMS_RESULTS_ID);
-            console.log(symptoms);
             for (const s of symptoms) {
-                console.log(s);
+                $resultsDiv.appendChild(new SymptomItem(s));
             }
         }
     }
@@ -29,19 +28,25 @@ const SymptomsSearchComponent = function () {
 // #region SymptomItem
 class SymptomItem extends HTMLElement {
 
-    static TEMPLATE_ID = 'template__symptom_id';
+    /** @type {Symptom} */
     symptom;
 
-    constructor() {
+    /**
+     * 
+     * @param {Symptom} symptom
+     */
+    constructor(symptom) {
         super();
+        this.symptom = symptom;
+        const $spanName = document.createElement('span');
+        $spanName.textContent = symptom.name;
+        const $btnAdd = document.createElement('button');
+        $btnAdd.textContent = 'Adicionar';
+        $btnAdd.classList.add('button');
+        this.appendChild($spanName);
+        this.appendChild($btnAdd);
     }
 
-    connectedCallback() {
-        const root = this.attachShadow({ mode: 'closed' });
-        const template = document.getElementById(TEMPLATE_ID).content.cloneNode(true);
-        root.append(template);
-        htmx.process(root);
-    }
 }
 
 customElements.define('symptom-item', SymptomItem);
@@ -52,3 +57,16 @@ const DiagnosesSearchComponent = function () {
 
 }();
 // #endregion
+
+// #region CaseComponent
+const CaseComponent = function() {
+    return {
+        /**
+         * 
+         * @param {Symptom} symptom 
+         */
+        addSymptom(symptom) {
+
+        }
+    }
+};
