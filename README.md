@@ -6,6 +6,21 @@ The medical information is intended for background reading and general interest.
 
 Please consult your own licensed physician regarding diagnosis and treatment of any medical condition
 
+## Run the client
+
+Start the dependency-free static file server from the repository root:
+
+```sh
+python server.py
+```
+
+Then open <http://127.0.0.1:8000/> in a browser. The server serves files from
+`public/` and supports custom bind settings, for example:
+
+```sh
+python server.py --host 0.0.0.0 --port 8080
+```
+
 ## How it works
 
 DDSS maintains database of diseases and its symptoms.
