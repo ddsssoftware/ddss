@@ -3,16 +3,78 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#fff" />
-        <meta name="description" content="Differential Diagnosis Support System" />
-        <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="stylesheet" href="/css.css" />
-        <title>Differential Diagnosis Support System</title>
+        <meta name="theme-color" content="#0f172a" />
+        <meta name="description" content="DDClient data-driven differential diagnosis decision support" />
+        <link rel="manifest" href="./manifest.webmanifest" />
+        <link rel="stylesheet" href="./css.css" />
+        <title>DDClient | Differential diagnosis decision support</title>
     </head>
     <body>
-        <script>
-            if ('serviceWorker' in navigator)
-                window.addEventListener('load', () => navigator.serviceWorker.register('./js.js'));
-        </script>
+        <header class="site-header">
+            <a class="brand" href="./" aria-label="DDClient home">DDClient</a>
+            <span class="subtitle">Differential diagnosis decision support</span>
+        </header>
+        <main id="app" class="app-shell">
+            <p id="status" class="status" role="status" aria-live="polite"></p>
+            <section id="loading-view" class="panel state-panel" aria-labelledby="loading-title">
+                <h1 id="loading-title">Loading diagnosis data</h1>
+                <p>DDClient is checking the local clinical data collections.</p>
+                <span class="loading-indicator" aria-hidden="true"></span>
+            </section>
+            <section id="error-view" class="panel state-panel error-panel" aria-labelledby="error-title" hidden>
+                <h1 id="error-title">Diagnosis data unavailable</h1>
+                <p id="error-message"></p>
+                <button id="retry-button" class="button" type="button">Retry loading data</button>
+            </section>
+            <section id="entry-view" class="panel" aria-labelledby="entry-title" hidden>
+                <p class="eyebrow">Start a case</p>
+                <h1 id="entry-title">Describe the patient presentation</h1>
+                <p class="intro">Enter a concise presentation to begin a local, data-driven differential diagnosis.</p>
+                <form id="case-form" novalidate>
+                    <label for="case-description">Presentation description</label>
+                    <textarea id="case-description" name="description" rows="6" maxlength="1024" required
+                        placeholder="Example: Adult with three days of fever and a persistent cough."></textarea>
+                    <p id="description-error" class="field-error" role="alert" hidden></p>
+                    <button class="button primary" type="submit">Start diagnosis</button>
+                </form>
+            </section>
+            <section id="results-view" hidden aria-labelledby="results-title">
+                <div class="results-header">
+                    <div>
+                        <p class="eyebrow">Active case</p>
+                        <h1 id="results-title">Differential diagnosis</h1>
+                        <p id="case-summary" class="case-summary"></p>
+                    </div>
+                    <button id="reset-button" class="button secondary" type="button">Start a new case</button>
+                </div>
+                <div class="workflow-grid">
+                    <section class="panel findings-panel" aria-labelledby="findings-title">
+                        <h2 id="findings-title">Symptom findings</h2>
+                        <p>Mark each finding as present, absent, or not yet assessed.</p>
+                        <form id="symptom-form">
+                            <fieldset id="symptom-list">
+                                <legend class="sr-only">Available symptoms</legend>
+                            </fieldset>
+                        </form>
+                    </section>
+                    <section class="panel diagnoses-panel" aria-labelledby="diagnoses-title">
+                        <div class="section-heading">
+                            <div>
+                                <h2 id="diagnoses-title">Possible conditions</h2>
+                                <p>Ranked by matching present symptoms and data priority.</p>
+                            </div>
+                            <span id="match-count" class="count-badge"></span>
+                        </div>
+                        <div id="diagnosis-list"></div>
+                    </section>
+                </div>
+            </section>
+            <footer class="disclaimer">
+                <strong>For medical professionals only.</strong>
+                DDClient provides decision support from local data; it does not make a diagnosis or replace
+                clinical judgment. Verify findings and consult appropriate clinical resources.
+            </footer>
+        </main>
+        <script type="module" src="./app.js"></script>
     </body>
 </html>

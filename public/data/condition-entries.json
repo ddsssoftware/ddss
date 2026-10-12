@@ -1,0 +1,5 @@
+[
+  {"id": "condition-entry-common-cold", "condition": "condition-common-cold", "present": true, "desc": "Common cold reference entry."},
+  {"id": "condition-entry-influenza", "condition": "condition-influenza", "present": true, "desc": "Influenza reference entry."},
+  {"id": "condition-entry-pneumonia", "condition": "condition-pneumonia", "present": true, "desc": "Pneumonia reference entry."}
+]

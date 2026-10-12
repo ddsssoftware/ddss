@@ -1,0 +1,8 @@
+[
+  {"id": "symptom-fever", "name": "Fever", "desc": "Elevated body temperature.", "tests": ["test-temperature"], "citation": "citation-primary-care"},
+  {"id": "symptom-cough", "name": "Cough", "desc": "A forceful expulsion of air from the airways.", "tests": ["test-chest-exam"], "citation": "citation-primary-care"},
+  {"id": "symptom-fatigue", "name": "Fatigue", "desc": "A reduced ability or energy to perform usual activities.", "tests": ["test-clinical-history"], "citation": "citation-primary-care"},
+  {"id": "symptom-shortness-breath", "name": "Shortness of breath", "desc": "A subjective feeling of difficult or uncomfortable breathing.", "tests": ["test-oxygen-saturation"], "citation": "citation-primary-care"},
+  {"id": "symptom-sore-throat", "name": "Sore throat", "desc": "Pain or irritation in the throat.", "tests": ["test-throat-exam"], "citation": "citation-primary-care"},
+  {"id": "symptom-runny-nose", "name": "Runny nose", "desc": "Excess nasal discharge.", "tests": ["test-clinical-history"], "citation": "citation-primary-care"}
+]

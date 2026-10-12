@@ -1,0 +1,7 @@
+[
+  {
+    "id": "citation-primary-care",
+    "bibtex": "@misc{ddclient_primary_care, title={Primary care reference collection}}",
+    "ieee": "DDClient, \"Primary care reference collection,\" local data fixture."
+  }
+]

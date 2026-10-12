@@ -1,0 +1,26 @@
+[
+  {
+    "id": "condition-common-cold",
+    "name": "Common cold",
+    "desc": "A usually mild upper respiratory infection causing nasal and throat symptoms.",
+    "symptoms": ["symptom-cough", "symptom-sore-throat", "symptom-runny-nose"],
+    "priority": 1,
+    "citation": "citation-primary-care"
+  },
+  {
+    "id": "condition-influenza",
+    "name": "Influenza",
+    "desc": "An acute viral respiratory illness that commonly causes fever, cough, and marked fatigue.",
+    "symptoms": ["symptom-fever", "symptom-cough", "symptom-fatigue"],
+    "priority": 3,
+    "citation": "citation-primary-care"
+  },
+  {
+    "id": "condition-pneumonia",
+    "name": "Pneumonia",
+    "desc": "An infection of the lung tissue that may cause fever, cough, and shortness of breath.",
+    "symptoms": ["symptom-fever", "symptom-cough", "symptom-shortness-breath"],
+    "priority": 5,
+    "citation": "citation-primary-care"
+  }
+]

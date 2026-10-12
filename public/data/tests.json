@@ -1,0 +1,7 @@
+[
+  {"id": "test-temperature", "name": "Temperature measurement", "desc": "Measurement of body temperature.", "citation": "citation-primary-care"},
+  {"id": "test-chest-exam", "name": "Chest examination", "desc": "Clinical examination of the chest and lungs.", "citation": "citation-primary-care"},
+  {"id": "test-clinical-history", "name": "Clinical history", "desc": "Review of symptoms, timing, and relevant exposures.", "citation": "citation-primary-care"},
+  {"id": "test-oxygen-saturation", "name": "Oxygen saturation", "desc": "Non-invasive measurement of blood oxygen saturation.", "citation": "citation-primary-care"},
+  {"id": "test-throat-exam", "name": "Throat examination", "desc": "Clinical examination of the throat.", "citation": "citation-primary-care"}
+]

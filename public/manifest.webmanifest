@@ -1,17 +1,18 @@
 {
-  "name": "SpecKit — Agentic AI Field Guide",
-  "short_name": "SpecKit",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "description": "A focused field guide for spec-driven agentic AI development.",
-  "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+    "name": "Differential Diagnosis Support System",
+    "short_name": "DDSS",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#f4f7fb",
+    "theme_color": "#0f172a",
+    "description": "Differential diagnosis support system for medical professionals",
+    "icons": [
+        {
+            "src": "./icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
 }
