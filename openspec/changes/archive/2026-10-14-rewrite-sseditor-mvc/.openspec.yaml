@@ -1,0 +1,7 @@
+schema: spec-driven
+created: 2026-10-14
+# This change is a pure internal refactor (object-oriented restructuring under a
+# Model-View-Controller layout). No capability's requirements change: the
+# observable behaviour, the CLI surface, and the on-disk JSON contract are all
+# preserved. Per the spec-driven schema, a zero-delta change opts out of specs.
+skip_specs: true

@@ -1,8 +1,62 @@
 [
-  {"id": "symptom-fever", "name": "Fever", "desc": "Elevated body temperature.", "tests": ["test-temperature"], "citation": "citation-primary-care"},
-  {"id": "symptom-cough", "name": "Cough", "desc": "A forceful expulsion of air from the airways.", "tests": ["test-chest-exam"], "citation": "citation-primary-care"},
-  {"id": "symptom-fatigue", "name": "Fatigue", "desc": "A reduced ability or energy to perform usual activities.", "tests": ["test-clinical-history"], "citation": "citation-primary-care"},
-  {"id": "symptom-shortness-breath", "name": "Shortness of breath", "desc": "A subjective feeling of difficult or uncomfortable breathing.", "tests": ["test-oxygen-saturation"], "citation": "citation-primary-care"},
-  {"id": "symptom-sore-throat", "name": "Sore throat", "desc": "Pain or irritation in the throat.", "tests": ["test-throat-exam"], "citation": "citation-primary-care"},
-  {"id": "symptom-runny-nose", "name": "Runny nose", "desc": "Excess nasal discharge.", "tests": ["test-clinical-history"], "citation": "citation-primary-care"}
+  {
+    "id": "31d6b4520a504597854f5d1463fff2f6",
+    "name": "Fever",
+    "desc": "Elevated body temperature.",
+    "tests": [
+      "67fa4004796847a0990f11e0966ab794"
+    ],
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
+  },
+  {
+    "id": "d4dfd7b16041416c9ba549afc284cf59",
+    "name": "Cough",
+    "desc": "A forceful expulsion of air from the airways.",
+    "tests": [
+      "3ea9f63e9120446f90cac1b2eae92d95"
+    ],
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
+  },
+  {
+    "id": "34b1bd0b4fba4100b5c5aaba30652ffc",
+    "name": "Fatigue",
+    "desc": "A reduced ability or energy to perform usual activities.",
+    "tests": [
+      "8a247767db3d47caa3dc96622fc86036"
+    ],
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
+  },
+  {
+    "id": "00cacbcce2cc4a82b210e2f0a1e8c4e5",
+    "name": "Shortness of Breath",
+    "desc": "A subjective feeling of difficult or uncomfortable breathing.",
+    "tests": [
+      "3c9ab87195f14682a9427f7878a9f558"
+    ],
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
+  },
+  {
+    "id": "6a3e31c7d5654fa5a7afb425b675fcd5",
+    "name": "Sore Throat",
+    "desc": "Pain or irritation in the throat.",
+    "tests": [
+      "b3fbeb2bf87a487a84ca109d6d6686ad"
+    ],
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
+  },
+  {
+    "id": "bd67acfb1dfb43cf8117344af691cd07",
+    "name": "Runny Nose",
+    "desc": "Excess nasal discharge.",
+    "tests": [
+      "8a247767db3d47caa3dc96622fc86036"
+    ],
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
+  }
 ]

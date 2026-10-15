@@ -1,4 +1,0 @@
-[
-  {"id": "symptom-entry-fever", "symptom": "symptom-fever", "present": true, "desc": "Fever reference entry."},
-  {"id": "symptom-entry-cough", "symptom": "symptom-cough", "present": true, "desc": "Cough reference entry."}
-]

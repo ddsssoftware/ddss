@@ -1,0 +1,368 @@
+"""Tests for the controller layer.
+
+A controller takes values and returns a result, so these tests call one method and
+read the return value: no terminal, and no stand-ins for a view.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+
+from editor.controllers.entity_detail import EntityDetailController
+from editor.controllers.entity_list import EntityListController
+from editor.controllers.home import HomeController
+from editor.models.editor_model import EditorModel
+from editor.models.records import Citation, Condition, Record, Symptom, Test
+from editor.models.repository import CollectionRepository
+
+ENTITY_TYPES = ("conditions", "symptoms", "tests", "citations")
+
+#: One valid stored record per entity type.
+STORED: dict[str, Record] = {
+    "conditions": Condition(
+        id="c1",
+        name="Common Cold",
+        desc="A cold",
+        aka=["Cold"],
+        symptoms=["s1"],
+        priority=1,
+        citation="z1",
+    ),
+    "symptoms": Symptom(
+        id="s1", name="Cough", desc="A cough", aka=["Tussis"], tests=["t1"], citation="z1"
+    ),
+    "tests": Test(
+        id="t1", name="Chest Examination", desc="A test", aka=["CXR"], citation="z1"
+    ),
+    "citations": Citation(id="z1", bibtex="Source", ieee="IEEE"),
+}
+
+
+def _model(
+    data_directory: Path,
+    conditions: list[Record] | None = None,
+    symptoms: list[Record] | None = None,
+    tests: list[Record] | None = None,
+    citations: list[Record] | None = None,
+) -> EditorModel:
+    """A model over a directory holding exactly these four collections."""
+    repository = CollectionRepository(data_directory)
+    repository.save("conditions", conditions or [])
+    repository.save("symptoms", symptoms or [])
+    repository.save("tests", tests or [])
+    repository.save("citations", citations or [])
+    return EditorModel(repository)
+
+
+def _labels(controller: EntityListController) -> list[str]:
+    return [controller.label_for(record) for record in controller.items()]
+
+
+# --- HomeController --------------------------------------------------------
+
+
+def test_the_menu_lists_all_four_entity_types_with_their_labels(
+    tmp_path: Path,
+) -> None:
+    controller = HomeController(_model(tmp_path))
+
+    assert controller.menu() == [
+        ("conditions", "Condition"),
+        ("symptoms", "Symptom"),
+        ("tests", "Test"),
+        ("citations", "Citation"),
+    ]
+
+
+# --- EntityListController --------------------------------------------------
+
+
+def test_items_lists_every_record_of_the_type(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        conditions=[
+            Condition(id="a", name="Common Cold"),
+            Condition(id="b", name="Influenza"),
+        ],
+    )
+    controller = EntityListController(model, "conditions")
+
+    assert _labels(controller) == ["Common Cold", "Influenza"]
+
+
+def test_a_search_term_narrows_the_items(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        conditions=[
+            Condition(id="a", name="Common Cold"),
+            Condition(id="b", name="Influenza"),
+        ],
+    )
+    controller = EntityListController(model, "conditions")
+
+    assert _labels(controller) == ["Common Cold", "Influenza"]
+    assert [
+        controller.label_for(record) for record in controller.items("cold")
+    ] == ["Common Cold"]
+
+
+def test_searching_ignores_case_and_surrounding_space(tmp_path: Path) -> None:
+    model = _model(tmp_path, conditions=[Condition(id="a", name="Common Cold")])
+    controller = EntityListController(model, "conditions")
+
+    assert len(controller.items("  COMMON  ")) == 1
+
+
+@pytest.mark.parametrize("entity_type", ENTITY_TYPES)
+def test_every_entity_type_can_be_listed(tmp_path: Path, entity_type: str) -> None:
+    model = _model(tmp_path, **{entity_type: [STORED[entity_type]]})
+    controller = EntityListController(model, entity_type)
+
+    assert len(controller.records()) == 1
+    assert _labels(controller) == [model.label_for(STORED[entity_type])]
+
+
+def test_the_detail_controller_is_bound_to_the_record_it_is_given(
+    tmp_path: Path,
+) -> None:
+    stored = Condition(id="a", name="Common Cold")
+    controller = EntityListController(_model(tmp_path, conditions=[stored]), "conditions")
+
+    assert controller.detail_controller(stored).record is stored
+    assert controller.detail_controller(None).is_new is True
+
+
+def test_a_refused_delete_returns_the_violation_and_keeps_the_record(
+    tmp_path: Path,
+) -> None:
+    test = Test(id="t1", name="Chest Examination")
+    model = _model(
+        tmp_path,
+        tests=[test],
+        symptoms=[Symptom(id="s1", name="Cough", tests=["t1"])],
+    )
+    controller = EntityListController(model, "tests")
+
+    violations = controller.delete(test)
+
+    assert [violation.rule for violation in violations] == ["delete-referenced"]
+    assert len(controller.records()) == 1
+
+
+def test_a_successful_delete_removes_the_record(tmp_path: Path) -> None:
+    test = Test(id="t1", name="Chest Examination")
+    controller = EntityListController(_model(tmp_path, tests=[test]), "tests")
+
+    assert controller.delete(test) == []
+    assert controller.records() == []
+
+
+def test_refresh_reloads_from_disk(tmp_path: Path) -> None:
+    controller = EntityListController(_model(tmp_path), "citations")
+
+    CollectionRepository(tmp_path).save(
+        "citations", [Citation(id="z1", bibtex="Source", ieee="IEEE")]
+    )
+    assert controller.items() == []
+
+    controller.refresh()
+
+    assert len(controller.items()) == 1
+
+
+def test_a_load_error_is_available_to_the_view(tmp_path: Path) -> None:
+    repository = CollectionRepository(tmp_path)
+    repository.save("symptoms", [])
+    repository.save("tests", [])
+    repository.save("citations", [])
+    (tmp_path / "conditions.json").write_text("not json at all", encoding="utf-8")
+
+    controller = EntityListController(EditorModel(repository), "conditions")
+
+    error = controller.load_error()
+
+    assert error is not None
+    assert "conditions.json" in error
+
+
+# --- EntityDetailController ------------------------------------------------
+
+
+@pytest.mark.parametrize("entity_type", ENTITY_TYPES)
+def test_a_new_record_starts_with_every_field_empty(
+    tmp_path: Path, entity_type: str
+) -> None:
+    controller = EntityDetailController(_model(tmp_path), entity_type)
+
+    assert controller.is_new is True
+    assert set(controller.initial_values()) == set(controller.fields())
+    assert set(controller.initial_values().values()) == {""}
+
+
+@pytest.mark.parametrize("entity_type", ENTITY_TYPES)
+def test_a_stored_record_fills_every_form_field(
+    tmp_path: Path, entity_type: str
+) -> None:
+    stored = STORED[entity_type]
+    controller = EntityDetailController(
+        _model(tmp_path, **{entity_type: [stored]}), entity_type, stored
+    )
+
+    values = controller.initial_values()
+
+    assert set(values) == set(controller.fields())
+    assert all(value != "" for value in values.values())
+
+
+def test_the_initial_values_show_the_stored_record(tmp_path: Path) -> None:
+    stored = STORED["conditions"]
+    controller = EntityDetailController(
+        _model(tmp_path, conditions=[stored]), "conditions", stored
+    )
+
+    assert controller.initial_values() == {
+        "name": "Common Cold",
+        "desc": "A cold",
+        "aka": "Cold",
+        "symptoms": "s1",
+        "priority": "1",
+        "citation": "z1",
+    }
+
+
+def test_a_valid_new_record_is_stored_from_the_form(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[Symptom(id="s1", name="Cough")],
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+    controller = EntityDetailController(model, "conditions")
+
+    violations = controller.save(
+        {
+            "name": "Common Cold",
+            "desc": "A cold",
+            "aka": "Cold, Rhinitis",
+            "symptoms": "s1",
+            "priority": "2",
+            "citation": "z1",
+        }
+    )
+
+    assert violations == []
+    stored = model.conditions()[0]
+    assert stored.name == "Common Cold"
+    assert stored.aka == ["Cold", "Rhinitis"]
+    assert stored.symptoms == ["s1"]
+    assert stored.priority == 2
+    assert model.identifiers.is_valid(stored.id)
+    assert controller.is_new is False
+
+
+def test_an_edit_keeps_the_identifier(tmp_path: Path) -> None:
+    stored = Condition(
+        id="a" * 32,
+        name="Common Cold",
+        symptoms=["s1"],
+        priority=1,
+        citation="z1",
+    )
+    model = _model(
+        tmp_path,
+        conditions=[stored],
+        symptoms=[Symptom(id="s1", name="Cough")],
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+    controller = EntityDetailController(model, "conditions", stored)
+
+    violations = controller.save(
+        {
+            "name": "Influenza",
+            "desc": "",
+            "aka": "",
+            "symptoms": "s1",
+            "priority": "1",
+            "citation": "z1",
+        }
+    )
+
+    assert violations == []
+    assert [record.id for record in model.conditions()] == ["a" * 32]
+    assert model.conditions()[0].name == "Influenza"
+
+
+def test_invalid_values_return_violations_and_write_nothing(tmp_path: Path) -> None:
+    model = _model(tmp_path, symptoms=[Symptom(id="s1", name="Cough")])
+    controller = EntityDetailController(model, "conditions")
+
+    violations = controller.save(
+        {
+            "name": "common cold",
+            "desc": "",
+            "aka": "",
+            "symptoms": "s1",
+            "priority": "1",
+            "citation": "",
+        }
+    )
+
+    rules_hit = {violation.rule for violation in violations}
+    assert "name-title-case" in rules_hit
+    assert "reference-invalid" in rules_hit
+    assert model.conditions() == []
+
+
+def test_a_non_numeric_priority_is_rejected_by_the_rules(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[Symptom(id="s1", name="Cough")],
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+    controller = EntityDetailController(model, "conditions")
+
+    violations = controller.save(
+        {
+            "name": "Common Cold",
+            "desc": "",
+            "aka": "",
+            "symptoms": "s1",
+            "priority": "high",
+            "citation": "z1",
+        }
+    )
+
+    assert [violation.rule for violation in violations] == ["field-invalid"]
+    assert model.conditions() == []
+
+
+def test_every_entity_type_can_be_saved_from_the_form(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[Symptom(id="s1", name="Cough")],
+        tests=[Test(id="t1", name="Chest Examination")],
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+
+    assert EntityDetailController(model, "conditions").save(
+        {
+            "name": "Common Cold",
+            "desc": "",
+            "aka": "",
+            "symptoms": "s1",
+            "priority": "1",
+            "citation": "z1",
+        }
+    ) == []
+    assert EntityDetailController(model, "symptoms").save(
+        {"name": "Fever", "desc": "", "aka": "", "tests": "t1", "citation": "z1"}
+    ) == []
+    assert EntityDetailController(model, "tests").save(
+        {"name": "Blood Count", "desc": "", "aka": "", "citation": "z1"}
+    ) == []
+    assert EntityDetailController(model, "citations").save(
+        {"bibtex": "Another Source", "ieee": "IEEE"}
+    ) == []
+
+    assert len(model.all_records()) == 7

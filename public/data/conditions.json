@@ -1,26 +1,41 @@
 [
   {
-    "id": "condition-common-cold",
-    "name": "Common cold",
+    "id": "1c3eaadca46a49b983a3bec70bee7579",
+    "name": "Common Cold",
     "desc": "A usually mild upper respiratory infection causing nasal and throat symptoms.",
-    "symptoms": ["symptom-cough", "symptom-sore-throat", "symptom-runny-nose"],
+    "symptoms": [
+      "d4dfd7b16041416c9ba549afc284cf59",
+      "6a3e31c7d5654fa5a7afb425b675fcd5",
+      "bd67acfb1dfb43cf8117344af691cd07"
+    ],
     "priority": 1,
-    "citation": "citation-primary-care"
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
   },
   {
-    "id": "condition-influenza",
+    "id": "121e33bb5e0f4453ac3562954437a5f9",
     "name": "Influenza",
     "desc": "An acute viral respiratory illness that commonly causes fever, cough, and marked fatigue.",
-    "symptoms": ["symptom-fever", "symptom-cough", "symptom-fatigue"],
+    "symptoms": [
+      "31d6b4520a504597854f5d1463fff2f6",
+      "d4dfd7b16041416c9ba549afc284cf59",
+      "34b1bd0b4fba4100b5c5aaba30652ffc"
+    ],
     "priority": 3,
-    "citation": "citation-primary-care"
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
   },
   {
-    "id": "condition-pneumonia",
+    "id": "fa4765bad7814232a8e1f38653067d1c",
     "name": "Pneumonia",
     "desc": "An infection of the lung tissue that may cause fever, cough, and shortness of breath.",
-    "symptoms": ["symptom-fever", "symptom-cough", "symptom-shortness-breath"],
+    "symptoms": [
+      "31d6b4520a504597854f5d1463fff2f6",
+      "d4dfd7b16041416c9ba549afc284cf59",
+      "00cacbcce2cc4a82b210e2f0a1e8c4e5"
+    ],
     "priority": 5,
-    "citation": "citation-primary-care"
+    "citation": "b020a98bec084b48a163dcb52c822fb7",
+    "aka": []
   }
 ]
