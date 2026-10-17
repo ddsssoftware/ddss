@@ -10,7 +10,15 @@ import asyncio
 from pathlib import Path
 
 import pytest
-from textual.widgets import Input, ListView, OptionList, Static, TextArea
+from textual.widgets import (
+    Button,
+    Input,
+    ListView,
+    OptionList,
+    SelectionList,
+    Static,
+    TextArea,
+)
 
 from editor.app import EditorApp
 from editor.models.records import (
@@ -25,12 +33,16 @@ from editor.models.repository import CollectionRepository
 from editor.views.detail import EntityDetailView
 from editor.views.home import HomeView
 from editor.views.list import EntityListView
+from editor.views.picker import ReferencePickerView
 
 CITATION_ID = "d" * 32
 TEST_ID = "c" * 32
 SYMPTOM_ID = "b" * 32
 CONDITION_ID = "a" * 32
 SECOND_CONDITION_ID = "e" * 32
+SECOND_SYMPTOM_ID = "f" * 32
+THIRD_SYMPTOM_ID = "9" * 32
+SECOND_TEST_ID = "8" * 32
 
 
 def _seed(data_directory: Path) -> None:
@@ -95,6 +107,12 @@ def _stored(data_directory: Path, entity_type: str) -> list[Record]:
     return CollectionRepository(data_directory).load(entity_type)
 
 
+def _add_records(data_directory: Path, entity_type: str, *records: Record) -> None:
+    """Append records to one collection and write it back."""
+    repository = CollectionRepository(data_directory)
+    repository.save(entity_type, [*repository.load(entity_type), *records])
+
+
 def _status(view: EntityListView) -> str:
     """Return the status line the view is showing."""
     return str(view.query_one("#status", Static).content)
@@ -105,16 +123,25 @@ def _violations(view: EntityDetailView) -> str:
     return str(view.query_one("#violations", Static).content)
 
 
+def _picker_status(view: ReferencePickerView) -> str:
+    """Return the message the picker shows under its search box."""
+    return str(view.query_one("#picker-status", Static).content)
+
+
 def _select(view: EntityListView, index: int) -> None:
     view.query_one("#records", ListView).index = index
 
 
 def _fill(detail: EntityDetailView, **values: str) -> None:
-    """Type values into the form, using the widget each field's kind needs."""
+    """Fill the form, attaching references instead of typing identifier lists."""
     for field_name, value in values.items():
         field_spec = next(
             field for field in detail.controller.spec.fields if field.name == field_name
         )
+        if field_spec.kind == "reference_list":
+            identifiers = [part.strip() for part in value.split(",") if part.strip()]
+            detail.attach_references(field_name, identifiers)
+            continue
         widget_id = f"#field-{field_name}"
         if field_spec.kind == "long_text":
             detail.query_one(widget_id, TextArea).text = value
@@ -233,6 +260,469 @@ def test_a_failed_reload_after_saving_is_reported(
             await pilot.pause()
 
             assert "conditions.json" in _status(view)
+
+    asyncio.run(scenario())
+
+
+# --- reference tables ------------------------------------------------------
+
+
+def test_editing_shows_attached_references_as_rows(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+
+            rows = detail.reference_rows("symptoms")
+            assert [row.identifier for row in rows] == [SYMPTOM_ID]
+            assert rows[0].label == "Cough"
+            assert detail.reference_identifiers("symptoms") == [SYMPTOM_ID]
+
+    asyncio.run(scenario())
+
+
+def test_a_new_record_starts_with_an_empty_reference_table(
+    tmp_path: Path,
+) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            view.action_add()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+
+            assert detail.reference_rows("symptoms") == []
+            assert detail.query_one("#add-symptoms") is not None
+
+    asyncio.run(scenario())
+
+
+def test_removing_a_reference_updates_the_form_and_the_store(
+    tmp_path: Path,
+) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        repository = CollectionRepository(tmp_path)
+        repository.save(
+            "symptoms",
+            [
+                Symptom(
+                    id=SYMPTOM_ID,
+                    name="Cough",
+                    tests=[TEST_ID],
+                    citation=CITATION_ID,
+                ),
+                Symptom(
+                    id=SECOND_SYMPTOM_ID,
+                    name="Fever",
+                    tests=[TEST_ID],
+                    citation=CITATION_ID,
+                ),
+            ],
+        )
+        repository.save(
+            "conditions",
+            [
+                Condition(
+                    id=CONDITION_ID,
+                    name="Common Cold",
+                    symptoms=[SYMPTOM_ID, SECOND_SYMPTOM_ID],
+                    priority=1,
+                    citation=CITATION_ID,
+                )
+            ],
+        )
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            assert detail.reference_identifiers("symptoms") == [
+                SYMPTOM_ID,
+                SECOND_SYMPTOM_ID,
+            ]
+
+            first_row = detail.reference_rows("symptoms")[0]
+            detail.on_button_pressed(
+                Button.Pressed(first_row.query_one(".reference-remove", Button))
+            )
+            await pilot.pause()
+
+            assert detail.reference_identifiers("symptoms") == [SECOND_SYMPTOM_ID]
+            assert detail.values()["symptoms"] == [SECOND_SYMPTOM_ID]
+
+            detail.action_save()
+            await pilot.pause()
+
+            stored = _stored(tmp_path, "conditions")[0]
+            assert stored.symptoms == [SECOND_SYMPTOM_ID]
+
+    asyncio.run(scenario())
+
+
+def test_opening_a_reference_returns_to_the_form_with_its_edits(
+    tmp_path: Path,
+) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            _fill(detail, name="Cold In Progress")
+
+            row = detail.reference_rows("symptoms")[0]
+            detail.on_button_pressed(
+                Button.Pressed(row.query_one(".reference-goto", Button))
+            )
+            await pilot.pause()
+
+            referenced = app.screen
+            assert isinstance(referenced, EntityDetailView)
+            assert referenced.controller.spec.entity_type == "symptoms"
+
+            _fill(referenced, name="Coughing")
+            referenced.action_save()
+            await pilot.pause()
+
+            assert app.screen is detail
+            assert detail.values()["name"] == "Cold In Progress"
+            assert detail.reference_rows("symptoms")[0].label == "Coughing"
+            assert _stored(tmp_path, "conditions")[0].name == "Common Cold"
+
+    asyncio.run(scenario())
+
+
+def test_an_unresolvable_reference_is_shown_and_can_be_removed(
+    tmp_path: Path,
+) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        CollectionRepository(tmp_path).save(
+            "conditions",
+            [
+                Condition(
+                    id=CONDITION_ID,
+                    name="Common Cold",
+                    symptoms=["missing", SYMPTOM_ID],
+                    priority=1,
+                    citation=CITATION_ID,
+                )
+            ],
+        )
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            unknown, known = detail.reference_rows("symptoms")
+
+            assert unknown.label == "Unknown"
+            assert unknown.query_one(".reference-goto", Button).disabled is True
+            assert known.query_one(".reference-goto", Button).disabled is False
+
+            detail.action_save()
+            await pilot.pause()
+
+            assert app.screen is detail
+            assert "does not exist" in _violations(detail)
+
+            detail.on_button_pressed(
+                Button.Pressed(unknown.query_one(".reference-remove", Button))
+            )
+            await pilot.pause()
+            detail.action_save()
+            await pilot.pause()
+
+            assert app.screen is view
+            assert _stored(tmp_path, "conditions")[0].symptoms == [SYMPTOM_ID]
+
+    asyncio.run(scenario())
+
+
+def test_the_picker_searches_names_and_alternative_names(
+    tmp_path: Path,
+) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        _add_records(
+            tmp_path,
+            "symptoms",
+            Symptom(
+                id=SECOND_SYMPTOM_ID,
+                name="Fever",
+                aka=["Pyrexia"],
+                tests=[TEST_ID],
+                citation=CITATION_ID,
+            ),
+            Symptom(
+                id=THIRD_SYMPTOM_ID,
+                name="Sore Throat",
+                tests=[TEST_ID],
+                citation=CITATION_ID,
+            ),
+        )
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+
+            detail.open_reference_picker("symptoms")
+            await pilot.pause()
+
+            picker = app.screen
+            assert isinstance(picker, ReferencePickerView)
+            options = picker.query_one("#picker-options", SelectionList)
+            assert options.option_count == 2
+            assert [
+                str(options.get_option_at_index(index).prompt)
+                for index in range(options.option_count)
+            ] == ["Fever", "Sore Throat"]
+
+            options.select(SECOND_SYMPTOM_ID)
+            await pilot.pause()
+
+            picker.query_one("#picker-search", Input).value = "pyr"
+            await pilot.pause()
+
+            assert options.option_count == 1
+            assert str(options.get_option_at_index(0).prompt) == "Fever (Pyrexia)"
+
+            picker.query_one("#picker-search", Input).value = "sore"
+            await pilot.pause()
+
+            assert options.option_count == 1
+            assert SECOND_SYMPTOM_ID in picker.chosen
+
+            picker.action_attach()
+            await pilot.pause()
+
+            assert app.screen is detail
+            assert detail.reference_identifiers("symptoms") == [
+                SYMPTOM_ID,
+                SECOND_SYMPTOM_ID,
+            ]
+
+            detail.action_save()
+            await pilot.pause()
+
+            assert _stored(tmp_path, "conditions")[0].symptoms == [
+                SYMPTOM_ID,
+                SECOND_SYMPTOM_ID,
+            ]
+
+    asyncio.run(scenario())
+
+
+def test_attaching_several_records_at_once(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        _add_records(
+            tmp_path,
+            "symptoms",
+            Symptom(
+                id=SECOND_SYMPTOM_ID,
+                name="Fever",
+                tests=[TEST_ID],
+                citation=CITATION_ID,
+            ),
+            Symptom(
+                id=THIRD_SYMPTOM_ID,
+                name="Sore Throat",
+                tests=[TEST_ID],
+                citation=CITATION_ID,
+            ),
+        )
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+
+            detail.open_reference_picker("symptoms")
+            await pilot.pause()
+
+            picker = app.screen
+            assert isinstance(picker, ReferencePickerView)
+            options = picker.query_one("#picker-options", SelectionList)
+            options.select(SECOND_SYMPTOM_ID)
+            options.select(THIRD_SYMPTOM_ID)
+            await pilot.pause()
+
+            picker.action_attach()
+            await pilot.pause()
+
+            assert detail.reference_identifiers("symptoms") == [
+                SYMPTOM_ID,
+                SECOND_SYMPTOM_ID,
+                THIRD_SYMPTOM_ID,
+            ]
+
+            detail.action_save()
+            await pilot.pause()
+
+            assert _stored(tmp_path, "conditions")[0].symptoms == [
+                SYMPTOM_ID,
+                SECOND_SYMPTOM_ID,
+                THIRD_SYMPTOM_ID,
+            ]
+
+    asyncio.run(scenario())
+
+
+def test_the_same_table_edits_a_symptoms_tests(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        _add_records(
+            tmp_path,
+            "tests",
+            Test(id=SECOND_TEST_ID, name="Blood Count", citation=CITATION_ID),
+        )
+        app = EditorApp(tmp_path, initial_entity_type="symptoms")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            assert detail.reference_identifiers("tests") == [TEST_ID]
+
+            detail.open_reference_picker("tests")
+            await pilot.pause()
+
+            picker = app.screen
+            assert isinstance(picker, ReferencePickerView)
+            options = picker.query_one("#picker-options", SelectionList)
+            assert options.option_count == 1
+            options.select(SECOND_TEST_ID)
+            await pilot.pause()
+
+            picker.action_attach()
+            await pilot.pause()
+
+            assert detail.reference_identifiers("tests") == [
+                TEST_ID,
+                SECOND_TEST_ID,
+            ]
+
+            detail.action_save()
+            await pilot.pause()
+
+            assert _stored(tmp_path, "symptoms")[0].tests == [
+                TEST_ID,
+                SECOND_TEST_ID,
+            ]
+
+    asyncio.run(scenario())
+
+
+def test_the_picker_reports_when_there_is_nothing_to_attach(
+    tmp_path: Path,
+) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        app = EditorApp(tmp_path, initial_entity_type="conditions")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            detail.open_reference_picker("symptoms")
+            await pilot.pause()
+
+            picker = app.screen
+            assert isinstance(picker, ReferencePickerView)
+            assert _picker_status(picker) == "No records available to attach."
+
+            picker.on_button_pressed(
+                Button.Pressed(picker.query_one("#cancel", Button))
+            )
+            await pilot.pause()
+
+            assert app.screen is detail
+            assert detail.reference_identifiers("symptoms") == [SYMPTOM_ID]
 
     asyncio.run(scenario())
 
@@ -408,7 +898,7 @@ def test_a_null_field_starts_empty(tmp_path: Path) -> None:
                 "name": "Common Cold",
                 "desc": "",
                 "aka": "",
-                "symptoms": "",
+                "symptoms": [],
                 "priority": "",
                 "citation": "",
             }

@@ -11,6 +11,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Final, Literal
 
+from editor.models.records import Record
+
 FieldKind = Literal[
     "text",
     "long_text",
@@ -105,10 +107,24 @@ def spec_for(entity_type: str) -> EntitySpec:
     return ENTITY_SPECS[entity_type]
 
 
+def label_of(record: Record) -> str:
+    """Return the text that names ``record`` in a list.
+
+    Which field names a record is a presentation choice, so it comes from the
+    entity type's spec. A record with no label falls back to its identifier.
+    """
+    field = spec_for(record.ENTITY_TYPE).label_field
+    value = getattr(record, field, None)
+    if isinstance(value, str) and value.strip():
+        return value
+    return str(record.id)
+
+
 __all__ = [
     "ENTITY_SPECS",
     "EntitySpec",
     "FieldKind",
     "FieldSpec",
+    "label_of",
     "spec_for",
 ]

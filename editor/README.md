@@ -37,6 +37,32 @@ lookup table. Reading and writing a whole collection (`load`/`save`) is shared o
 the `Record` base, which swaps the file in through a temporary sibling so a
 failure part-way through cannot truncate the existing data.
 
+## Reference tables and the picker
+
+The Condition and Symptom detail screens edit their reference-list fields
+(`Condition.symptoms` and `Symptom.tests`) as attach tables rather than
+comma-separated text boxes. Each row shows the referenced record's name and
+identifier with **Go to** and **Remove** actions; **Add** opens the picker in
+`editor/views/picker.py`.
+
+The picker offers only records already stored in the referenced collection and
+never creates one. Its search matches a record's name and every entry of its
+alternative-name list, case-insensitively, through
+`editor/controllers/matching.py`. A name match is labelled with the name alone;
+an alternative-name match is labelled `Name (Aka)`. Records already attached are
+not offered, and ticks survive a changed search term.
+
+**Go to** pushes that record's own detail screen. Returning re-resolves the row
+labels, so a rename made there is visible, while the form's unsubmitted values
+stay as they were.
+
+List-screen search uses the same matching: a term matches a name or an
+alternative name, while list rows keep displaying the name only.
+
+An identifier loaded from disk that no longer resolves is shown as `Unknown`,
+can be removed but not opened, and keeps blocking the save through
+`reference-unknown` until it is gone.
+
 ## Validation rules
 
 `editor/models/rules.py` is the single owner of every validation and integrity

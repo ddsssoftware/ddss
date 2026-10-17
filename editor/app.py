@@ -30,6 +30,13 @@ class EditorApp(App[None]):
     #violations { color: $error; }
     #status { height: auto; }
     #form TextArea { height: 8; }
+    #form .reference-table { height: auto; }
+    #form .reference-row { height: auto; }
+    #form .reference-name { width: 1fr; }
+    #form .reference-id { width: 34; }
+    #picker-options { height: 1fr; }
+    #picker-actions { height: auto; }
+    #picker-status { height: auto; }
     """
 
     def __init__(

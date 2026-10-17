@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from editor.controllers.entity_detail import EntityDetailController
+from editor.controllers.matching import matches
 from editor.models.editor_model import EditorModel
 from editor.models.records import Record
 from editor.models.rules import Violation
@@ -17,13 +18,8 @@ class EntityListController:
         self.spec = model.spec_for(entity_type)
 
     def items(self, term: str = "") -> list[Record]:
-        """Return the records to show, narrowed by ``term`` when one is given."""
-        wanted = term.strip().casefold()
-        return [
-            record
-            for record in self.records()
-            if not wanted or wanted in self.label_for(record).casefold()
-        ]
+        """Return the records matching ``term`` by name or alternative name."""
+        return [record for record in self.records() if matches(record, term)]
 
     def records(self) -> list[Record]:
         """Return every stored record of this controller's entity type."""

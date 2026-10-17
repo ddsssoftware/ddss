@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from editor.models.fields import EntitySpec, spec_for
+from editor.models.fields import EntitySpec, label_of, spec_for
 from editor.models.identifiers import IdentifierFactory
 from editor.models.records import (
     Citation,
@@ -83,16 +83,8 @@ class EditorModel:
         return self._conditions + self._symptoms + self._tests + self._citations
 
     def label_for(self, record: Record) -> str:
-        """Return the text that names ``record`` in a list.
-
-        Which field names a record is a presentation choice, so it comes from the
-        entity type's spec. A record with no label falls back to its identifier.
-        """
-        field = self.spec_for(record.ENTITY_TYPE).label_field
-        value = getattr(record, field, None)
-        if isinstance(value, str) and value.strip():
-            return value
-        return str(record.id)
+        """Return the text that names ``record`` in a list."""
+        return label_of(record)
 
     def spec_for(self, entity_type: str) -> EntitySpec:
         """Return the form descriptor for ``entity_type``."""

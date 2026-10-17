@@ -115,6 +115,21 @@ def test_searching_ignores_case_and_surrounding_space(tmp_path: Path) -> None:
     assert len(controller.items("  COMMON  ")) == 1
 
 
+def test_a_search_term_matches_an_alternative_name(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        conditions=[
+            Condition(id="a", name="Common Cold", aka=["Rhinitis"]),
+            Condition(id="b", name="Influenza"),
+        ],
+    )
+    controller = EntityListController(model, "conditions")
+
+    matched = controller.items("rhin")
+
+    assert [controller.label_for(record) for record in matched] == ["Common Cold"]
+
+
 @pytest.mark.parametrize("entity_type", ENTITY_TYPES)
 def test_every_entity_type_can_be_listed(tmp_path: Path, entity_type: str) -> None:
     model = _model(tmp_path, **{entity_type: [STORED[entity_type]]})
@@ -366,3 +381,175 @@ def test_every_entity_type_can_be_saved_from_the_form(tmp_path: Path) -> None:
     ) == []
 
     assert len(model.all_records()) == 7
+
+
+# --- references on the detail form -----------------------------------------
+
+
+def test_attached_references_keep_stored_order_and_report_unknowns(
+    tmp_path: Path,
+) -> None:
+    stored = Condition(
+        id="a" * 32,
+        name="Common Cold",
+        symptoms=["s2", "missing", "s1"],
+    )
+    model = _model(
+        tmp_path,
+        conditions=[stored],
+        symptoms=[Symptom(id="s1", name="Cough"), Symptom(id="s2", name="Fever")],
+    )
+    controller = EntityDetailController(model, "conditions", stored)
+
+    attached = controller.attached_references("symptoms")
+
+    assert [reference.identifier for reference in attached] == [
+        "s2",
+        "missing",
+        "s1",
+    ]
+    assert [
+        reference.record.name if reference.record else None
+        for reference in attached
+    ] == ["Fever", None, "Cough"]
+
+
+def test_a_new_record_has_no_attached_references(tmp_path: Path) -> None:
+    controller = EntityDetailController(
+        _model(tmp_path, symptoms=[Symptom(id="s1", name="Cough")]),
+        "conditions",
+    )
+
+    assert controller.attached_references("symptoms") == []
+
+
+def test_available_references_leave_out_the_attached_records(
+    tmp_path: Path,
+) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[
+            Symptom(id="s1", name="Cough"),
+            Symptom(id="s2", name="Fever"),
+            Symptom(id="s3", name="Sore Throat"),
+        ],
+    )
+    stored = Condition(id="a" * 32, name="Common Cold", symptoms=["s1"])
+    controller = EntityDetailController(model, "conditions", stored)
+
+    assert [
+        choice.identifier for choice in controller.available_references("symptoms")
+    ] == ["s2", "s3"]
+    assert [
+        choice.identifier
+        for choice in controller.available_references("symptoms", attached=["s2"])
+    ] == ["s3"]
+
+
+def test_available_references_annotate_alternative_name_matches(
+    tmp_path: Path,
+) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[Symptom(id="s2", name="Fever", aka=["Pyrexia"])],
+    )
+    controller = EntityDetailController(model, "conditions")
+
+    choices = controller.available_references("symptoms", "pyr")
+
+    assert [(choice.identifier, choice.label) for choice in choices] == [
+        ("s2", "Fever (Pyrexia)")
+    ]
+
+
+def test_a_name_match_in_the_picker_is_not_annotated(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[Symptom(id="s2", name="Fever", aka=["Pyrexia"])],
+    )
+    controller = EntityDetailController(model, "conditions")
+
+    choices = controller.available_references("symptoms", "fev")
+
+    assert [(choice.identifier, choice.label) for choice in choices] == [
+        ("s2", "Fever")
+    ]
+
+
+def test_lookup_reference_returns_the_current_record(tmp_path: Path) -> None:
+    model = _model(tmp_path, symptoms=[Symptom(id="s1", name="Cough")])
+    stored = Condition(id="a" * 32, name="Common Cold", symptoms=["s1"])
+    controller = EntityDetailController(model, "conditions", stored)
+
+    found = controller.lookup_reference("symptoms", "s1")
+
+    assert found is not None
+    assert found.name == "Cough"
+    assert controller.lookup_reference("symptoms", "missing") is None
+
+
+def test_a_reference_field_accepts_a_list_of_identifiers(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        symptoms=[Symptom(id="s1", name="Cough"), Symptom(id="s2", name="Fever")],
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+    controller = EntityDetailController(model, "conditions")
+
+    violations = controller.save(
+        {
+            "name": "Common Cold",
+            "desc": "",
+            "aka": "",
+            "symptoms": ["s2", "s1"],
+            "priority": "1",
+            "citation": "z1",
+        }
+    )
+
+    assert violations == []
+    assert model.conditions()[0].symptoms == ["s2", "s1"]
+
+
+def test_a_symptom_test_reference_accepts_a_list(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        tests=[Test(id="t1", name="Chest Examination")],
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+    controller = EntityDetailController(model, "symptoms")
+
+    violations = controller.save(
+        {
+            "name": "Cough",
+            "desc": "",
+            "aka": "",
+            "tests": ["t1"],
+            "citation": "z1",
+        }
+    )
+
+    assert violations == []
+    assert model.symptoms()[0].tests == ["t1"]
+
+
+def test_an_empty_reference_list_is_still_required(tmp_path: Path) -> None:
+    model = _model(
+        tmp_path,
+        citations=[Citation(id="z1", bibtex="Source", ieee="IEEE")],
+    )
+    controller = EntityDetailController(model, "conditions")
+
+    violations = controller.save(
+        {
+            "name": "Common Cold",
+            "desc": "",
+            "aka": "",
+            "symptoms": [],
+            "priority": "1",
+            "citation": "z1",
+        }
+    )
+
+    assert "reference-required" in {violation.rule for violation in violations}
+    assert model.conditions() == []
