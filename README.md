@@ -21,6 +21,22 @@ Then open <http://127.0.0.1:8000/> in a browser. The server serves files from
 python server.py --host 0.0.0.0 --port 8080
 ```
 
+## Data versions
+
+`public/data/version.json` records when SSEditor last wrote a collection. It
+holds that write time as an ISO 8601 UTC timestamp with microsecond precision:
+
+```json
+{ "version": "2026-10-18T14:03:11.482123Z" }
+```
+
+SSEditor rewrites it after every accepted write. The client compares it with the
+version it last served and reloads the collections when they differ, so the file
+is only useful when it travels with the data. **Any commit that touches
+`public/data/*.json` must include `public/data/version.json`.** Hand edits that
+skip the editor do not update the marker, so clients keep the data they already
+cached until the next accepted editor write.
+
 ## Run the editor
 
 SSEditor is the terminal application used to maintain the clinical data the

@@ -136,21 +136,14 @@ Each rule named above is covered by unit tests in `editor/tests/test_rules.py`.
 | `identifier-duplicate` | `test_a_duplicate_identifier_is_reported`, `test_a_duplicate_identifier_in_another_type_is_reported`, `test_an_unused_identifier_is_accepted`, `test_editing_a_record_does_not_collide_with_its_own_identifier`                                                                                                                                                                                                                                                                                                                                                                               |
 | `delete-referenced`    | `test_referencing_records_are_reported`, `test_a_referenced_record_cannot_be_deleted`, `test_an_unreferenced_record_can_be_deleted`, `test_a_referenced_citation_cannot_be_deleted`, `test_every_referencing_record_is_listed`, `test_a_test_can_block_a_citation_deletion`, `test_a_symptom_can_block_a_test_deletion`, `test_client_only_collections_never_block_a_deletion`, `test_references_only_match_the_entity_type_they_point_at`, `test_a_referencing_record_without_a_name_is_labelled_by_its_identifier`, `test_a_referencing_record_with_neither_name_nor_identifier_is_unknown` |
 
-## Known follow-up: the client is currently broken
+## Client data loading
 
-The four client-only collections were **deleted** as part of this work:
-`cases.json`, `condition-entries.json`, `symptom-entries.json`, and
-`test-entries.json`. SSEditor never read them, so it is unaffected.
+The four client-only collections were **deleted**: `cases.json`,
+`condition-entries.json`, `symptom-entries.json`, and `test-entries.json`.
+SSEditor never read them, so it is unaffected.
 
-`public/app.js` still fetches all of them. Its `COLLECTION_PATHS` map lists the
-deleted files and `loadCollections` loads every path in a single `Promise.all`,
-throwing on the first non-OK response. Because those files are now missing, the
-client shows its "diagnosis data unavailable" error and the diagnosis workflow
-does not start.
-
-Repairing this was deliberately left out of scope and is tracked as separate
-work. The fix is small: drop the four deleted entries from `COLLECTION_PATHS`
-and the three matching `ensureReferences(...)` calls in `validateCollections`.
-That also brings `app.js` in line with the client's own specification, which
-only ever commits to loading the condition, symptom, test, and citation
-collections.
+`public/app.js` now loads only the condition, symptom, test, and citation
+collections. The four deleted paths and their three reference checks were
+removed from `COLLECTION_PATHS` and `validateCollections`, so the client no
+longer requests files that do not exist. This matches the client's own
+specification, which only ever commits to loading those four collections.

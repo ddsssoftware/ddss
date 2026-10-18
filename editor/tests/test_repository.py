@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -246,3 +247,59 @@ def test_the_client_only_collections_are_neither_read_nor_written(
         assert json.loads((tmp_path / filename).read_text(encoding="utf-8")) == [
             {"id": "untouched"}
         ]
+
+
+# -- the published data version ---------------------------------------------
+
+
+def test_a_save_publishes_the_write_time_as_the_version(tmp_path: Path) -> None:
+    moment = datetime(2026, 10, 18, 14, 3, 11, 482123, tzinfo=timezone.utc)
+    repository = CollectionRepository(tmp_path, clock=lambda: moment)
+
+    repository.save("tests", [Test(id="a")])
+
+    assert json.loads((tmp_path / "version.json").read_text(encoding="utf-8")) == {
+        "version": "2026-10-18T14:03:11.482123Z"
+    }
+
+
+def test_a_naive_clock_value_is_treated_as_utc(tmp_path: Path) -> None:
+    naive = datetime(2026, 10, 18, 14, 3, 11, 482123)
+    repository = CollectionRepository(tmp_path, clock=lambda: naive)
+
+    repository.save("tests", [])
+
+    assert json.loads((tmp_path / "version.json").read_text(encoding="utf-8")) == {
+        "version": "2026-10-18T14:03:11.482123Z"
+    }
+
+
+def test_the_version_is_written_after_the_collection(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    replaced: list[str] = []
+    original = Path.replace
+
+    def record(self: Path, target: Path) -> Path:
+        replaced.append(Path(target).name)
+        return original(self, target)
+
+    monkeypatch.setattr(Path, "replace", record)
+
+    _repository(tmp_path).save("tests", [Test(id="a")])
+
+    assert replaced == ["tests.json", "version.json"]
+
+
+def test_a_failed_version_write_does_not_fail_the_save(tmp_path: Path) -> None:
+    repository = _repository(tmp_path)
+    (tmp_path / "version.json").mkdir()
+
+    repository.save("tests", [Test(id="a")])
+
+    assert repository.load("tests") == [Test(id="a")]
+
+    (tmp_path / "version.json").rmdir()
+    repository.save("tests", [Test(id="b")])
+
+    assert (tmp_path / "version.json").is_file()

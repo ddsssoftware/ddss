@@ -173,6 +173,19 @@ def test_a_blocked_save_returns_violations_and_writes_nothing(
     assert (tmp_path / "conditions.json").read_text(encoding="utf-8") == before
 
 
+def test_a_blocked_save_leaves_the_version_unchanged(tmp_path: Path) -> None:
+    model = _model(tmp_path)
+    version = tmp_path / "version.json"
+    version.unlink()
+
+    violations = model.save(
+        Condition(id=None, name="Common cold", symptoms=[], priority=1)
+    )
+
+    assert violations
+    assert not version.exists()
+
+
 def test_a_successful_save_reaches_the_file(tmp_path: Path) -> None:
     model = _model(tmp_path)
 

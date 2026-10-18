@@ -27,6 +27,19 @@ class RecordError(Exception):
     """Raised when a collection file cannot be read as a JSON array."""
 
 
+def write_text_atomically(path: Path, payload: str) -> None:
+    """Write ``payload`` to ``path`` via a temporary sibling.
+
+    A failure part-way through cannot truncate the existing file. ``OSError``
+    is left to the caller: the collection files and the version marker treat a
+    failed write differently.
+    """
+    temporary = path.with_name(f"{path.name}.tmp")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary.write_text(payload, encoding="utf-8")
+    temporary.replace(path)
+
+
 class Record:
     """Base class for one stored record.
 
@@ -104,11 +117,8 @@ class Record:
             )
             + "\n"
         )
-        temporary = path.with_name(f"{path.name}.tmp")
         try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            temporary.write_text(payload, encoding="utf-8")
-            temporary.replace(path)
+            write_text_atomically(path, payload)
         except OSError as error:
             raise RecordError(f"Could not write {path.name}: {error}.") from error
         return path
@@ -332,4 +342,5 @@ __all__ = [
     "Symptom",
     "Test",
     "record_type",
+    "write_text_atomically",
 ]
