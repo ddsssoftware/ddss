@@ -104,8 +104,8 @@ Citation stores the source of "Condition", "Symptom", "Test".
 | Field  | Type   | Description                                          | Other                     |
 | ------ | ------ | ---------------------------------------------------- | ------------------------- |
 | id     | uuid   | Unique identifier                                    | Required.                 |
-| bibtex | string | A bibtex entry                                       | Required. Max 1024 chars. |
-| ieee   | string | The bibtex value formatted as an IEEE-style citation | Required. Max 1024 chars. |
+| bibtex | string | A bibtex entry                                       | Required. Max 2048 chars. |
+| ieee   | string | The bibtex value formatted as an IEEE-style citation | Required. Max 2048 chars. |
 
 ## Tech stack
 

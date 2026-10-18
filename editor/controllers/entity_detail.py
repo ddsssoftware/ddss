@@ -250,7 +250,7 @@ class EntityDetailController:
             )
         return Citation(
             bibtex=values["bibtex"].strip(),
-            ieee=values["ieee"].strip(),
+            ieee="",
         )
 
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from editor.models.citation_format import CitationError, derive_ieee
 from editor.models.fields import EntitySpec, label_of, spec_for
 from editor.models.identifiers import IdentifierFactory
 from editor.models.records import (
@@ -102,11 +103,47 @@ class EditorModel:
         with itself.
         """
         record.id = self.identifiers.resolve(existing)
+        if isinstance(record, Citation):
+            self._derive_ieee(record, existing)
         violations = self.validator.validate(record, existing, self)
         if violations:
             return violations
         self._write(record)
         return []
+
+    @staticmethod
+    def _derive_ieee(record: Citation, existing: Record | None) -> None:
+        """Derive or keep the IEEE citation before the record is validated.
+
+        A changed BibTeX value is always re-derived. An unchanged one keeps the
+        stored citation, unless that value is empty. A derivation failure leaves
+        the field empty so ``bibtex-invalid`` blocks the write.
+        """
+        stored = existing if isinstance(existing, Citation) else None
+        stored_bibtex = (
+            stored.bibtex
+            if stored is not None and isinstance(stored.bibtex, str)
+            else ""
+        )
+        unchanged = (
+            stored is not None
+            and isinstance(record.bibtex, str)
+            and record.bibtex == stored_bibtex.strip()
+        )
+        if (
+            unchanged
+            and isinstance(stored.ieee, str)
+            and stored.ieee.strip()
+        ):
+            record.ieee = stored.ieee
+            return
+
+        try:
+            record.ieee = derive_ieee(
+                record.bibtex if isinstance(record.bibtex, str) else ""
+            )
+        except CitationError:
+            record.ieee = ""
 
     def delete(self, record: Record) -> list[Violation]:
         """Delete ``record`` unless another record still references it."""

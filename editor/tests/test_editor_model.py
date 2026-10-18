@@ -4,9 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from editor.models.editor_model import EditorModel
 from editor.models.records import Citation, Condition, Record, Symptom, Test
 from editor.models.repository import CollectionRepository
+
+VALID_BIBTEX = "@misc{reference, title={Reference}}"
+OTHER_BIBTEX = "@misc{other, title={Other Reference}}"
 
 
 def _model(
@@ -110,23 +115,95 @@ def test_a_valid_new_record_is_stored_with_a_fresh_identifier(
 ) -> None:
     model = _model(tmp_path)
 
-    violations = model.save(Citation(id=None, bibtex="b", ieee="i"))
+    violations = model.save(
+        Citation(id=None, bibtex=VALID_BIBTEX, ieee="stale")
+    )
 
     assert violations == []
     stored = model.citations()[0]
     assert model.identifiers.is_valid(stored.id)
+    assert stored.ieee == '"Reference".'
+
+def test_a_new_citation_derives_its_ieee(tmp_path: Path) -> None:
+    model = _model(tmp_path)
+
+    violations = model.save(
+        Citation(id=None, bibtex=VALID_BIBTEX, ieee="stale")
+    )
+
+    assert violations == []
+    assert model.citations()[0].ieee == '"Reference".'
+
+
+def test_changed_bibtex_rederives_the_ieee(tmp_path: Path) -> None:
+    stored = Citation(id="a" * 32, bibtex=VALID_BIBTEX, ieee="hand authored")
+    model = _model(tmp_path, citations=[stored])
+    changed = Citation(id=stored.id, bibtex=OTHER_BIBTEX, ieee="ignored")
+
+    violations = model.save(changed, existing=stored)
+
+    assert violations == []
+    assert model.citations()[0].ieee == '"Other Reference".'
+
+
+def test_unchanged_bibtex_keeps_the_stored_ieee(tmp_path: Path) -> None:
+    stored = Citation(id="a" * 32, bibtex=VALID_BIBTEX, ieee="hand authored")
+    model = _model(tmp_path, citations=[stored])
+    candidate = Citation(id=stored.id, bibtex=VALID_BIBTEX, ieee="ignored")
+
+    violations = model.save(candidate, existing=stored)
+
+    assert violations == []
+    assert model.citations()[0].ieee == "hand authored"
+
+
+def test_an_empty_stored_ieee_is_derived(tmp_path: Path) -> None:
+    stored = Citation(id="a" * 32, bibtex=VALID_BIBTEX, ieee="")
+    model = _model(tmp_path, citations=[stored])
+    candidate = Citation(id=stored.id, bibtex=VALID_BIBTEX, ieee="ignored")
+
+    violations = model.save(candidate, existing=stored)
+
+    assert violations == []
+    assert model.citations()[0].ieee == '"Reference".'
+
+
+def test_a_derivation_failure_blocks_without_writing(tmp_path: Path) -> None:
+    model = _model(tmp_path)
+
+    violations = model.save(
+        Citation(id=None, bibtex="not bibtex", ieee="stale")
+    )
+
+    assert [violation.rule for violation in violations] == ["bibtex-invalid"]
+    assert model.citations() == []
+
+
+def test_a_derived_ieee_over_the_limit_blocks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import editor.models.editor_model as editor_model
+
+    monkeypatch.setattr(editor_model, "derive_ieee", lambda text: "x" * 2049)
+    model = _model(tmp_path)
+
+    violations = model.save(Citation(id=None, bibtex=VALID_BIBTEX, ieee=""))
+
+    assert [violation.rule for violation in violations] == ["field-too-long"]
+    assert violations[0].field == "ieee"
+    assert model.citations() == []
 
 
 def test_an_edit_keeps_the_identifier(tmp_path: Path) -> None:
-    stored = Citation(id="a" * 32, bibtex="b", ieee="i")
+    stored = Citation(id="a" * 32, bibtex=VALID_BIBTEX, ieee="hand authored")
     model = _model(tmp_path, citations=[stored])
-    changed = Citation(id=stored.id, bibtex="b2", ieee="i")
+    changed = Citation(id=stored.id, bibtex=OTHER_BIBTEX, ieee="ignored")
 
     violations = model.save(changed, existing=stored)
 
     assert violations == []
     assert [record.id for record in model.citations()] == ["a" * 32]
-    assert model.citations()[0].bibtex == "b2"
+    assert model.citations()[0].bibtex == OTHER_BIBTEX
 
 
 def test_a_record_is_stored_in_its_own_collection(tmp_path: Path) -> None:
@@ -134,7 +211,7 @@ def test_a_record_is_stored_in_its_own_collection(tmp_path: Path) -> None:
         tmp_path,
         symptoms=[Symptom(id="s1", name="Cough")],
         tests=[Test(id="t1", name="Chest Examination")],
-        citations=[Citation(id="cite", bibtex="b", ieee="i")],
+        citations=[Citation(id="cite", bibtex=VALID_BIBTEX, ieee="i")],
     )
 
     assert model.save(
@@ -150,7 +227,7 @@ def test_a_record_is_stored_in_its_own_collection(tmp_path: Path) -> None:
         Symptom(id=None, name="Fever", tests=["t1"], citation="cite")
     ) == []
     assert model.save(Test(id=None, name="Blood Count", citation="cite")) == []
-    assert model.save(Citation(id=None, bibtex="b2", ieee="i2")) == []
+    assert model.save(Citation(id=None, bibtex=OTHER_BIBTEX, ieee="i2")) == []
 
     assert len(model.conditions()) == 1
     assert len(model.symptoms()) == 2
@@ -189,10 +266,10 @@ def test_a_blocked_save_leaves_the_version_unchanged(tmp_path: Path) -> None:
 def test_a_successful_save_reaches_the_file(tmp_path: Path) -> None:
     model = _model(tmp_path)
 
-    model.save(Citation(id=None, bibtex="b", ieee="i"))
+    model.save(Citation(id=None, bibtex=VALID_BIBTEX, ieee="i"))
 
     assert [record.bibtex for record in CollectionRepository(tmp_path).load("citations")] == [
-        "b"
+        VALID_BIBTEX
     ]
 
 

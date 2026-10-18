@@ -25,6 +25,9 @@ class EditorApp(App[None]):
     SUB_TITLE = "Differential Diagnosis Support System Data Editor"
 
     CSS = """
+    Screen {
+        padding: 2 4;
+    }
     #list-actions { height: auto; }
     #actions { height: auto; }
     #violations { color: $error; }

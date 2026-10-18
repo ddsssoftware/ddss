@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING, Any, Final
 
 from titlecase import titlecase
 
+from editor.models.citation_format import validate_citation
 from editor.models.records import (
     Citation,
     Condition,
@@ -36,6 +37,7 @@ if TYPE_CHECKING:  # pragma: no cover - annotations only
 
 NAME_MAX_LENGTH: Final[int] = 256
 TEXT_MAX_LENGTH: Final[int] = 1024
+CITATION_MAX_LENGTH: Final[int] = 2048
 
 #: The three entity types that carry a ``name`` and an ``aka`` list.
 NamedRecord = Condition | Symptom | Test
@@ -195,6 +197,7 @@ class Validator:
 
         violations += self.references_must_resolve(record, model)
         violations += self.fields_must_fit(record)
+        violations += self.bibtex_must_be_valid(record)
         violations += self.condition_priority_must_be_a_whole_number(record)
         violations += self.identifier_must_be_unused(record, existing, model)
         return violations
@@ -369,11 +372,27 @@ class Validator:
         if isinstance(record, Citation):
             return _over_length(
                 (
-                    ("bibtex", record.bibtex, TEXT_MAX_LENGTH),
-                    ("ieee", record.ieee, TEXT_MAX_LENGTH),
+                    ("bibtex", record.bibtex, CITATION_MAX_LENGTH),
+                    ("ieee", record.ieee, CITATION_MAX_LENGTH),
                 )
             )
         return []
+
+    def bibtex_must_be_valid(self, record: Record) -> list[Violation]:
+        """Reject a Citation whose BibTeX entry cannot become an IEEE citation."""
+        if not isinstance(record, Citation):
+            return []
+        value = record.bibtex if isinstance(record.bibtex, str) else ""
+        message = validate_citation(value)
+        if message is None:
+            return []
+        return [
+            Violation(
+                rule="bibtex-invalid",
+                field="bibtex",
+                message=message,
+            )
+        ]
 
     def condition_priority_must_be_a_whole_number(
         self, record: Record

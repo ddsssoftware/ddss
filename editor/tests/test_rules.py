@@ -16,6 +16,8 @@ from editor.models.rules import (
     is_title_cased,
 )
 
+VALID_BIBTEX = "@misc{reference, title={Reference}}"
+
 
 class FakeModel:
     """The queries the validator needs, built from four plain lists.
@@ -163,9 +165,16 @@ def test_title_casing_rule_is_idempotent_on_valid_values() -> None:
 
 
 def test_citations_are_not_subject_to_name_rules(validator: Validator) -> None:
-    candidate = Citation(id="a", bibtex="not title cased at all")
+    candidate = Citation(id="a", bibtex=VALID_BIBTEX)
 
-    assert validator.validate(candidate, None, _empty()) == []
+    violations = validator.validate(candidate, None, _empty())
+
+    assert not {
+        "name-unique",
+        "name-title-case",
+        "aka-title-case",
+        "aka-name-clash",
+    } & _rule_names(violations)
 
 
 # --- aka_must_not_clash_with_a_name ----------------------------------------
@@ -357,17 +366,66 @@ def test_over_long_description_is_rejected(validator: Validator) -> None:
 
 
 def test_over_long_citation_field_is_rejected(validator: Validator) -> None:
-    candidate = Citation(id="a", bibtex="x" * 1025, ieee="short")
+    candidate = Citation(id="a", bibtex="x" * 2049, ieee="short")
 
     violations = validator.validate(candidate, None, _empty())
 
     assert "field-too-long" in _rule_names(violations)
 
 
+def test_citation_fields_at_the_limit_are_accepted(validator: Validator) -> None:
+    candidate = Citation(id="a", bibtex="x" * 2048, ieee="y" * 2048)
+
+    assert validator.fields_must_fit(candidate) == []
+
+
+def test_over_long_citation_ieee_is_rejected(validator: Validator) -> None:
+    candidate = Citation(id="a", bibtex="x" * 2048, ieee="y" * 2049)
+
+    assert "field-too-long" in _rule_names(validator.fields_must_fit(candidate))
+
+
 def test_a_record_class_without_length_limits_is_not_checked(
     validator: Validator,
 ) -> None:
     assert validator.fields_must_fit(Record()) == []
+
+
+# --- bibtex_must_be_valid --------------------------------------------------
+
+
+def test_valid_bibtex_is_accepted(validator: Validator) -> None:
+    candidate = Citation(id="a", bibtex=VALID_BIBTEX)
+
+    assert validator.bibtex_must_be_valid(candidate) == []
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "",
+        "hello world",
+        "@misc{a, title={A}}\n@misc{b, title={B}}",
+        "@misc{a, title={A}}\n@misc{a, title={B}}",
+        "@misc{a, title={A}",
+        "@misc{empty}",
+    ],
+)
+def test_invalid_bibtex_is_rejected(validator: Validator, value: str) -> None:
+    candidate = Citation(id="a", bibtex=value)
+
+    violations = validator.validate(candidate, None, _empty())
+
+    assert [violation.rule for violation in violations] == ["bibtex-invalid"]
+    assert violations[0].field == "bibtex"
+
+
+def test_non_text_bibtex_is_rejected(validator: Validator) -> None:
+    candidate = Citation(id="a", bibtex=5)
+
+    violations = validator.validate(candidate, None, _empty())
+
+    assert "bibtex-invalid" in _rule_names(violations)
 
 
 # --- condition_priority_must_be_a_whole_number -----------------------------
@@ -406,8 +464,10 @@ def test_a_record_without_a_priority_is_not_checked_for_one(
 
 
 def test_a_duplicate_identifier_is_reported(validator: Validator) -> None:
-    model = FakeModel(citations=[Citation(id="b" * 32, bibtex="b", ieee="i")])
-    candidate = Citation(id="b" * 32, bibtex="b", ieee="i")
+    model = FakeModel(
+        citations=[Citation(id="b" * 32, bibtex=VALID_BIBTEX, ieee="i")]
+    )
+    candidate = Citation(id="b" * 32, bibtex=VALID_BIBTEX, ieee="i")
 
     violations = validator.validate(candidate, None, model)
 
@@ -418,7 +478,7 @@ def test_a_duplicate_identifier_in_another_type_is_reported(
     validator: Validator,
 ) -> None:
     model = FakeModel(symptoms=[Symptom(id="b" * 32, name="Cough")])
-    candidate = Citation(id="b" * 32, bibtex="b", ieee="i")
+    candidate = Citation(id="b" * 32, bibtex=VALID_BIBTEX, ieee="i")
 
     violations = validator.validate(candidate, None, model)
 
@@ -426,8 +486,10 @@ def test_a_duplicate_identifier_in_another_type_is_reported(
 
 
 def test_an_unused_identifier_is_accepted(validator: Validator) -> None:
-    model = FakeModel(citations=[Citation(id="b" * 32, bibtex="b", ieee="i")])
-    candidate = Citation(id="c" * 32, bibtex="b", ieee="i")
+    model = FakeModel(
+        citations=[Citation(id="b" * 32, bibtex=VALID_BIBTEX, ieee="i")]
+    )
+    candidate = Citation(id="c" * 32, bibtex=VALID_BIBTEX, ieee="i")
 
     assert validator.validate(candidate, None, model) == []
 

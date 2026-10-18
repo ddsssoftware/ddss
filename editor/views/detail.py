@@ -124,8 +124,8 @@ class EntityDetailView(Screen[bool]):
         """
         widget_id = field_widget_id(field_spec)
         if field_spec.kind == "long_text":
-            return TextArea(value, id=widget_id)
-        return Input(value=value, id=widget_id)
+            return TextArea(value, id=widget_id, read_only=field_spec.read_only)
+        return Input(value=value, id=widget_id, disabled=field_spec.read_only)
 
     @staticmethod
     def _target_label(field_spec: FieldSpec) -> str:

@@ -18,6 +18,7 @@ from editor.models.records import Citation, Condition, Record, Symptom, Test
 from editor.models.repository import CollectionRepository
 
 ENTITY_TYPES = ("conditions", "symptoms", "tests", "citations")
+VALID_BIBTEX = "@misc{another, title={Another Source}}"
 
 #: One valid stored record per entity type.
 STORED: dict[str, Record] = {
@@ -247,6 +248,34 @@ def test_the_initial_values_show_the_stored_record(tmp_path: Path) -> None:
     }
 
 
+def test_citation_initial_values_show_the_stored_ieee(tmp_path: Path) -> None:
+    stored = Citation(
+        id="z1",
+        bibtex="@misc{reference, title={Reference}}",
+        ieee="hand authored",
+    )
+    controller = EntityDetailController(
+        _model(tmp_path, citations=[stored]), "citations", stored
+    )
+
+    assert controller.initial_values() == {
+        "bibtex": "@misc{reference, title={Reference}}",
+        "ieee": "hand authored",
+    }
+
+
+def test_the_form_ieee_value_is_ignored(tmp_path: Path) -> None:
+    model = _model(tmp_path)
+    controller = EntityDetailController(model, "citations")
+
+    violations = controller.save(
+        {"bibtex": VALID_BIBTEX, "ieee": "typed by hand"}
+    )
+
+    assert violations == []
+    assert model.citations()[0].ieee == '"Another Source".'
+
+
 def test_a_valid_new_record_is_stored_from_the_form(tmp_path: Path) -> None:
     model = _model(
         tmp_path,
@@ -377,7 +406,7 @@ def test_every_entity_type_can_be_saved_from_the_form(tmp_path: Path) -> None:
         {"name": "Blood Count", "desc": "", "aka": "", "citation": "z1"}
     ) == []
     assert EntityDetailController(model, "citations").save(
-        {"bibtex": "Another Source", "ieee": "IEEE"}
+        {"bibtex": VALID_BIBTEX, "ieee": "IEEE"}
     ) == []
 
     assert len(model.all_records()) == 7

@@ -31,6 +31,7 @@ class FieldSpec:
     label: str
     kind: FieldKind = "text"
     target: str | None = None
+    read_only: bool = False
 
 
 @dataclass(frozen=True)
@@ -96,7 +97,7 @@ ENTITY_SPECS: Final[dict[str, EntitySpec]] = {
         label_field="bibtex",
         fields=(
             FieldSpec("bibtex", "BibTeX entry", "long_text"),
-            FieldSpec("ieee", "IEEE citation", "long_text"),
+            FieldSpec("ieee", "IEEE citation", "long_text", read_only=True),
         ),
     ),
 }

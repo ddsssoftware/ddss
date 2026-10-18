@@ -50,7 +50,13 @@ def _seed(data_directory: Path) -> None:
     repository = CollectionRepository(data_directory)
     repository.save(
         "citations",
-        [Citation(id=CITATION_ID, bibtex="@misc{ref}", ieee="Reference.")],
+        [
+            Citation(
+                id=CITATION_ID,
+                bibtex="@misc{ref, title={Reference}}",
+                ieee="Reference.",
+            )
+        ],
     )
     repository.save(
         "tests",
@@ -939,6 +945,76 @@ def test_description_supports_multiline_text(tmp_path: Path) -> None:
                 if record.name == "Pneumonia"
             ]
             assert added[0].desc == "An infection\nof the lung tissue."
+
+    asyncio.run(scenario())
+
+
+def test_the_ieee_field_is_read_only(tmp_path: Path) -> None:
+    async def scenario() -> None:
+        _seed(tmp_path)
+        app = EditorApp(tmp_path, initial_entity_type="citations")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            _select(view, 0)
+            await pilot.pause()
+            view.action_edit()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            assert detail.query_one("#field-ieee", TextArea).read_only is True
+            assert detail.query_one("#field-bibtex", TextArea).read_only is False
+
+    asyncio.run(scenario())
+
+
+def test_a_multiline_citation_round_trips_through_the_view(
+    tmp_path: Path,
+) -> None:
+    bibtex = (
+        "@article{multi,\n"
+        "  author = {Müller, Jürgen},\n"
+        "  title = {A multiline\n"
+        "    title},\n"
+        "  journal = {Journal of Testing},\n"
+        "  year = {2020}\n"
+        "}"
+    )
+
+    async def scenario() -> None:
+        _seed(tmp_path)
+        app = EditorApp(tmp_path, initial_entity_type="citations")
+
+        async with app.run_test() as pilot:
+            await pilot.pause()
+            view = app.screen
+            assert isinstance(view, EntityListView)
+
+            view.action_add()
+            await pilot.pause()
+
+            detail = app.screen
+            assert isinstance(detail, EntityDetailView)
+            detail.query_one("#field-bibtex", TextArea).text = bibtex
+            detail.action_save()
+            await pilot.pause()
+
+            assert app.screen is view
+            stored = [
+                record
+                for record in _stored(tmp_path, "citations")
+                if record.bibtex == bibtex
+            ]
+            assert len(stored) == 1
+            assert stored[0].bibtex == bibtex
+            assert "\n" not in stored[0].ieee
+            assert stored[0].ieee.isascii()
+            assert "Muller" in stored[0].ieee
+            assert bibtex in view.visible_labels()
 
     asyncio.run(scenario())
 
